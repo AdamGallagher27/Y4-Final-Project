@@ -1,11 +1,12 @@
 interface CollectionProperty {
-  name: String
-  type: String | Boolean | Number
+  name: string
+  type: string
 }
 
 interface Collection {
-  name: String
+  name: string
   properties: CollectionProperty[]
+  items?: any
 }
 
 interface Acknowledgment {

@@ -1,5 +1,5 @@
 'use client'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface Props {
   addToCollectionNames: (collectionName: string) => void
@@ -13,8 +13,6 @@ const CollectionCreator = (props: Props) => {
   const [collections, setCollections] = useState<Collection[]>([])
   const [newCollectionName, setNewCollectionName] = useState('')
   const [properties, setProperties] = useState([{ name: '', type: 'string' }])
-  // const [activeCollection, setActiveCollection] = useState(null)
-  // const [newItem, setNewItem] = useState({})
 
   // Handle property name/type change
   const handlePropertyChange = (index: number, key: string, value: string) => {
@@ -46,15 +44,15 @@ const CollectionCreator = (props: Props) => {
       setCollections([...collections, newCollection])
       addToCollectionNames(newCollection.name)
       setNewCollectionName('')
-      setProperties([{ name: '', type: 'string' }]) // Reset form
+      setProperties([{ name: '', type: 'string' }]) 
     }
   }
 
   return (
-    <div>
-      <h2>CollectionCreator</h2>
+    <div className='my-9'>
+      <h2 className='font-bold'>Create a New Collection</h2>
       <div>
-        <label>Collection Name:</label>
+        <label className='italic'>Collection Name:</label>
         <input
           type="text"
           value={newCollectionName}
@@ -62,7 +60,7 @@ const CollectionCreator = (props: Props) => {
           placeholder="Enter collection name"
         />
       </div>
-      <h3>Properties</h3>
+      <h3 className='italic'>Properties</h3>
       {properties.map((property, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
           <input
@@ -88,14 +86,13 @@ const CollectionCreator = (props: Props) => {
           )}
         </div>
       ))}
-      <button onClick={addPropertyField}>Add Property</button>
-      <div>
-        <button onClick={handleCreateCollection}>Create Collection</button>
-      </div>
+      <span className='flex gap-5'>
+        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={addPropertyField}>Add Property</button>
+        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={handleCreateCollection}>Create Collection</button>
+      </span>
 
-      {/* [{"name":"car","properties":[{"name":"wheels","type":"number"}],"items":[]},{"name":"houses","properties":[{"name":"doors","type":"number"}],"items":[]}]*/}
-      <p>collection = array of objects with a name which is a string and properties which is an array of objects that have a name and a type</p>
-      {JSON.stringify(collections)}
+      {/* {JSON.stringify(collections)} */}
+      
     </div>
   )
 }

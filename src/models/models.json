@@ -1,0 +1,48 @@
+[
+  {
+    "name": "car test mock",
+    "properties": [
+      {
+        "name": "car_make",
+        "type": "string"
+      },
+      {
+        "name": "year_bought",
+        "type": "number"
+      },
+      {
+        "name": "has_insurance",
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "name": "hospital test mock",
+    "properties": [
+      {
+        "name": "hospital_name",
+        "type": "string"
+      },
+      {
+        "name": "year_bought",
+        "type": "number"
+      },
+      {
+        "name": "has_insurance",
+        "type": "boolean"
+      },
+      {
+        "name":"num_staff",
+        "type": "number"
+      },
+      {
+        "name":"num_rooms",
+        "type": "number"
+      },
+      {
+        "name":"num_nurses",
+        "type": "number"
+      }
+    ]
+  }
+]

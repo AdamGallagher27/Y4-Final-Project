@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "fs": "^0.0.1-security",
     "gun": "^0.2020.1240",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",

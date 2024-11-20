@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  padding: 20px;
+}
+
 table, th, td {
   border:1px solid black;
 }

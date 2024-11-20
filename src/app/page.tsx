@@ -1,24 +1,27 @@
 'use client'
 import CollectionCreator from '@/components/CollectionCreator'
 import CollectionNames from '@/components/CollectionNames'
-import CollectionView from '@/components/CollectionView'
+import CollectionView from '@/components/CollectionViews'
 import { useState } from 'react'
 
 export default function Home() {
 
   const [selectedCollection, setSelectedCollection] = useState<string>('')
-  const [collectionNames, setCollectionNames] = useState<string[]>([])
+  const [collectionNames, setCollectionNames] = useState<string[]>(['car test mock', 'hospital test mock'])
 
   const addToCollectionNames = (collectionName: string) => {
-    setCollectionNames((prevItems) => [...prevItems, collectionName]);
-  };
+    setCollectionNames((prevItems) => [...prevItems, collectionName])
+  }
+
+  const updateSelectedCollection = (collectionName: string) => {
+    setSelectedCollection(collectionName)
+  }
 
   return (
     <div>
-      <h1>Create a New Collection</h1>
-      <CollectionNames collectionNames={collectionNames} />
+      <CollectionNames collectionNames={collectionNames} updateSelectedCollection={updateSelectedCollection} />
       <CollectionCreator addToCollectionNames={addToCollectionNames} />
-      <CollectionView collectionName={selectedCollection} />
+      <CollectionView selectedCollectionName={selectedCollection} />
     </div>
   )
 }
