@@ -39,5 +39,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local copy of gun js data 
+# local copies of gun js data 
 /radata
+*.tmp

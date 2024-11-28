@@ -1,13 +1,23 @@
 'use client'
-import CollectionCreator from '@/components/CollectionCreator'
-import CollectionNames from '@/components/CollectionNames'
-import CollectionView from '@/components/CollectionViews'
-import { useState } from 'react'
+import CollectionCreator from '@/components/collections/CollectionCreator'
+import CollectionNames from '@/components/collections/CollectionNames'
+import CollectionView from '@/components/collections/CollectionViews'
+import { getAllModelNames } from '@/utils'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
 
   const [selectedCollection, setSelectedCollection] = useState<string>('')
-  const [collectionNames, setCollectionNames] = useState<string[]>(['car test mock', 'hospital test mock'])
+  const [collectionNames, setCollectionNames] = useState<string[]>([])
+
+  useEffect(() => {
+    const loadCollectionNamesArray = async () => {
+      setCollectionNames(await getAllModelNames())
+    }
+
+    loadCollectionNamesArray()
+
+  }, [collectionNames])
 
   const addToCollectionNames = (collectionName: string) => {
     setCollectionNames((prevItems) => [...prevItems, collectionName])

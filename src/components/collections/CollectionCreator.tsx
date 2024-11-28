@@ -5,6 +5,25 @@ interface Props {
   addToCollectionNames: (collectionName: string) => void
 }
 
+const addNewModelToModels = async (model: Model) => {
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/models/${model.name}`, {
+      method: 'POST',
+      body: JSON.stringify(model)
+    })
+
+    if (!response.ok) {
+      console.error(response.status)
+    }
+    console.log(await response.json())
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+
 const CollectionCreator = (props: Props) => {
 
   const { addToCollectionNames } = props
@@ -12,7 +31,7 @@ const CollectionCreator = (props: Props) => {
   // State to store collections and their items
   const [collections, setCollections] = useState<Collection[]>([])
   const [newCollectionName, setNewCollectionName] = useState('')
-  const [properties, setProperties] = useState([{ name: '', type: 'string' }])
+  const [properties, setProperties] = useState<Properties[]>([])
 
   // Handle property name/type change
   const handlePropertyChange = (index: number, key: string, value: string) => {
@@ -24,7 +43,7 @@ const CollectionCreator = (props: Props) => {
 
   // Add a new empty property input field
   const addPropertyField = () => {
-    setProperties([...properties, { name: '', type: 'string' }])
+    setProperties([...properties])
   }
 
   // Remove a property input field
@@ -41,6 +60,8 @@ const CollectionCreator = (props: Props) => {
         properties: properties.filter((p) => p.name),
         items: [],
       }
+
+      addNewModelToModels(newCollection)
       setCollections([...collections, newCollection])
       addToCollectionNames(newCollection.name)
       setNewCollectionName('')
@@ -54,22 +75,22 @@ const CollectionCreator = (props: Props) => {
       <div>
         <label className='italic'>Collection Name:</label>
         <input
-          type="text"
+          type='text'
           value={newCollectionName}
           onChange={(e) => setNewCollectionName(e.target.value)}
-          placeholder="Enter collection name"
+          placeholder='Enter collection name'
         />
       </div>
       <h3 className='italic'>Properties</h3>
       {properties.map((property, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
           <input
-            type="text"
+            type='text'
             value={property.name}
             onChange={(e) =>
               handlePropertyChange(index, 'name', e.target.value)
             }
-            placeholder="Property name"
+            placeholder='Property name'
           />
           <select
             value={property.type}
@@ -77,9 +98,9 @@ const CollectionCreator = (props: Props) => {
               handlePropertyChange(index, 'type', e.target.value)
             }
           >
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="boolean">Boolean</option>
+            <option value='string'>String</option>
+            <option value='number'>Number</option>
+            <option value='boolean'>Boolean</option>
           </select>
           {properties.length > 1 && (
             <button onClick={() => removePropertyField(index)}>Remove</button>
@@ -89,10 +110,7 @@ const CollectionCreator = (props: Props) => {
       <span className='flex gap-5'>
         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={addPropertyField}>Add Property</button>
         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={handleCreateCollection}>Create Collection</button>
-      </span>
-
-      {/* {JSON.stringify(collections)} */}
-      
+      </span>      
     </div>
   )
 }
