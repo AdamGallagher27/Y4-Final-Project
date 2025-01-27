@@ -29,9 +29,8 @@ const CollectionCreator = (props: Props) => {
   const { addToCollectionNames } = props
 
   // State to store collections and their items
-  const [collections, setCollections] = useState<Collection[]>([])
   const [newCollectionName, setNewCollectionName] = useState('')
-  const [properties, setProperties] = useState<Properties[]>([])
+  const [properties, setProperties] = useState<Properties[]>([{ name: '', type: 'string' }])
 
   // Handle property name/type change
   const handlePropertyChange = (index: number, key: string, value: string) => {
@@ -43,7 +42,7 @@ const CollectionCreator = (props: Props) => {
 
   // Add a new empty property input field
   const addPropertyField = () => {
-    setProperties([...properties])
+    setProperties([...properties, { name: '', type: '' }])
   }
 
   // Remove a property input field
@@ -62,10 +61,9 @@ const CollectionCreator = (props: Props) => {
       }
 
       addNewModelToModels(newCollection)
-      setCollections([...collections, newCollection])
       addToCollectionNames(newCollection.name)
       setNewCollectionName('')
-      setProperties([{ name: '', type: 'string' }]) 
+      setProperties([{ name: '', type: 'string' }])
     }
   }
 
@@ -110,7 +108,7 @@ const CollectionCreator = (props: Props) => {
       <span className='flex gap-5'>
         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={addPropertyField}>Add Property</button>
         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={handleCreateCollection}>Create Collection</button>
-      </span>      
+      </span>
     </div>
   )
 }

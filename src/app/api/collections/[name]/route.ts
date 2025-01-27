@@ -1,4 +1,4 @@
-import { generateRowId } from '@/utils'
+import { cleanResponse, generateRowId } from '@/utils'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
@@ -46,7 +46,6 @@ export const GET = async (req: Request, { params }: { params: { name: string } }
   // this is my temp solution to this issue
   await new Promise(resolve => setTimeout(resolve, 1000))
 
-  console.log(results, name)
-
-  return NextResponse.json(results)
+  return NextResponse.json(cleanResponse(results)
+)
 }

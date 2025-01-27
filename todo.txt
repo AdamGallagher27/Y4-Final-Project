@@ -1,6 +1,7 @@
+backlog
+-----------------------
 full crud for models
 add user id and id to newly created collections model
-fix create collection component
 validation
 refactor
 encryption
@@ -13,3 +14,9 @@ get rows from api
 fix grid code
 set up proper env
 fix redudant uses of any
+
+
+in progress
+----------------------
+ui design 
+

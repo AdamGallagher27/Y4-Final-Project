@@ -43,3 +43,11 @@ export const getModel = async (modelName: string) => {
     return model.name === modelName
   })[0]
 }
+
+
+export const cleanResponse = (response: Item[]) => {
+  return response.map(item => {
+    const {_, ...newObject} = item
+    return newObject
+  })
+}
