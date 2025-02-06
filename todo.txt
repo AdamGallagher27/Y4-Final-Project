@@ -5,7 +5,6 @@ add user id and id to newly created collections model
 validation
 refactor
 encryption
-authentication
 proper and consitent error handleing
 style
 test hosted versions
@@ -19,4 +18,4 @@ fix redudant uses of any
 in progress
 ----------------------
 ui design 
-
+authentication
