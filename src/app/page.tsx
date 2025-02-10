@@ -21,6 +21,9 @@ export default function Home() {
 
   }, [collectionNames])
 
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
   const addToCollectionNames = (collectionName: string) => {
     setCollectionNames((prevItems) => [...prevItems, collectionName])
   }
@@ -44,11 +47,16 @@ export default function Home() {
   return (
     <div>
       <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
-        <ConnectWalletButton />
+        <ConnectWalletButton setIsLoggedIn={setIsLoggedIn} />
       </MetaMaskProvider>
-      <CollectionNames collectionNames={collectionNames} updateSelectedCollection={updateSelectedCollection} />
-      <CollectionCreator addToCollectionNames={addToCollectionNames} />
-      <CollectionView selectedCollectionName={selectedCollection} />
+
+      {isLoggedIn &&
+        <>
+          <CollectionNames collectionNames={collectionNames} updateSelectedCollection={updateSelectedCollection} />
+          <CollectionCreator addToCollectionNames={addToCollectionNames} />
+          <CollectionView selectedCollectionName={selectedCollection} /> 
+        </>}
+
     </div>
   )
 }
