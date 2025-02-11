@@ -8,7 +8,8 @@ const isOnClient = () => {
   return false
 }
 
-// these two functions are the same but have different names 
+
+// these three functions are the same but have different names 
 // this is just for cleaner ui code
 export const generateRowId = () => {
   return uuidv4()
@@ -16,6 +17,18 @@ export const generateRowId = () => {
 
 export const generateModelId = () => {
   return Math.random().toString().substring(2, 8)
+}
+
+const generateSessionId = () => {
+  return uuidv4()
+}
+
+// returns a stringified session data object which will be converted
+// into a jwt token for api access
+export const startSession = (walletId: string) => {
+  const sessionId = generateSessionId()
+  const sessionData = {walletId, sessionId, createdAt: Date.now()}
+  return JSON.stringify(sessionData)
 }
 
 const getAllModels = async () => {
