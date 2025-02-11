@@ -12,14 +12,13 @@ interface Collection {
 }
 
 interface Model {
+  modelId: string
   name: string
   properties: Properties[]
 }
 
 interface Item {
   id: string
-  userId: string
-  // An entry into the db must have an id / userId but the rest of the params can be anything
   [key: string]: any
 }
 

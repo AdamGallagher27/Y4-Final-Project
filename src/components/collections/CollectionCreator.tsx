@@ -1,4 +1,5 @@
 'use client'
+import { generateModelId } from '@/utils'
 import { useState } from 'react'
 
 interface Props {
@@ -55,6 +56,7 @@ const CollectionCreator = (props: Props) => {
   const handleCreateCollection = () => {
     if (newCollectionName) {
       const newCollection = {
+        modelId: `${newCollectionName}-${generateModelId()}`,
         name: newCollectionName,
         properties: properties.filter((p) => p.name),
         items: [],

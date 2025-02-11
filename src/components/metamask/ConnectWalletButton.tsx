@@ -1,5 +1,6 @@
 'use client'
 
+import { updateAuthJSON } from '@/utils'
 //  https://metamask.io/news/developers/how-to-implement-metamask-sdk-with-nextjs/
 
 import { useSDK } from '@metamask/sdk-react'
@@ -12,6 +13,13 @@ interface Props {
 export const ConnectWalletButton = ({ setIsLoggedIn }: Props) => {
 
   const { sdk, connected, account } = useSDK()
+
+  // if the account variable gets assigned wallet address
+  // hit the user auth end point
+  // this checks if its the first time the user has logged in before
+  useEffect(() => {
+    if (account) updateAuthJSON(account)
+    }, [account])
 
   const connect = async () => {
     try {

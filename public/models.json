@@ -1,89 +1,13 @@
 [
-  {
-    "name": "car test mock",
-    "properties": [
-      {
-        "name": "id",
-        "type": "string"
-      },
-      {
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "name": "car_make",
-        "type": "string"
-      },
-      {
-        "name": "year_bought",
-        "type": "number"
-      },
-      {
-        "name": "has_insurance",
-        "type": "boolean"
-      }
-    ]
-  },
-  {
-    "name": "hospital test mock",
-    "properties": [
-      {
-        "name": "id",
-        "type": "string"
-      },
-      {
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "name": "hospital_name",
-        "type": "string"
-      },
-      {
-        "name": "year_bought",
-        "type": "number"
-      },
-      {
-        "name": "has_insurance",
-        "type": "boolean"
-      },
-      {
-        "name": "num_staff",
-        "type": "number"
-      },
-      {
-        "name": "num_rooms",
-        "type": "number"
-      },
-      {
-        "name": "num_nurses",
-        "type": "number"
-      }
-    ]
-  },
-  {
-    "name": "test",
-    "properties": [
-      {
-        "name": "id",
-        "type": "string"
-      },
-      {
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "name": "test",
-        "type": "string"
-      },
-      {
-        "name": "num",
-        "type": "number"
-      },
-      {
-        "name": "bool",
-        "type": "boolean"
-      }
-    ]
-  }
+    {
+        "modelId": "cars-026937",
+        "name": "cars",
+        "properties": [
+            {
+                "name": "wheels",
+                "type": "string"
+            }
+        ],
+        "items": []
+    }
 ]

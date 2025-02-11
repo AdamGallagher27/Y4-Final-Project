@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 const { generateKeyPair } = require('crypto') 
@@ -35,7 +35,7 @@ const createEnvFile = (rsaKeyPair: any) => {
   const filePath = path.resolve(fileName)
   
   if (!fs.existsSync(filePath)) {
-    const defaultContent = `PUBLIC_RSA_KEY=${rsaKeyPair.publicKey.replace(/\n/g, '')}\nPRIVATE_RSA_KEY=${rsaKeyPair.privateKey.replace(/\n/g, '')}`
+    const defaultContent = `PUBLIC_RSA_KEY=${rsaKeyPair.publicKey.replace(/\n/g, '')}\nPRIVATE_RSA_KEY=${rsaKeyPair.privateKey.replace(/\n/g, '')}\nNEXT_PUBLIC_HOSTING_URL=http://localhost:3000/`
     
     fs.writeFileSync(filePath, defaultContent)
     console.log(`${fileName} created successfully.`)
@@ -49,31 +49,20 @@ export const POST = async (req: Request) => {
   try {
     const filePath = path.join(process.cwd(), 'public', 'auth.json')
 
-    // console.log('public key = ' + process.env.PUBLIC_RSA_KEY)
-
+    const { walletId } = await req.json()
     
     // check if the auth.json file exists if not means it the first time logging in
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify([]))
+      fs.writeFileSync(filePath, JSON.stringify([{'firstTimeLogin':true, 'walletId': walletId }]))
 
       const rsaKeyPair = await generateRSAKeys()
 
       createEnvFile(rsaKeyPair)
 
-      console.log('first time logging in')
+      return NextResponse.json({ message: 'First-time login set to true' })
     }
 
-    // const isLoggedInArray = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-
-    // if (isLoggedInArray.length === 0) {
-
-    //   isLoggedInArray.push({ firstTimeLogin: true })
-
-    //   fs.writeFileSync(filePath, JSON.stringify(isLoggedInArray))
-    //   return NextResponse.json({ message: 'First-time login set to true' })
-    // }
-
-    return NextResponse.json({ message: 'First-time login set to true' })
+    return NextResponse.json({ message: 'Not first-time logging in' })
   }
   catch (error) {
     return error
