@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 
 const isOnClient = () => {
@@ -27,7 +29,7 @@ const generateSessionId = () => {
 // into a jwt token for api access
 export const startSession = (walletId: string) => {
   const sessionId = generateSessionId()
-  const sessionData = {walletId, sessionId, createdAt: Date.now()}
+  const sessionData = { walletId, sessionId, createdAt: Date.now() }
   return JSON.stringify(sessionData)
 }
 
@@ -71,19 +73,64 @@ export const cleanResponse = (response: Item[]) => {
   })
 }
 
+
+const verifyToken = (token: string) => {
+  try {
+    const publicKey = process.env.PUBLIC_RSA_KEY
+
+    if (!token) {
+      console.error('Token is missing!')
+      return false
+    }
+
+    if (!publicKey) {
+      console.error('Public key is missing!')
+      return false
+    }
+
+    const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+
+    if (decoded) {
+      return true
+    }
+
+    return false
+    
+  } catch (error) {
+    console.error('Error verifying the token:', error)
+    return false
+  }
+
+}
+
+// this technically is not middleware but the way next handles middleware
+// is that it creates an edge environment and you define the paths where the middleware runs
+// unfortunatly you cant use node packages in edge envs
+// its easier to just make this function and treat it like middleware in resource routes
+export const authorisationMiddleWare = (authHeader: string | null) => {
+    if (!authHeader) {
+
+      return NextResponse.json({ message: 'no auth token present' })
+    }
+  
+    // get the token
+    const token = authHeader.split(' ')[1]
+  
+    if (!verifyToken(token)) {
+      return NextResponse.json({ message: 'error fetching, invalid token' })
+    }
+  
+}
+
 export const updateAuthJSON = async (walletId: string) => {
 
   const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-  
-  // later replace with auth token which is generated when the user logs in for the first time
-  const authToken = 'your-auth-token-here'
 
   try {
     const response = await fetch(`${url}api/auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         walletId: walletId,

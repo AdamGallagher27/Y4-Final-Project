@@ -3,59 +3,24 @@ const jwt = require('jsonwebtoken')
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import {  startSession } from '@/utils'
-const { generateKeyPair } = require('crypto') 
+import { startSession } from '@/utils'
+import { NextApiResponse } from 'next'
+const { generateKeyPair } = require('crypto')
 
 
-const createToken = (sessionData: string) => {
-  const publicKey = process.env.PUBLIC_RSA_KEY
-
-  if(publicKey) {
-    return jwt.sign(sessionData, publicKey, { algorithm: 'RS256' })
+const createToken = (sessionData: string, privateKey: string) => {
+  if (privateKey) {
+    return jwt.sign(sessionData, privateKey, { algorithm: 'RS256' })
   }
 }
 
-const verifyToken = (token: string) => {
-  const privateKey = process.env.PRIVATE_RSA_KEY
-
-  try {
-    const decoded = jwt.verify(token, privateKey, { algorithms: ['RS256'] })
-
-    if(decoded) {
-      return true
-    }
-
-  } catch(error) {
-    console.error(error)
-  }
-
-  return false
-}
-
-
-const appendTokenToEnv = (token: string) => {
-  const envFilePath = path.resolve(process.cwd(), '.env')
-
-  // check env exists
-  if (!fs.existsSync(envFilePath)) {
-    console.error('.env file does not exist')
-    return
-  }
-
-  // read env data
-  const envContent = fs.readFileSync(envFilePath)
-
-  const appendedEnvContent = `${envContent}\nNEXT_PUBLIC_JWT_TOKEN=${token}`
-
-  fs.writeFileSync(envFilePath, appendedEnvContent)
-}
 
 const generateRSAKeys = async () => {
   try {
     // use crypto to generate public / private keys
     const rsaKeyPair = await new Promise((resolve, reject) => {
       generateKeyPair(
-        'rsa', 
+        'rsa',
         {
           modulusLength: 2048,
           publicKeyEncoding: { type: 'spki', format: 'pem' },
@@ -69,7 +34,7 @@ const generateRSAKeys = async () => {
       )
     })
 
-  return rsaKeyPair
+    return rsaKeyPair
 
   } catch (error) {
     console.error(error)
@@ -77,13 +42,16 @@ const generateRSAKeys = async () => {
 }
 
 // fix any later
-const createEnvFile = (rsaKeyPair: any) => {
+const createEnvFile = (rsaKeyPair: any, walletId: string) => {
   const fileName = '.env'
   const filePath = path.resolve(fileName)
 
+  const initialSession = startSession(walletId)
+  const apiToken = createToken(initialSession, rsaKeyPair.privateKey)
+  
   if (!fs.existsSync(filePath)) {
-    const defaultContent = `PUBLIC_RSA_KEY=${rsaKeyPair.publicKey.replace(/\n/g, '')}\nPRIVATE_RSA_KEY=${rsaKeyPair.privateKey.replace(/\n/g, '')}\nNEXT_PUBLIC_HOSTING_URL=http://localhost:3000/`
-    
+    const defaultContent = `PUBLIC_RSA_KEY="${rsaKeyPair.publicKey}"\nPRIVATE_RSA_KEY="${rsaKeyPair.privateKey}"\nNEXT_PUBLIC_HOSTING_URL="http://localhost:3000/"\nNEXT_PUBLIC_GUN_URL="https://gun-manhattan.herokuapp.com/gun"\nPUBLIC_API_TOKEN="${apiToken}"`
+
     fs.writeFileSync(filePath, defaultContent)
     console.log(`${fileName} created successfully.`)
   } else {
@@ -92,29 +60,19 @@ const createEnvFile = (rsaKeyPair: any) => {
 }
 
 
-export const POST = async (req: Request) => {
+export const POST = async (req: Request, res: NextApiResponse) => {
   try {
     const filePath = path.join(process.cwd(), 'public', 'auth.json')
 
     const { walletId } = await req.json()
-    
+
     // check if the auth.json file exists if not means it the first time logging in
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify([{'firstTimeLogin':true, 'walletId': walletId }]))
+      fs.writeFileSync(filePath, JSON.stringify([{ 'firstTimeLogin': true, 'walletId': walletId }]))
 
       const rsaKeyPair = await generateRSAKeys()
 
-      await createEnvFile(rsaKeyPair)
-
-      const initialSession = await startSession(walletId)
-
-      // console.log(initialSession)
-
-      // const token = createToken(initialSession)
-
-      // console.log('token : ' + token)
-
-      // appendTokenToEnv(token)
+      await createEnvFile(rsaKeyPair, walletId)
 
       return NextResponse.json({ message: 'First-time login set to true' })
     }
@@ -122,7 +80,7 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ message: 'Not first-time logging in' })
   }
   catch (error) {
-    return error
+    return NextResponse.json({ message: 'An Error occoured', error: error })
   }
 
 }

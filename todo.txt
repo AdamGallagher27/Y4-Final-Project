@@ -1,17 +1,11 @@
 backlog
 -----------------------
-full crud for models
-add user id and id to newly created collections model
 validation
 refactor
-encryption
-proper and consitent error handleing
 style
 test hosted versions
-add more routes for api 
 get rows from api 
 fix grid code
-set up proper env
 fix redudant uses of any
 fix login bug
 
@@ -19,4 +13,9 @@ fix login bug
 in progress
 ----------------------
 ui design 
-authentication
+add more routes for api 
+encryption
+full crud for models
+single item routes
+user auth routes
+proper and consitent error handleing

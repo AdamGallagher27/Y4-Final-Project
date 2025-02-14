@@ -19,7 +19,7 @@ export default function Home() {
 
     loadCollectionNamesArray()
 
-  }, [collectionNames])
+  }, [])
 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
