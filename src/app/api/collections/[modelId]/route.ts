@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
 
-// add optional header for user id later
+// create row route
 export const POST = async (req: Request, { params }: { params: { modelId: string } }) => {
   const authHeader = await req.headers.get('Authorization')
 
@@ -35,6 +35,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
   return NextResponse.json({ message: `Data created`, body: newData })
 }
 
+// get all rows route
 export const GET = async (req: Request, { params }: { params: { modelId: string } }) => {
   const authHeader = await req.headers.get('Authorization')
 
