@@ -1,4 +1,4 @@
-import { cleanResponse, generateRowId, authorisationMiddleWare } from '@/utils'
+import { cleanResponse, generateRowId, authorisationMiddleWare, generateSigniture, encryptData, decryptData, verifySigniture } from '@/utils'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
@@ -16,8 +16,13 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
   const body = await req.json()
   const ref = gun.get(modelId)
 
+  // generate an data integrity signiture / encrypt data
+  const signiture = generateSigniture(body)
+  const encryptedData = encryptData(body)
+
   const newData = {
-    ...body,
+    encryptedData,
+    signiture,
     id: generateRowId()
   }
 
@@ -40,12 +45,21 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
   const { modelId } = await params
 
   const ref = gun.get(modelId)
-
   const results: Item[] = []
 
-  await ref.map().once((res, id) => {
+  await ref.map().once((res) => {
     if (res) {
-      results.push(res)
+      const decryptedData = decryptData(res.encryptedData)
+      const isValid = verifySigniture(decryptedData, res.signiture)
+
+      // if the signiture is valid it means the data has not been tampered with outside of the api
+      if(isValid) {
+        results.push({...decryptedData, id: res.id})
+      }
+      else {
+        // alert the user to the fact that unauth data has been altered / add in roll back feature
+        console.error('unauth user altered data start rollback')
+      }
     }
   })
 

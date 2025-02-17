@@ -8,13 +8,14 @@ get rows from api
 fix grid code
 fix redudant uses of any
 fix login bug
+rollback (maybe)
 
 
 in progress
 ----------------------
 ui design 
 add more routes for api 
-encryption
+
 full crud for models
 single item routes
 user auth routes

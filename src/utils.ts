@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -146,4 +147,33 @@ export const updateAuthJSON = async (walletId: string) => {
   } catch (error) {
     console.error('Error during fetch:', error)
   }
+}
+
+
+export const encryptData = (data: any) => {
+  const buffer = Buffer.from(JSON.stringify(data))
+  const encrypted = crypto.publicEncrypt(process.env.PUBLIC_RSA_KEY as string, buffer)
+
+  return encrypted.toString('base64')
+}
+
+export const generateSigniture = (data: any) => {
+  const sign = crypto.createSign('SHA256')
+  sign.update(JSON.stringify(data))
+
+  const sigBuffer = sign.sign(process.env.PRIVATE_RSA_KEY as string) 
+
+  return sigBuffer.toString('base64')
+}
+
+export const decryptData = (encryptedData: string) => {
+  const buffer = Buffer.from(encryptedData, 'base64')
+  const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
+  return JSON.parse(decrypted.toString('utf-8'))
+}
+
+export const verifySigniture = (data: any, signiture: string): boolean => {
+  const verify = crypto.createVerify('SHA256')
+  verify.update(JSON.stringify(data))
+  return verify.verify(process.env.PUBLIC_RSA_KEY as string, signiture, 'base64')
 }
