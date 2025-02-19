@@ -22,6 +22,12 @@ interface Item {
   [key: string]: any
 }
 
+interface EncryptedItem {
+  id: string
+  encryptedData: string
+  signiture: string
+}
+
 interface Acknowledgment {
   err?: string
   ok?: { '': number } 

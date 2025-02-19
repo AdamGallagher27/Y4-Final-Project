@@ -96,7 +96,7 @@ const verifyToken = (token: string) => {
     }
 
     return false
-    
+
   } catch (error) {
     console.error('Error verifying the token:', error)
     return false
@@ -109,18 +109,18 @@ const verifyToken = (token: string) => {
 // unfortunatly you cant use node packages in edge envs
 // its easier to just make this function and treat it like middleware in resource routes
 export const authorisationMiddleWare = (authHeader: string | null) => {
-    if (!authHeader) {
+  if (!authHeader) {
 
-      return NextResponse.json({ message: 'no auth token present' })
-    }
-  
-    // get the token
-    const token = authHeader.split(' ')[1]
-  
-    if (!verifyToken(token)) {
-      return NextResponse.json({ message: 'error fetching, invalid token' })
-    }
-  
+    return NextResponse.json({ message: 'no auth token present' })
+  }
+
+  // get the token
+  const token = authHeader.split(' ')[1]
+
+  if (!verifyToken(token)) {
+    return NextResponse.json({ message: 'error fetching, invalid token' })
+  }
+
 }
 
 export const updateAuthJSON = async (walletId: string) => {
@@ -161,9 +161,9 @@ export const generateSigniture = (data: any) => {
   const sign = crypto.createSign('SHA256')
   sign.update(JSON.stringify(data))
 
-  const sigBuffer = sign.sign(process.env.PRIVATE_RSA_KEY as string) 
+  const signBuffer = sign.sign(process.env.PRIVATE_RSA_KEY as string)
 
-  return sigBuffer.toString('base64')
+  return signBuffer.toString('base64')
 }
 
 export const decryptData = (encryptedData: string) => {
@@ -176,4 +176,12 @@ export const verifySigniture = (data: any, signiture: string): boolean => {
   const verify = crypto.createVerify('SHA256')
   verify.update(JSON.stringify(data))
   return verify.verify(process.env.PUBLIC_RSA_KEY as string, signiture, 'base64')
+}
+
+// returns the id (pointer) of an entry in gun db
+export const getGunEntryId = (entry: any) => {
+  if (entry && entry._ && entry._['#']) {
+    return entry._['#']
+  }
+  return null
 }
