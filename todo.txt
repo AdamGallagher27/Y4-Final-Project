@@ -1,7 +1,7 @@
 backlog
 -----------------------
 validation
-refactor
+
 style
 test hosted versions
 get rows from api 
@@ -16,7 +16,4 @@ in progress
 ui design 
 add more routes for api 
 
-full crud for models
 single item routes
-user auth routes
-proper and consitent error handleing

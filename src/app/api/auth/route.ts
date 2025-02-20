@@ -48,7 +48,7 @@ const createEnvFile = (rsaKeyPair: any, walletId: string) => {
 
   const initialSession = startSession(walletId)
   const apiToken = createToken(initialSession, rsaKeyPair.privateKey)
-  
+
   if (!fs.existsSync(filePath)) {
     const defaultContent = `PUBLIC_RSA_KEY="${rsaKeyPair.publicKey}"\nPRIVATE_RSA_KEY="${rsaKeyPair.privateKey}"\nNEXT_PUBLIC_HOSTING_URL="http://localhost:3000/"\nNEXT_PUBLIC_GUN_URL="https://gun-manhattan.herokuapp.com/gun"\nPUBLIC_API_TOKEN="${apiToken}"`
 
@@ -74,13 +74,13 @@ export const POST = async (req: Request, res: NextApiResponse) => {
 
       await createEnvFile(rsaKeyPair, walletId)
 
-      return NextResponse.json({ message: 'First-time login set to true' })
+      return NextResponse.json({ message: 'First-time login set to true', ok: true }, { status: 201 })
     }
 
-    return NextResponse.json({ message: 'Not first-time logging in' })
+    return NextResponse.json({ message: 'Not first-time logging in', ok: true }, { status: 200 })
   }
   catch (error) {
-    return NextResponse.json({ message: 'An Error occoured', error: error })
+    return NextResponse.json({ message: 'An Error occoured', error: error, ok: false }, { status: 500 })
   }
 
 }

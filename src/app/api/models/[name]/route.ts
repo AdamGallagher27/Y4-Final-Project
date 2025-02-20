@@ -12,12 +12,10 @@ export const POST = async (req: Request) => {
 
     fs.writeFileSync(filePath, JSON.stringify(modelsJson))
 
-    console.log(newModel)
-
-    return NextResponse.json({message: 'added to models success'})
+    return NextResponse.json({ message: 'Added to models successfully', ok: true }, { status: 201 })
   }
   catch (error) {
-    return NextResponse.json({error: error})
+    return NextResponse.json({ error: error, ok: false }, { status: 500 })
   }
 
 }

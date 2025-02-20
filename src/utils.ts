@@ -110,15 +110,14 @@ const verifyToken = (token: string) => {
 // its easier to just make this function and treat it like middleware in resource routes
 export const authorisationMiddleWare = (authHeader: string | null) => {
   if (!authHeader) {
-
-    return NextResponse.json({ message: 'no auth token present' })
+    return NextResponse.json({ message: 'no auth token present', ok: false }, {status: 401})
   }
 
   // get the token
   const token = authHeader.split(' ')[1]
 
   if (!verifyToken(token)) {
-    return NextResponse.json({ message: 'error fetching, invalid token' })
+    return NextResponse.json({ message: 'error fetching, invalid token', ok: false }, {status: 401})
   }
 
 }
