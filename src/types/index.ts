@@ -1,4 +1,4 @@
-interface Properties {
+interface Property {
   name: string
   type: string
 }
@@ -7,14 +7,19 @@ interface Properties {
 // makes it more readible in the code
 interface Collection {
   name: string
-  properties: Properties[]
+  properties: Property[]
   items?: Item[]
 }
 
 interface Model {
   modelId: string
   name: string
-  properties: Properties[]
+  properties: Property[]
+}
+
+interface Single {
+  singleId: string
+  name: string
 }
 
 interface Item {

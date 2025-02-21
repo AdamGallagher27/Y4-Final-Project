@@ -82,5 +82,4 @@ export const POST = async (req: Request, res: NextApiResponse) => {
   catch (error) {
     return NextResponse.json({ message: 'An Error occoured', error: error, ok: false }, { status: 500 })
   }
-
 }

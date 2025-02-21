@@ -9,7 +9,7 @@ interface Props {
 const addNewModelToModels = async (model: Model) => {
 
   try {
-    const response = await fetch(`http://localhost:3000/api/models/${model.name}`, {
+    const response = await fetch(`http://localhost:3000/api/models`, {
       method: 'POST',
       body: JSON.stringify(model)
     })
@@ -31,7 +31,7 @@ const CollectionCreator = (props: Props) => {
 
   // State to store collections and their items
   const [newCollectionName, setNewCollectionName] = useState('')
-  const [properties, setProperties] = useState<Properties[]>([{ name: '', type: 'string' }])
+  const [properties, setProperties] = useState<Property[]>([{ name: '', type: 'string' }])
 
   // Handle property name/type change
   const handlePropertyChange = (index: number, key: string, value: string) => {
