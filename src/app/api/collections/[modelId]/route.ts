@@ -61,7 +61,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
     const ref = gun.get(modelId)
     const results: Item[] = []
 
-    await ref.map().once((res) => {
+    ref.map().once((res: EncryptedItem) => {
       if (res) {
         const decryptedData = decryptData(res.encryptedData)
         const isValid = verifySigniture(decryptedData, res.signiture)

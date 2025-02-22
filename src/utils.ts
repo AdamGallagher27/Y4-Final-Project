@@ -182,5 +182,4 @@ export const getGunEntryId = (entry: any) => {
   if (entry && entry._ && entry._['#']) {
     return entry._['#']
   }
-  return null
 }

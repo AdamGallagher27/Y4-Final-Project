@@ -18,7 +18,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 		const ref = gun.get(modelId)
 		const results: Item[] = []
 
-		await ref.map().once((res) => {
+		ref.map().once((res: EncryptedItem) => {
 			if (res && res.id === rowId) {
 				const decryptedData = decryptData(res.encryptedData)
 				const isValid = verifySigniture(decryptedData, res.signiture)
@@ -73,8 +73,8 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 		// fix any later
 		const results: any = {}
 
-		await ref.map().once((res) => {
-			if (res && res.encryptedData) {
+		ref.map().once((res: EncryptedItem) => {
+			if (res) {
 				const decryptedData = decryptData(res.encryptedData)
 				const isValid = verifySigniture(decryptedData, res.signiture)
 
@@ -127,7 +127,7 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
       }
 		})
 
-		return NextResponse.json({ body: cleanResponse(results), message: 'Successfully updated row', ok: true }, { status: 200 })
+		return NextResponse.json({ message: 'Successfully updated row', ok: true }, { status: 200 })
 	}
 	catch (error) {
 		console.error(error)
@@ -153,8 +153,8 @@ export const DELETE = async (req: Request, { params }: { params: { modelId: stri
 
 		let rowToDeleteId: string | undefined
 
-		await ref.map().once((res) => {
-			if (res && res.encryptedData) {
+		await ref.map().once((res: EncryptedItem) => {
+			if (res) {
 				const decryptedData = decryptData(res.encryptedData)
 				const isValid = verifySigniture(decryptedData, res.signiture)
 

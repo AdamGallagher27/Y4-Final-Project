@@ -28,7 +28,7 @@ interface Item {
 }
 
 interface EncryptedItem {
-  id: string
+  id?: string
   encryptedData: string
   signiture: string
 }
