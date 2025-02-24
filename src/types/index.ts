@@ -37,3 +37,8 @@ interface Acknowledgment {
   err?: string
   ok?: { '': number } 
 }
+
+interface User {
+  email: string
+  password: string
+}

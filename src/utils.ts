@@ -89,7 +89,7 @@ const verifyToken = (token: string) => {
       return false
     }
 
-    const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+    const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] })
 
     if (decoded) {
       return true
@@ -182,4 +182,14 @@ export const getGunEntryId = (entry: any) => {
   if (entry && entry._ && entry._['#']) {
     return entry._['#']
   }
+}
+
+export const validateEmail = (email: string) => {
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return regex.test(email)
+}
+
+export const validatePassword = (password: string) => {
+  const regex = /^.{8,}$/
+  return regex.test(password)
 }
