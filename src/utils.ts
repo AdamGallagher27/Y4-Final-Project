@@ -195,3 +195,27 @@ export const validatePassword = (password: string) => {
   const regex = /^.{8,}$/
   return regex.test(password)
 }
+
+export const saveResponseStatus = async (url: string, status: number) => {
+
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+
+  try {
+    const response = await fetch(`${apiUrl}api/saveResponse`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url, status }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error saving API response status:', error);
+  }
+}

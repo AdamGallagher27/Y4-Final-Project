@@ -55,3 +55,8 @@ export interface DecryptedData {
   // eslint-disable-next-line
   [key: string]: any
 }
+
+export interface StatusFromAPI {
+  url: string
+  status: number
+}

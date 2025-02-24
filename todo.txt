@@ -10,5 +10,4 @@ rollback (maybe)
 
 in progress
 ----------------------
-ui design 
-api response log saved to json
+UI work
