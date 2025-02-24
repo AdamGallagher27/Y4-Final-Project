@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import { Single } from '@/types'
 
 export const POST = async (req: Request) => {
   try {

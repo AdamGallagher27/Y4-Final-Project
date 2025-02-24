@@ -39,7 +39,7 @@ export default function Home() {
     logging: { developerMode: false },
     checkInstallationImmediately: false,
     dappMetadata: {
-      name: "Next-Metamask-Boilerplate",
+      name: 'Next-Metamask-Boilerplate',
       url: host,
     },
   }

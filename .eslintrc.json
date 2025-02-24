@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "quotes": ["error", "single"],  
+    "@typescript-eslint/no-require-imports": "off",
     "semi": ["error", "never"]
   }
 }

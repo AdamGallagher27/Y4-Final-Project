@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Gun from 'gun'
 import { encryptData, generateSigniture, validateEmail, validatePassword } from '@/utils'
+import { Acknowledgment, EncryptedItem, User } from '@/types'
 const jwt = require('jsonwebtoken')
 
 

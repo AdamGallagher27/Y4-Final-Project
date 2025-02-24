@@ -1,4 +1,5 @@
-import { authorisationMiddleWare, decryptData, encryptData, generateSigniture, getGunEntryId, verifySigniture } from "@/utils"
+import { Acknowledgment, EncryptedItem } from '@/types'
+import { authorisationMiddleWare, decryptData, encryptData, generateSigniture, getGunEntryId, verifySigniture } from '@/utils'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
@@ -131,12 +132,11 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
           const signiture = generateSigniture(value)
           const encryptedData = encryptData(value)
 
-          // fix any later
-          let newData: any = {}
-
-          newData[getGunEntryId(res)] = {
-            encryptedData,
-            signiture,
+          const newData = {
+            [getGunEntryId(res)]: {
+              encryptedData,
+              signiture
+            }
           }
 
           ref.put(newData, (ack: Acknowledgment) => {

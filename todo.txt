@@ -8,12 +8,7 @@ fix grid code
 fix login bug
 rollback (maybe)
 
-
 in progress
 ----------------------
 ui design 
-add more routes for api 
-single item routes
-user auth routes
-fix redudant uses of any
 api response log saved to json

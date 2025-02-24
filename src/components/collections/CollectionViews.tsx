@@ -1,3 +1,4 @@
+import { Collection } from '@/types'
 import { getModel } from '@/utils'
 import React, { useEffect, useState } from 'react'
 

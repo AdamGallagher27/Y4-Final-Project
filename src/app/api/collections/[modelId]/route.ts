@@ -1,3 +1,4 @@
+import { Acknowledgment, EncryptedItem, Item } from '@/types'
 import { cleanResponse, generateRowId, authorisationMiddleWare, generateSigniture, encryptData, decryptData, verifySigniture } from '@/utils'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
@@ -14,7 +15,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
     if (checkToken) return checkToken
 
     const { modelId } = await params
-    const body = await req.json()
+    const body = await req.json() as Item
     const ref = gun.get(modelId)
 
     if (!body || !modelId) {
@@ -86,7 +87,11 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
     // this is my temp solution to this issue
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    return NextResponse.json({ message: 'Got all rows successfully', ok:true, body: cleanResponse(results) }, { status: 200 })
+    if (results.length === 0) {
+      return NextResponse.json({ message: 'No rows found', ok: false, }, { status: 404 })
+    }
+
+    return NextResponse.json({ message: 'Got all rows successfully', ok: true, body: cleanResponse(results) }, { status: 200 })
   }
   catch (error) {
     console.error(error)

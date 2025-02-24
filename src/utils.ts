@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
+import { DecryptedData, EncryptedItem, Item, Model, User } from './types'
 
 const isOnClient = () => {
   if (typeof window !== undefined) {
@@ -69,6 +70,7 @@ export const getModel = async (modelName: string) => {
 
 export const cleanResponse = (response: Item[]) => {
   return response.map(item => {
+    // eslint-disable-next-line
     const { _, ...newObject } = item
     return newObject
   })
@@ -149,14 +151,14 @@ export const updateAuthJSON = async (walletId: string) => {
 }
 
 
-export const encryptData = (data: any) => {
+export const encryptData = (data: Item | User) => {
   const buffer = Buffer.from(JSON.stringify(data))
   const encrypted = crypto.publicEncrypt(process.env.PUBLIC_RSA_KEY as string, buffer)
 
   return encrypted.toString('base64')
 }
 
-export const generateSigniture = (data: any) => {
+export const generateSigniture = (data: Item | User) => {
   const sign = crypto.createSign('SHA256')
   sign.update(JSON.stringify(data))
 
@@ -165,20 +167,20 @@ export const generateSigniture = (data: any) => {
   return signBuffer.toString('base64')
 }
 
-export const decryptData = (encryptedData: string) => {
+export const decryptData = (encryptedData: string)  => {
   const buffer = Buffer.from(encryptedData, 'base64')
   const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
   return JSON.parse(decrypted.toString('utf-8'))
 }
 
-export const verifySigniture = (data: any, signiture: string): boolean => {
+export const verifySigniture = (data: DecryptedData, signiture: string): boolean => {
   const verify = crypto.createVerify('SHA256')
   verify.update(JSON.stringify(data))
   return verify.verify(process.env.PUBLIC_RSA_KEY as string, signiture, 'base64')
 }
 
 // returns the id (pointer) of an entry in gun db
-export const getGunEntryId = (entry: any) => {
+export const getGunEntryId = (entry: EncryptedItem) => {
   if (entry && entry._ && entry._['#']) {
     return entry._['#']
   }

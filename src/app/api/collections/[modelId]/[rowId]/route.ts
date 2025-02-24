@@ -1,6 +1,7 @@
+import { Acknowledgment, DecryptedData, EncryptedItem, Item } from '@/types'
 import { authorisationMiddleWare, cleanResponse, decryptData, encryptData, generateSigniture, getGunEntryId, verifySigniture } from '@/utils'
-import Gun from "gun"
-import { NextResponse } from "next/server"
+import Gun from 'gun'
+import { NextResponse } from 'next/server'
 
 const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
 
@@ -20,7 +21,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 
 		ref.map().once((res: EncryptedItem) => {
 			if (res && res.id === rowId) {
-				const decryptedData = decryptData(res.encryptedData)
+				const decryptedData: DecryptedData = decryptData(res.encryptedData)
 				const isValid = verifySigniture(decryptedData, res.signiture)
 
 				// if the signiture is valid it means the data has not been tampered with outside of the api
@@ -70,8 +71,7 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 			return NextResponse.json({ message: 'invalid params', ok: false }, { status: 400 })
 		}
 
-		// fix any later
-		const results: any = {}
+		const results: DecryptedData = {}
 
 		ref.map().once((res: EncryptedItem) => {
 			if (res) {
@@ -82,7 +82,7 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 				// create a new body and add it as a property to results
 				if (isValid && res.id === rowId) {
 
-					const combinedBody = { ...decryptedData, ...body }
+					const combinedBody = { ...decryptedData, ...body } as Item
 
 					const newBody = {
 						id: rowId,

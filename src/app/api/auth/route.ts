@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { startSession } from '@/utils'
-import { NextApiResponse } from 'next'
+import { RSAKeyPair } from '@/types'
 const { generateKeyPair } = require('crypto')
 
 
@@ -14,11 +14,10 @@ const createToken = (sessionData: string, privateKey: string) => {
   }
 }
 
-
 const generateRSAKeys = async () => {
   try {
     // use crypto to generate public / private keys
-    const rsaKeyPair = await new Promise((resolve, reject) => {
+    const rsaKeyPair = await new Promise<{ publicKey: string; privateKey: string }>((resolve, reject) => {
       generateKeyPair(
         'rsa',
         {
@@ -26,8 +25,8 @@ const generateRSAKeys = async () => {
           publicKeyEncoding: { type: 'spki', format: 'pem' },
           privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
         },
-        // fix any later
-        (err: any, publicKey: any, privateKey: any) => {
+
+        (err: Error, publicKey: string, privateKey: string) => {
           if (err) reject(err)
           else resolve({ publicKey, privateKey })
         }
@@ -41,8 +40,7 @@ const generateRSAKeys = async () => {
   }
 }
 
-// fix any later
-const createEnvFile = (rsaKeyPair: any, walletId: string) => {
+const createEnvFile = (rsaKeyPair: RSAKeyPair, walletId: string) => {
   const fileName = '.env'
   const filePath = path.resolve(fileName)
 
@@ -60,7 +58,7 @@ const createEnvFile = (rsaKeyPair: any, walletId: string) => {
 }
 
 
-export const POST = async (req: Request, res: NextApiResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const filePath = path.join(process.cwd(), 'public', 'auth.json')
 
@@ -72,7 +70,9 @@ export const POST = async (req: Request, res: NextApiResponse) => {
 
       const rsaKeyPair = await generateRSAKeys()
 
-      await createEnvFile(rsaKeyPair, walletId)
+      if(rsaKeyPair) {
+        await createEnvFile(rsaKeyPair, walletId)
+      }
 
       return NextResponse.json({ message: 'First-time login set to true', ok: true }, { status: 201 })
     }

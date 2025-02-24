@@ -1,4 +1,5 @@
 'use client'
+import { Model, Property } from '@/types'
 import { generateModelId } from '@/utils'
 import { useState } from 'react'
 

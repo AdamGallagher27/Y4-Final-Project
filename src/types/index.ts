@@ -1,44 +1,57 @@
-interface Property {
+export interface Property {
   name: string
   type: string
 }
 
 // Model and Collection are esssentially the same thing this just 
 // makes it more readible in the code
-interface Collection {
+export interface Collection {
   name: string
   properties: Property[]
   items?: Item[]
 }
 
-interface Model {
+export interface Model {
   modelId: string
   name: string
   properties: Property[]
 }
 
-interface Single {
+export interface Single {
   singleId: string
   name: string
 }
 
-interface Item {
+export interface Item {
   id: string
+  // eslint-disable-next-line
   [key: string]: any
 }
 
-interface EncryptedItem {
+export interface EncryptedItem {
   id?: string
   encryptedData: string
   signiture: string
+  // eslint-disable-next-line
+  _: any
 }
 
-interface Acknowledgment {
+export interface Acknowledgment {
   err?: string
   ok?: { '': number } 
 }
 
-interface User {
+export interface User {
   email: string
   password: string
+}
+
+export interface RSAKeyPair {
+  publicKey: string
+    privateKey: string
+}
+
+export interface DecryptedData {
+  // eslint-disable-next-line
+  [key: string]: any
 }
