@@ -1,14 +1,16 @@
 backlog
 -----------------------
-validation
-style
 test hosted versions
-get rows from api 
-fix grid code
-fix login bug
 rollback (maybe)
 
 in progress
 ----------------------
 UI work
-protected page routes after maetamask login
+style
+fix grid code
+fix login bug
+loading logic
+get rows from api 
+validation
+documentation page 
+status page

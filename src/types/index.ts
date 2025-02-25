@@ -60,3 +60,10 @@ export interface StatusFromAPI {
   url: string
   status: number
 }
+
+export interface AuthContextInterface {
+  isLoggedIn: boolean
+  setIsLoggedIn: (value: boolean) => void
+  walletAddress: string | null
+  setWalletAddress: (value: string) => void
+}

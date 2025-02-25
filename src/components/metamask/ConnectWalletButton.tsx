@@ -1,50 +1,48 @@
 'use client'
 
-import { updateAuthJSON } from '@/utils'
 //  https://metamask.io/news/developers/how-to-implement-metamask-sdk-with-nextjs/
-
+import { updateAuthJSON } from '@/utils'
 import { useSDK } from '@metamask/sdk-react'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Mail } from 'lucide-react'
 import { Button } from '../ui/button'
+import { useAuth } from '@/context/AuthContext'
 
 interface Props {
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
 }
 
-export const ConnectWalletButton = ({ setIsLoggedIn }: Props) => {
-
+export const ConnectWalletButton = ({ setIsAuthenticated }: Props) => {
+  
+  const {  setIsLoggedIn, setWalletAddress } = useAuth()
   const { sdk, connected, account } = useSDK()
 
   // if the account variable gets assigned wallet address
   // hit the user auth end point
   // this checks if its the first time the user has logged in before
   useEffect(() => {
-    if (account) updateAuthJSON(account)
+    if (account) {
+      updateAuthJSON(account)
+      setIsLoggedIn(true)
+      setWalletAddress(account) 
+      setIsAuthenticated(true)
+    }
+    else{
+      setIsLoggedIn(false)
+      setWalletAddress('') 
+      setIsAuthenticated(false)
+    }
   }, [account])
 
   const connect = async () => {
     try {
       await sdk?.connect()
-      setIsLoggedIn(true)
     } catch (err) {
       console.warn(`No accounts found`, err)
-      setIsLoggedIn(false)
+      setIsAuthenticated(false)
     }
   }
-
-  // const disconnect = () => {
-  //   if (sdk) {
-  //     sdk.terminate()
-  //     setIsLoggedIn(false)
-  //   }
-  // }
-
-
-  useEffect(() => {
-    account && setIsLoggedIn(true)
-  }, [account])
 
   if(connected) return
 
