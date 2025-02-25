@@ -4,11 +4,11 @@ import '../styles/globals.css'
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang='en'>
-      <body>
+      <body className='p-0 m-0'>
         {children}
       </body>
     </html>

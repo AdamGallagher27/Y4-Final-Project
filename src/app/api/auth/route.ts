@@ -17,7 +17,7 @@ const createToken = (sessionData: string, privateKey: string) => {
 const generateRSAKeys = async () => {
   try {
     // use crypto to generate public / private keys
-    const rsaKeyPair = await new Promise<{ publicKey: string; privateKey: string }>((resolve, reject) => {
+    const rsaKeyPair = await new Promise<{ publicKey: string, privateKey: string }>((resolve, reject) => {
       generateKeyPair(
         'rsa',
         {

@@ -1,39 +1,20 @@
 'use client'
-import CollectionCreator from '@/components/collections/CollectionCreator'
-import CollectionNames from '@/components/collections/CollectionNames'
-import CollectionView from '@/components/collections/CollectionViews'
 import { ConnectWalletButton } from '@/components/metamask/ConnectWalletButton'
-import { getAllModelNames } from '@/utils'
 import { MetaMaskProvider } from '@metamask/sdk-react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
-
-  const [selectedCollection, setSelectedCollection] = useState<string>('')
-  const [collectionNames, setCollectionNames] = useState<string[]>([])
-
-  useEffect(() => {
-    const loadCollectionNamesArray = async () => {
-      setCollectionNames(await getAllModelNames())
-    }
-
-    loadCollectionNamesArray()
-
-  }, [])
-
-
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const addToCollectionNames = (collectionName: string) => {
-    setCollectionNames((prevItems) => [...prevItems, collectionName])
-  }
+  const router = useRouter()
 
-  const updateSelectedCollection = (collectionName: string) => {
-    setSelectedCollection(collectionName)
-  }
+  useEffect(() => {
+    if(isLoggedIn) router.push('/database')
 
-  // use env host var later
-  const host = 'http://localhost:3000/'
+  }, [isLoggedIn, router])
+
+  const host = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
 
   const sdkOptions = {
     logging: { developerMode: false },
@@ -45,18 +26,10 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className='p-0 m-0'>
       <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
         <ConnectWalletButton setIsLoggedIn={setIsLoggedIn} />
       </MetaMaskProvider>
-
-      {isLoggedIn &&
-        <>
-          <CollectionNames collectionNames={collectionNames} updateSelectedCollection={updateSelectedCollection} />
-          <CollectionCreator addToCollectionNames={addToCollectionNames} />
-          <CollectionView selectedCollectionName={selectedCollection} /> 
-        </>}
-
     </div>
   )
 }

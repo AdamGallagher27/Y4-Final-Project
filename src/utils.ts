@@ -216,6 +216,6 @@ export const saveResponseStatus = async (url: string, status: number) => {
     const responseData = await response.json()
     return responseData
   } catch (error) {
-    console.error('Error saving API response status:', error);
+    console.error('Error saving API response status:', error)
   }
 }

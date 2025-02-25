@@ -5,6 +5,9 @@ import { updateAuthJSON } from '@/utils'
 
 import { useSDK } from '@metamask/sdk-react'
 import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import { Mail } from 'lucide-react'
+import { Button } from '../ui/button'
 
 interface Props {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
@@ -19,7 +22,7 @@ export const ConnectWalletButton = ({ setIsLoggedIn }: Props) => {
   // this checks if its the first time the user has logged in before
   useEffect(() => {
     if (account) updateAuthJSON(account)
-    }, [account])
+  }, [account])
 
   const connect = async () => {
     try {
@@ -31,31 +34,35 @@ export const ConnectWalletButton = ({ setIsLoggedIn }: Props) => {
     }
   }
 
-  const disconnect = () => {
-    if (sdk) {
-      sdk.terminate()
-      setIsLoggedIn(false)
-    }
-  }
+  // const disconnect = () => {
+  //   if (sdk) {
+  //     sdk.terminate()
+  //     setIsLoggedIn(false)
+  //   }
+  // }
 
 
   useEffect(() => {
     account && setIsLoggedIn(true)
   }, [account])
 
+  if(connected) return
+
   return (
     <div className='relative'>
-      {connected ? (
-        <><p>connected </p>
-          <button onClick={() => disconnect()}>disconnect </button>
-          <p>wallet address : {account}</p>
-        </>
-      ) : (
-        <button onClick={() => connect()}>connect wallet </button>
-      )}
-
-
-      <p>user logs in if its the first time a SEA public / private keys are generated and securily saved. the wallet address / private key are used to generate api tokens</p>
+        <div className='flex items-center justify-center min-h-screen'>
+          <Card className='w-64'>
+            <CardHeader>
+              <CardTitle>Connect Wallet</CardTitle>
+              <CardDescription>Metamask account and extension are required</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => connect()}>
+                <Mail /> Login with Metamask
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
     </div>
   )
 }

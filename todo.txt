@@ -11,3 +11,4 @@ rollback (maybe)
 in progress
 ----------------------
 UI work
+protected page routes after maetamask login
