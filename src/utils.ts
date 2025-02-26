@@ -35,7 +35,7 @@ export const startSession = (walletId: string) => {
   return JSON.stringify(sessionData)
 }
 
-const getAllModels = async () => {
+export const getAllModels = async () => {
 
   try {
 
@@ -222,24 +222,16 @@ export const saveResponseStatus = async (url: string, status: number) => {
 
 export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> => {
 
-  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-
   try {
-    const response = await fetch(`${apiUrl}api/saveResponse`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    if (isOnClient()) {
+      const response = await fetch('/response.json')
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
+      const responses = await response.json()
+
+      return responses as StatusFromAPI[]
     }
-
-    const responseData = await response.json()
-
-    return responseData.data as StatusFromAPI[]
-  } catch (error) {
-    console.error('Error getting API response status:', error)
+  }
+  catch (error) {
+    console.error(error)
   }
 }

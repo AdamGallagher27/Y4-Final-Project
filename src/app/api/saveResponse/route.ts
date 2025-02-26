@@ -24,17 +24,3 @@ export const POST = async (req: NextRequest,) => {
 		console.error(error)
 	}
 }
-
-export const GET = async () => {
-	try {
-		const filePath = path.join(process.cwd(), 'public', 'response.json')
-
-		const response = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-
-		return NextResponse.json({ data: response, ok: true }, { status: 200 })
-	}
-	catch (error) {
-		console.error(error)
-		return NextResponse.json({ message: 'Error reading file', ok: false }, { status: 500 })
-	}
-}

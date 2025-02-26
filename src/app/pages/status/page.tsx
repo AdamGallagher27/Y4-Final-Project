@@ -24,7 +24,8 @@ export default function Status() {
 	return (
 		<div className='flex'>
 			<Sidebar />
-			<div className='p-4 w-full'>
+			{/* im using w95% instead of w-full to prevent a sidebar bug */}
+			<div className='p-4 w-[95%]'>
 				<Title firstPartOfTitle='API' secondPartOfTitle='Logs' />
 				{responses && <ApiResponseTable responses={responses} />}
 			</div>
