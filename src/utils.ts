@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { DecryptedData, EncryptedItem, Item, Model, User } from './types'
+import { DecryptedData, EncryptedItem, Item, Model, StatusFromAPI, User } from './types'
 
 const isOnClient = () => {
   if (typeof window !== undefined) {
@@ -112,14 +112,14 @@ const verifyToken = (token: string) => {
 // its easier to just make this function and treat it like middleware in resource routes
 export const authorisationMiddleWare = (authHeader: string | null) => {
   if (!authHeader) {
-    return NextResponse.json({ message: 'no auth token present', ok: false }, {status: 401})
+    return NextResponse.json({ message: 'no auth token present', ok: false }, { status: 401 })
   }
 
   // get the token
   const token = authHeader.split(' ')[1]
 
   if (!verifyToken(token)) {
-    return NextResponse.json({ message: 'error fetching, invalid token', ok: false }, {status: 401})
+    return NextResponse.json({ message: 'error fetching, invalid token', ok: false }, { status: 401 })
   }
 
 }
@@ -167,7 +167,7 @@ export const generateSigniture = (data: Item | User) => {
   return signBuffer.toString('base64')
 }
 
-export const decryptData = (encryptedData: string)  => {
+export const decryptData = (encryptedData: string) => {
   const buffer = Buffer.from(encryptedData, 'base64')
   const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
   return JSON.parse(decrypted.toString('utf-8'))
@@ -217,5 +217,29 @@ export const saveResponseStatus = async (url: string, status: number) => {
     return responseData
   } catch (error) {
     console.error('Error saving API response status:', error)
+  }
+}
+
+export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> => {
+
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+
+  try {
+    const response = await fetch(`${apiUrl}api/saveResponse`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+
+    return responseData.data as StatusFromAPI[]
+  } catch (error) {
+    console.error('Error getting API response status:', error)
   }
 }

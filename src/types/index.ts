@@ -59,6 +59,7 @@ export interface DecryptedData {
 export interface StatusFromAPI {
   url: string
   status: number
+  createdAt: string
 }
 
 export interface AuthContextInterface {

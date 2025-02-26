@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest,) => {
 
 		const currentResponses = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
 
-		fs.writeFileSync(filePath, JSON.stringify([...currentResponses, { url, status }]))
+		fs.writeFileSync(filePath, JSON.stringify([...currentResponses, { url, status, createdAt: new Date().toLocaleString() }]))
 
 		return NextResponse.json({ message: 'Saved API response status', ok: true }, { status: 201 })
 	}
