@@ -3,7 +3,6 @@ backlog
 test hosted versions
 rollback (maybe)
 fix spacing on status page (low priority)
-add not found comp
 
 in progress
 ----------------------

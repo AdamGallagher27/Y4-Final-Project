@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { DecryptedData, EncryptedItem, Item, Model, StatusFromAPI, User } from './types'
+import { Collection, DecryptedData, EncryptedItem, Item, Model, StatusFromAPI, User } from './types'
 
 const isOnClient = () => {
   if (typeof window !== undefined) {
@@ -35,7 +35,7 @@ export const startSession = (walletId: string) => {
   return JSON.stringify(sessionData)
 }
 
-export const getAllModels = async () => {
+export const getAllModels = async (): Promise<Model[] | undefined> => {
 
   try {
 
@@ -51,22 +51,17 @@ export const getAllModels = async () => {
   catch (error) {
     console.error(error)
   }
+  return
 }
 
-export const getAllModelNames = async () => {
-  const models = await getAllModels()
+export const getAllModelNames = (models: Model[] | undefined) => {
+
+  if (!models) return
+
   return models.map((model: Model) => {
     return model.name
   })
 }
-
-export const getModel = async (modelName: string) => {
-  const models = await getAllModels()
-  return models.filter((model: Model) => {
-    return model.name === modelName
-  })[0]
-}
-
 
 export const cleanResponse = (response: Item[]) => {
   return response.map(item => {
@@ -234,4 +229,29 @@ export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> 
   catch (error) {
     console.error(error)
   }
+}
+
+export const getAllCollectionRows = async (collectionName: string): Promise<Collection[] | undefined> => {
+
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/collections/${collectionName}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.body
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
 }

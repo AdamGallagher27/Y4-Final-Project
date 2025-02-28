@@ -21,6 +21,7 @@ import {
 import { StatusFromAPI } from '@/types'
 import { Input } from '../ui/input'
 import { useState } from 'react'
+import NotFound from './NotFound'
 
 
 const columns: ColumnDef<StatusFromAPI>[] = [
@@ -101,7 +102,7 @@ const ApiResponseTable = ({ responses }: Props) => {
 				/>
 			</div>
 
-			<div className='rounded-md'>
+			{responses.length === 0 ? <NotFound item='API responses' /> : <div className='rounded-md'>
 				<Table className='border-none'>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -126,7 +127,7 @@ const ApiResponseTable = ({ responses }: Props) => {
 						))}
 					</TableBody>
 				</Table>
-			</div>
+			</div>}
 		</div>
 	)
 }

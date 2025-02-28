@@ -4,7 +4,49 @@
         "name": "cars",
         "properties": [
             {
+                "name": "id",
+                "type": "string"
+            },
+            {
                 "name": "wheels",
+                "type": "string"
+            },
+            {
+                "name": "year",
+                "type": "number"
+            },
+            {
+                "name": "insurance",
+                "type": "boolean"
+            },
+            {
+                "name": "colour",
+                "type": "string"
+            },
+            {
+                "name": "automatic",
+                "type": "boolean"
+            }
+        ],
+        "items": []
+    },
+    {
+        "modelId": "houses-026937",
+        "name": "houses",
+        "properties": [
+            {
+                "name": "doors",
+                "type": "string"
+            }
+        ],
+        "items": []
+    },
+    {
+        "modelId": "hospitals-026937",
+        "name": "hospitals",
+        "properties": [
+            {
+                "name": "medicine",
                 "type": "string"
             }
         ],
