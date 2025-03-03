@@ -3,15 +3,16 @@ backlog
 test hosted versions
 rollback (maybe)
 fix spacing on status page (low priority)
+rerender inner sidebar on model creation
+ignore dashboard res
+2 small project to show dashboard works
 
 in progress
 ----------------------
 UI work
 style
-fix grid code
-fix login bug
+
 loading logic
-get rows from api 
 validation
 documentation page 
 

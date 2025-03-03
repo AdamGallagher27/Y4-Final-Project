@@ -245,7 +245,7 @@ export const getAllCollectionRows = async (collectionName: string): Promise<Coll
     })
 
     if (!response.ok) {
-      throw new Error('Network response was not ok')
+      console.error('Network response was not ok')
     }
 
     const responseData = await response.json()

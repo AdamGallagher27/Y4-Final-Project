@@ -5,6 +5,7 @@ import CollectionTable from '@/components/collections/CollectionTable'
 import InnerSideBar from '@/components/generic/InnerSideBar'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
+import { Button } from '@/components/ui/button'
 import { Model } from '@/types'
 import { getAllModels } from '@/utils'
 import { useEffect, useState } from 'react'
@@ -32,7 +33,7 @@ export default function Database() {
 			<Sidebar />
 			{selectedModel && <InnerSideBar allModels={allModels} selectedModel={selectedModel} setSelectedModel={setSelectedModel} />}
 			<div className='p-4 w-full'>
-				{(selectedModel && selectedModel.name) && <Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} />}
+				<div className='flex items-center justify-between'>{(selectedModel && selectedModel.name) && <Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} />} <Button>Add New Row</Button></div>
 				{selectedModel && <CollectionTable selectedModel={selectedModel} />}
 			</div>
 		</div>

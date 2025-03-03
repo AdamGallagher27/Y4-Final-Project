@@ -42,7 +42,6 @@ const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 
 interface CollectionTableProps {
 	selectedModel: Model
-
 }
 
 const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
@@ -52,16 +51,19 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 	useEffect(() => {
 		const handleGetAllRows = async () => {
 			const allData = await getAllCollectionRows(selectedModel.modelId)
-			setData(allData)
-		}
+			
+			if(allData) {
+				setData(allData)
+			}
 
+		}
 		handleGetAllRows()
-	}, [])
+	}, [selectedModel])
 
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
 	const columns = generateColumns(selectedModel.properties)
-
+ 
 	const table = useReactTable({
 		data: data || [],
 		columns,

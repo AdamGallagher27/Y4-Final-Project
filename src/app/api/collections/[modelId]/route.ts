@@ -72,7 +72,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
     const results: Item[] = []
 
     ref.map().once((res: EncryptedItem) => {
-      if (res) {
+      if (res && res.encryptedData && res.signiture && res.id) {
         const decryptedData = decryptData(res.encryptedData)
         const isValid = verifySigniture(decryptedData, res.signiture)
 
