@@ -1,6 +1,7 @@
 'use client'
 
 import useAuthentication from '@/app/hooks/useAuthentication'
+import AddRow from '@/components/collections/AddRow'
 import CollectionTable from '@/components/collections/CollectionTable'
 import InnerSideBar from '@/components/generic/InnerSideBar'
 import Sidebar from '@/components/generic/Sidebar'
@@ -33,7 +34,11 @@ export default function Database() {
 			<Sidebar />
 			{selectedModel && <InnerSideBar allModels={allModels} selectedModel={selectedModel} setSelectedModel={setSelectedModel} />}
 			<div className='p-4 w-full'>
-				<div className='flex items-center justify-between'>{(selectedModel && selectedModel.name) && <Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} />} <Button>Add New Row</Button></div>
+				{(selectedModel && selectedModel.name) &&
+					<div className='flex items-center justify-between'>
+						<Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} /> <AddRow selectedModel={selectedModel} />
+					</div>
+					}
 				{selectedModel && <CollectionTable selectedModel={selectedModel} />}
 			</div>
 		</div>
