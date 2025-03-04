@@ -98,7 +98,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
 
     if (results.length === 0) {
       saveResponseStatus(currentUrl, 404)
-      return NextResponse.json({ message: 'No rows found', ok: false, }, { status: 404 })
+      return NextResponse.json({ message: 'No rows found', ok: true, }, { status: 404 })
     }
 
     saveResponseStatus(currentUrl, 200)

@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { Collection, DecryptedData, EncryptedItem, Item, Model, StatusFromAPI, User } from './types'
+import { Collection, DecryptedData, EncryptedItem, Item, Model, Property, StatusFromAPI, User } from './types'
+import { Dispatch, SetStateAction } from 'react'
 
 const isOnClient = () => {
   if (typeof window !== undefined) {
@@ -231,12 +232,38 @@ export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> 
   }
 }
 
-export const getAllCollectionRows = async (collectionName: string): Promise<Collection[] | undefined> => {
+export const addRowToCollection = async (modelId: string, body: Item) => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+
+  try {
+    const response = await fetch(`${apiUrl}api/collections/${modelId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ ...body }),
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.body 
+  }
+  catch(error) {
+    console.error('Error saving API response status:', error)
+  }
+}
+
+export const getAllCollectionRows = async (modelId: string): Promise<Collection[] | undefined> => {
 
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN
   try {
-    const response = await fetch(`${apiUrl}api/collections/${collectionName}`, {
+    const response = await fetch(`${apiUrl}api/collections/${modelId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -254,4 +281,57 @@ export const getAllCollectionRows = async (collectionName: string): Promise<Coll
     console.error('Error saving API response status:', error)
   }
   return
+}
+
+const validateField = (name: string, value: string, properties: Property[]) => {
+  const property = properties.find((prop) => prop.name === name)
+
+  if (!property) return
+
+  if (property.name === 'id') return
+
+  if (value === '') {
+    return `${property.name} is required.`
+  }
+
+  if (property.type === 'number' && isNaN(Number(value))) {
+    return `${property.name} must be a valid number.`
+  }
+
+  if (property.type === 'string') {
+
+    if (value.length < 3) {
+      return `${property.name} must be at least 3 characters long.`
+    }
+
+    const regex = /^[a-zA-Z0-9 ]+$/
+    if (!regex.test(value)) {
+      return `${property.name} can only contain letters, numbers, and spaces.`
+    }
+  }
+
+}
+
+export const validateForm = (
+  form: { [key: string]: string }, 
+  properties: Property[], 
+  setErrors: Dispatch<SetStateAction<{ [key: string]: string }>>
+) => {
+  const formErrors: { [key: string]: string } = {}
+
+  // by default keep has error as false then check if error exists 
+  let isValid = true
+
+  properties.forEach((property) => {
+    const value = form[property.name] || ''
+    const error = validateField(property.name, value, properties)
+
+    if (error) {
+      formErrors[property.name] = error
+      isValid = false
+    }
+  })
+
+  setErrors(formErrors)
+  return isValid
 }

@@ -23,7 +23,6 @@ export interface Single {
 }
 
 export interface Item {
-  id: string
   // eslint-disable-next-line
   [key: string]: any
 }
