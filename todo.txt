@@ -9,6 +9,8 @@ ignore dashboard res / rix redudnant calls
 reload after create (reload hook maybe)
 tidy/refactor
 delete collection / single
+can create collection without any properties
+reset form when switching between collections
 
 in progress
 ----------------------

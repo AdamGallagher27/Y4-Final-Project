@@ -13,6 +13,9 @@ const isOnClient = () => {
   return false
 }
 
+export const refreshPage = () => {
+  if(isOnClient()) window.location.reload()
+}
 
 // these three functions are the same but have different names 
 // this is just for cleaner ui code

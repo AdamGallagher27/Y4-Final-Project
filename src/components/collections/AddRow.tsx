@@ -26,8 +26,6 @@ const preProcessSelectedModel = (model: Model) => {
   return result
 }
 
-
-
 const AddRow = ({ selectedModel, setRefresh }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(preProcessSelectedModel(selectedModel))
   const [open, setOpen] = useState(false)

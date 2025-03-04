@@ -18,8 +18,8 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Input } from '../ui/input'
-import { useEffect, useState } from 'react'
-import { Collection, Model, Property } from '@/types'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Collection, Item, Model, Property } from '@/types'
 import { getAllCollectionRows } from '@/utils'
 import Loading from '../generic/Loading'
 
@@ -43,14 +43,17 @@ const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 
 interface CollectionTableProps {
 	selectedModel: Model
+	setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
 }
 
-const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
+const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps) => {
 
 	const [loading, setLoading] = useState<boolean>(true)
 	const [data, setData] = useState<Collection[] | undefined>([])
 
 	useEffect(() => {
+		// reset the selected row to prevent updating row in differente table
+		setSelectedRow(undefined)
 
 		const timer = setTimeout(() => {
 			setLoading(false)
@@ -58,8 +61,8 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 
 		const handleGetAllRows = async () => {
 			const allData = await getAllCollectionRows(selectedModel.modelId)
-			
-			if(allData) {
+
+			if (allData) {
 				setData(allData)
 			}
 			else {
@@ -79,7 +82,6 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
 	const columns = generateColumns(selectedModel.properties)
- 
 	const table = useReactTable({
 		data: data || [],
 		columns,
@@ -92,11 +94,11 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 		},
 	})
 
-	if(loading) {
+	if (loading) {
 		return <Loading />
 	}
 
-	if(!loading && data && data.length === 0) {
+	if (!loading && data && data.length === 0) {
 		return <p>No entries yet</p>
 	}
 
@@ -128,11 +130,33 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 					<TableBody>
 						{table.getRowModel().rows.map((row) => (
 							<TableRow key={row.id} className='border-none'>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id} className='border-none'>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
+								{row.getVisibleCells().map((cell) => {
+									const isIdColumn = cell.column.id === 'id'
+
+									return (
+										<TableCell key={cell.id} className='border-none'>
+											{isIdColumn ? (
+												<div className='flex items-center'>
+													<input
+														type='radio'
+														id={`radio-${row.id}`}
+														name='row-select'
+														// value={cell.renderValue() as string}
+														onChange={() => {
+															setSelectedRow(row.original)
+															row.toggleSelected(true)
+														}}
+													/>
+													<label htmlFor={`radio-${row.id}`} className='ml-2'>
+														{cell.renderValue() as string}
+													</label>
+												</div>
+											) : (
+												cell.renderValue() as string
+											)}
+										</TableCell>
+									)
+								})}
 							</TableRow>
 						))}
 					</TableBody>

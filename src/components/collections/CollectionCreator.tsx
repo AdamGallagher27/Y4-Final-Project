@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Model, Property } from '@/types'
-import { generateModelId } from '@/utils'
+import { generateModelId, refreshPage } from '@/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -64,6 +64,7 @@ const CollectionCreator = () => {
       setNewCollectionName('')
       setProperties([{ name: '', type: 'string' }])
       setOpen(false)
+      refreshPage()
     }
   }
 
