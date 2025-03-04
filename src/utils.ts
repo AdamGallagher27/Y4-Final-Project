@@ -251,7 +251,7 @@ export const addRowToCollection = async (modelId: string, body: Item) => {
     }
 
     const responseData = await response.json()
-    return responseData.body 
+    return responseData.body as EncryptedItem 
   }
   catch(error) {
     console.error('Error saving API response status:', error)

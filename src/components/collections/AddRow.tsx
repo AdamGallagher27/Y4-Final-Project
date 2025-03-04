@@ -1,15 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Model, Property } from '@/types'
+import { Model } from '@/types'
 import FormError from '../generic/FormError'
 import { addRowToCollection, validateForm } from '@/utils'
 
 interface Props {
   selectedModel: Model
+  setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
 // pre save form with properties that are boolean
@@ -25,7 +26,9 @@ const preProcessSelectedModel = (model: Model) => {
   return result
 }
 
-const AddRow = ({ selectedModel }: Props) => {
+
+
+const AddRow = ({ selectedModel, setRefresh }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(preProcessSelectedModel(selectedModel))
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -36,9 +39,16 @@ const AddRow = ({ selectedModel }: Props) => {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleAddRow = () => {
-    if(validateForm(form, properties, setErrors) ){
-      console.log(addRowToCollection(selectedModel.modelId, form))
+  const resetPopUp = () => {
+    setRefresh(false)
+    setOpen(false)
+    setForm(preProcessSelectedModel(selectedModel))
+  }
+
+  const handleAddRow = async () => {
+    if (validateForm(form, properties, setErrors)) {
+      const response = await addRowToCollection(selectedModel.modelId, form)
+      response && resetPopUp()
     }
   }
 
@@ -57,8 +67,8 @@ const AddRow = ({ selectedModel }: Props) => {
 
             if (property.type === 'boolean') {
               return (
-                <div className='mb-3'>
-                  <div key={`${property}-${index}`} className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
+                <div key={`${property}-${index}`} className='mb-3'>
+                  <div className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
                     <div className='text-[#71717A]'>Enter {property.name}</div>
                     <input
                       type='checkbox'

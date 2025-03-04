@@ -21,6 +21,7 @@ import { Input } from '../ui/input'
 import { useEffect, useState } from 'react'
 import { Collection, Model, Property } from '@/types'
 import { getAllCollectionRows } from '@/utils'
+import Loading from '../generic/Loading'
 
 const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 	return properties.map((property) => {
@@ -46,18 +47,33 @@ interface CollectionTableProps {
 
 const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 
+	const [loading, setLoading] = useState<boolean>(true)
 	const [data, setData] = useState<Collection[] | undefined>([])
 
 	useEffect(() => {
+
+		const timer = setTimeout(() => {
+			setLoading(false)
+		}, 3000)
+
 		const handleGetAllRows = async () => {
 			const allData = await getAllCollectionRows(selectedModel.modelId)
 			
 			if(allData) {
 				setData(allData)
 			}
-
+			else {
+				setData([])
+			}
 		}
+
 		handleGetAllRows()
+
+		// cleanup timeout and reset loading
+		return () => {
+			clearTimeout(timer)
+			setLoading(true)
+		}
 	}, [selectedModel])
 
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -75,6 +91,14 @@ const CollectionTable = ({ selectedModel }: CollectionTableProps) => {
 			columnFilters,
 		},
 	})
+
+	if(loading) {
+		return <Loading />
+	}
+
+	if(!loading && data && data.length === 0) {
+		return <p>No entries yet</p>
+	}
 
 	return (
 		<div className='w-full'>

@@ -8,6 +8,7 @@ ignore dashboard res / rix redudnant calls
 2 small project to show dashboard works
 reload after create (reload hook maybe)
 tidy/refactor
+delete collection / single
 
 in progress
 ----------------------
