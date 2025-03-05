@@ -31,7 +31,7 @@ export default function Profile() {
 	return (
 		<div className='flex'>
 			<Sidebar />
-			<div className='p-4'>
+			<div className='p-4 ml-20'>
 				<Title firstPartOfTitle='Profile' secondPartOfTitle='User' />
 				<Button className='mt-4 ml-2' onClick={logoutAndRedirect}>Logout</Button>
 			</div>

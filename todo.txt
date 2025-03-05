@@ -2,9 +2,8 @@ backlog
 -----------------------
 test hosted versions
 rollback (maybe)
-fix spacing on status page (low priority)
 
-ignore dashboard res / rix redudnant calls
+ignore dashboard res 
 2 small project to show dashboard works
 
 tidy/refactor
@@ -18,5 +17,4 @@ UI work
 style
 
 
-documentation page 
 

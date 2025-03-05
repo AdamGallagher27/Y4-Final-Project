@@ -389,3 +389,24 @@ export const validateForm = (
   setErrors(formErrors)
   return isValid
 }
+
+
+export const getPillColour = (method: string) => {
+
+  let methodColour
+
+  if(method === 'GET') {
+    methodColour = 'bg-green-500'
+  }
+  else if(method === 'POST') {
+    methodColour = 'bg-yellow-500'
+  }
+  else if(method === 'PUT') {
+    methodColour = 'bg-blue-500'
+  }
+  else {
+    methodColour = 'bg-red-500'
+  }
+
+  return methodColour
+}

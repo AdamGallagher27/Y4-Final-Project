@@ -11,7 +11,7 @@ interface Props {
 const InnerSideBar = ({ allModels, selectedModel, setSelectedModel }: Props) => {
 
 	return (
-		<div className='h-screen w-56 flex flex-col items-center border-r border-[#E2E8F0] px-3 py-5 space-y-5'>
+		<div className='h-screen w-56 flex flex-col items-center border-r border-[#E2E8F0] px-3 py-5 space-y-5 ml-20'>
 			<CollectionCreator />
 			<ul>
 				{allModels && allModels.map(model => {

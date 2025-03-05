@@ -9,7 +9,7 @@ const Sidebar = () => {
 	const router = useRouter()
 
 	return (
-		<div className='h-screen w-20 flex flex-col items-center bg-[#F8FAFC] border-r border-[#E2E8F0] text-white py-4 space-y-5'>
+		<div className='h-screen fixed left-0 top-0 bottom-0  w-20 flex flex-col items-center bg-[#F8FAFC] border-r border-[#E2E8F0] text-white py-4 space-y-5'>
 			<button onClick={() => router.push('/pages/database')} className='p-2 rounded-lg'>
 				<Database className={`w-6 h-6 ${pathName === '/pages/database' ? 'text-black' : 'text-[#94A3B8]'}`} />
 			</button>
