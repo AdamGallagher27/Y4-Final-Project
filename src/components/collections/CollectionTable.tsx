@@ -48,16 +48,17 @@ interface CollectionTableProps {
 
 const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps) => {
 
-	const [loading, setLoading] = useState<boolean>(true)
-	const [data, setData] = useState<Collection[] | undefined>([])
+	const [data, setData] = useState<Collection[] | undefined>(undefined)
 
-	useEffect(() => {
+	const reset = () => {
 		// reset the selected row to prevent updating row in differente table
 		setSelectedRow(undefined)
+		setData(undefined)
 
-		const timer = setTimeout(() => {
-			setLoading(false)
-		}, 3000)
+	}
+
+	useEffect(() => {
+		reset()
 
 		const handleGetAllRows = async () => {
 			const allData = await getAllCollectionRows(selectedModel.modelId)
@@ -72,10 +73,8 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 
 		handleGetAllRows()
 
-		// cleanup timeout and reset loading
 		return () => {
-			clearTimeout(timer)
-			setLoading(true)
+			reset()
 		}
 	}, [selectedModel])
 
@@ -94,11 +93,11 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 		},
 	})
 
-	if (loading) {
+	if (!data) {
 		return <Loading />
 	}
 
-	if (!loading && data && data.length === 0) {
+	if (data && data.length === 0) {
 		return <p>No entries yet</p>
 	}
 
@@ -141,7 +140,6 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 														type='radio'
 														id={`radio-${row.id}`}
 														name='row-select'
-														// value={cell.renderValue() as string}
 														onChange={() => {
 															setSelectedRow(row.original)
 															row.toggleSelected(true)

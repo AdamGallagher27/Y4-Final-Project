@@ -261,6 +261,57 @@ export const addRowToCollection = async (modelId: string, body: Item) => {
   }
 }
 
+export const updateCollectionRow = async (modelId: string, body: Item) => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+
+  try {
+    const response = await fetch(`${apiUrl}api/collections/${modelId}/${body.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ ...body }),
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData
+  }
+  catch(error) {
+    console.error('Error saving API response status:', error)
+  }
+}
+
+export const deleteRow = async (modelId: string, rowId: string) => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN  
+
+  try {
+    const response = await fetch(`${apiUrl}api/collections/${modelId}/${rowId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
+}
+
 export const getAllCollectionRows = async (modelId: string): Promise<Collection[] | undefined> => {
 
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'

@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -30,6 +30,14 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(preProcessSelectedModel(selectedModel))
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
+
+  useEffect(() => {
+    if(!open) {
+      setForm(preProcessSelectedModel(selectedModel))
+      setErrors({})
+    }
+    
+  }, [open])
 
   const { properties } = selectedModel
 

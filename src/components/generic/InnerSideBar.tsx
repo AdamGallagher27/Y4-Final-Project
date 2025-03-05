@@ -16,7 +16,7 @@ const InnerSideBar = ({ allModels, selectedModel, setSelectedModel }: Props) => 
 			<ul>
 				{allModels && allModels.map(model => {
 					if (selectedModel && allModels) {
-						return <li key={model.modelId} onClick={() => setSelectedModel(model)} className={`hover:cursor-pointer w-40 p-1.5 border-b border-[#E2E8F0] ${model.name === selectedModel.name ? 'text-black' : 'text-[#94A3B8]'}`}>{model.name}</li>
+						return <li key={model.modelId} onClick={() => setSelectedModel(model)} className={'hover:cursor-pointer w-40 p-1.5 border-b border-[#E2E8F0] text-[#94A3B8]'}>{model.name}</li>
 					}
 				})}
 			</ul>

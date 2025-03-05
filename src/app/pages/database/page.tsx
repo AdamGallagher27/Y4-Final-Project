@@ -3,6 +3,8 @@
 import useAuthentication from '@/app/hooks/useAuthentication'
 import AddRow from '@/components/collections/AddRow'
 import CollectionTable from '@/components/collections/CollectionTable'
+import DeleteRow from '@/components/collections/DeleteRow'
+import UpdateRow from '@/components/collections/UpdateRow'
 import InnerSideBar from '@/components/generic/InnerSideBar'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
@@ -21,9 +23,6 @@ export default function Database() {
 		const handleGetAllModels = async () => {
 			const allModels = await getAllModels()
 			setAllModels(allModels)
-			if (allModels && allModels.length > 0) {
-				setSelectedModel(allModels[0])
-			}
 		}
 
 		// im using refresh to force a rerender without reloading the whole page
@@ -35,18 +34,22 @@ export default function Database() {
 	return (
 		<div className='flex'>
 			<Sidebar />
-			{selectedModel && <InnerSideBar allModels={allModels} selectedModel={selectedModel} setSelectedModel={setSelectedModel} />}
+			{allModels && <InnerSideBar allModels={allModels} selectedModel={selectedModel || allModels[0]} setSelectedModel={setSelectedModel} />}
 			<div className='p-4 w-full'>
 				{(selectedModel && selectedModel.name) &&
 					<div className='flex items-center justify-between'>
 						<Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} />
 						<div className='flex items-center gap-2'>
 							<AddRow selectedModel={selectedModel} setRefresh={setRefresh} />
-							{selectedRow && <div>update & delete</div>}
+							{selectedRow &&
+								<>
+									<UpdateRow selectedRow={selectedRow} setRefresh={setRefresh} model={selectedModel} />
+									<DeleteRow selectedRowId={selectedRow.id} modelId={selectedModel.modelId} setRefresh={setRefresh} />
+								</>}
 						</div>
 					</div>
 				}
-				{selectedModel && <CollectionTable selectedModel={selectedModel} setSelectedRow={setSelectedRow} />}
+				{(selectedModel && refresh) && <CollectionTable selectedModel={selectedModel} setSelectedRow={setSelectedRow} />}
 			</div>
 		</div>
 	)

@@ -3,20 +3,20 @@ backlog
 test hosted versions
 rollback (maybe)
 fix spacing on status page (low priority)
-rerender inner sidebar on model creation
+
 ignore dashboard res / rix redudnant calls
 2 small project to show dashboard works
-reload after create (reload hook maybe)
+
 tidy/refactor
 delete collection / single
 can create collection without any properties
-reset form when switching between collections
+
 
 in progress
 ----------------------
 UI work
 style
 
-loading logic
+
 documentation page 
 
