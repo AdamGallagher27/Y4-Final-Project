@@ -31,6 +31,8 @@ const idTemplate = {
   'type': 'string'
 }
 
+// push to the all modesl array to cause refresh
+
 const CollectionCreator = () => {
   const [newCollectionName, setNewCollectionName] = useState('')
   const [properties, setProperties] = useState<Property[]>([{ name: '', type: 'string' }])

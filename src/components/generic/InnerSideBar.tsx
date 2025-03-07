@@ -8,6 +8,8 @@ interface Props {
 	setSelectedModel: Dispatch<SetStateAction<Model | undefined>>
 }
 
+// pass in all modesl
+
 const InnerSideBar = ({ allModels, selectedModel, setSelectedModel }: Props) => {
 
 	return (

@@ -54,7 +54,7 @@ export const POST = async (req: NextRequest) => {
 		}
 
 		saveResponseStatus(currentUrl, 201)
-		return NextResponse.json({ message: 'User logged in', token: jwt.sign({ email, password }, process.env.PUBLIC_API_TOKEN), ok: true }, { status: 201 })
+		return NextResponse.json({ message: 'User logged in', token: jwt.sign({ email, password }, process.env.NEXT_PUBLIC_API_TOKEN), ok: true }, { status: 201 })
 	}
 	catch (error) {
 		console.error(error)

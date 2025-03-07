@@ -166,7 +166,7 @@ export const generateSigniture = (data: Item | User) => {
   return signBuffer.toString('base64')
 }
 
-export const decryptData = (encryptedData: string) => {
+export const decryptData = (encryptedData: string): Item | User => {
   const buffer = Buffer.from(encryptedData, 'base64')
   const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
   return JSON.parse(decrypted.toString('utf-8'))
@@ -335,6 +335,29 @@ export const getAllCollectionRows = async (modelId: string): Promise<Collection[
     console.error('Error saving API response status:', error)
   }
   return
+}
+
+export const getAllUsers = async (): Promise<User[] | undefined> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/userAuth`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.body
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
 }
 
 const validateField = (name: string, value: string, properties: Property[]) => {

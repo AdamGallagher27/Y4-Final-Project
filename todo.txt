@@ -1,20 +1,21 @@
 backlog
 -----------------------
-test hosted versions
-rollback (maybe)
-
-ignore dashboard res 
-2 small project to show dashboard works
-
-tidy/refactor
-delete collection / single
-can create collection without any properties
-
+inner side bar min width
+change how the singles / users page looks
+better loading in general but specifically on singls / users page
+api logs in reverse 
+add sort by date to api logs
+flesh out documentation / fix post pill component
 
 in progress
 ----------------------
 UI work
 style
-
+test hosted versions
+ignore dashboard res / set limit to saved requests
+2 small project to show dashboard works
+tidy/refactor
+crud single
+can create collection without any properties
 
 

@@ -14,6 +14,10 @@ const Sidebar = () => {
 				<Database className={`w-6 h-6 ${pathName === '/pages/database' ? 'text-black' : 'text-[#94A3B8]'}`} />
 			</button>
 
+			<button onClick={() => router.push('/pages/users')} className='p-2 rounded-lg'>
+				<User className={`w-6 h-6 ${pathName === '/pages/users' ? 'text-black' : 'text-[#94A3B8]'}`} />
+			</button>
+
 			<button onClick={() => router.push('/pages/documentation')} className='p-2 rounded-lg'>
 				<Code2 className={`w-6 h-6 ${pathName === '/pages/documentation' ? 'text-black' : 'text-[#94A3B8]'}`} />
 			</button>

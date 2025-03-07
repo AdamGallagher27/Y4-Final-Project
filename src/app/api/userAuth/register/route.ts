@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Gun from 'gun'
-import { encryptData, generateSigniture, saveResponseStatus, validateEmail, validatePassword } from '@/utils'
+import { decryptData, encryptData, generateSigniture, saveResponseStatus, validateEmail, validatePassword, verifySigniture } from '@/utils'
 import { Acknowledgment, EncryptedItem, User } from '@/types'
 const jwt = require('jsonwebtoken')
 
@@ -10,7 +10,7 @@ const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
 // register 
 export const POST = async (req: NextRequest) => {
 
-	const currentUrl = req.url
+	const currentUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
 
 	try {
 		const { email, password } = await req.json() as User
@@ -45,14 +45,19 @@ export const POST = async (req: NextRequest) => {
 			signiture,
 		}
 
-		const ref = gun.get(email)
+		const ref = gun.get('users')
 
-		let isEmailUnique: undefined | boolean
+		let isEmailUnique: boolean = true
 
 		// check that the email is unqique
-		ref.once((res: EncryptedItem) => {
-			if (!res) {
-				isEmailUnique = true
+		ref.map().once((res: EncryptedItem) => {
+			if (res) {
+				const decryptedData = decryptData(res.encryptedData)
+				const isValid = verifySigniture(decryptedData, res.signiture)
+
+				if (isValid && decryptedData.email === email) {
+					isEmailUnique = false
+				}
 			}
 		})
 
@@ -72,7 +77,7 @@ export const POST = async (req: NextRequest) => {
 		})
 
 		saveResponseStatus(currentUrl, 201)
-		return NextResponse.json({ message: 'User created', token: jwt.sign({ email, password }, process.env.PUBLIC_API_TOKEN), ok: true }, { status: 201 })
+		return NextResponse.json({ message: 'User created', token: jwt.sign({ email, password }, process.env.NEXT_PUBLIC_API_TOKEN), ok: true }, { status: 201 })
 	}
 	catch (error) {
 		console.error(error)
