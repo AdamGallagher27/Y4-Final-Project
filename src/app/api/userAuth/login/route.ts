@@ -37,7 +37,7 @@ export const POST = async (req: NextRequest) => {
 
 		gun.get(email).map().once((res: EncryptedItem) => {
 			if (res) {
-				const decryptedUser = decryptData(res.encryptedData)
+				const decryptedUser = decryptData(res.encryptedData) as User
 				const isValid = verifySigniture(decryptedUser, res.signiture)
 
 				if (isValid && decryptedUser.password === password) {

@@ -1,6 +1,6 @@
 'use client'
 
-import { User, Database, Code2, Activity } from 'lucide-react'
+import { User, Database, Code2, Activity, UserCog } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 
 const Sidebar = () => {
@@ -27,7 +27,7 @@ const Sidebar = () => {
 			</button>
 
 			<button onClick={() => router.push('/pages/profile')} className='p-2 rounded-lg'>
-				<User className={`w-6 h-6 ${pathName === '/pages/profile' ? 'text-black' : 'text-[#94A3B8]'}`} />
+				<UserCog className={`w-6 h-6 ${pathName === '/pages/profile' ? 'text-black' : 'text-[#94A3B8]'}`} />
 			</button>
 		</div>
 	)

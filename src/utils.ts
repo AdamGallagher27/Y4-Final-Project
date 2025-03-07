@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { Collection, DecryptedData, EncryptedItem, Item, Model, Property, StatusFromAPI, User } from './types'
+import { Collection, DecryptedData, EncryptedItem, Item, Model, Property, Single, StatusFromAPI, User } from './types'
 import { Dispatch, SetStateAction } from 'react'
 
 const isOnClient = () => {
@@ -166,7 +166,7 @@ export const generateSigniture = (data: Item | User) => {
   return signBuffer.toString('base64')
 }
 
-export const decryptData = (encryptedData: string): Item | User => {
+export const decryptData = (encryptedData: string): Item | User | Single => {
   const buffer = Buffer.from(encryptedData, 'base64')
   const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
   return JSON.parse(decrypted.toString('utf-8'))
@@ -306,6 +306,30 @@ export const deleteRow = async (modelId: string, rowId: string) => {
 
     const responseData = await response.json()
     return responseData
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
+}
+
+export const getAllSingles = async (): Promise<Item[] | undefined> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/single`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.singles
   } catch (error) {
     console.error('Error saving API response status:', error)
   }
