@@ -1,4 +1,4 @@
-import { Acknowledgment, EncryptedItem, Item } from '@/types'
+import { Acknowledgment, DecryptedData, EncryptedItem, Item } from '@/types'
 import { authorisationMiddleWare, decryptData, encryptData, generateSigniture, getGunEntryId, saveResponseStatus, verifySigniture } from '@/utils'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
@@ -137,38 +137,49 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
       return NextResponse.json({ message: 'invalid params', ok: false }, { status: 400 })
     }
 
-    const ref = gun.get(singleId)
+    const ref = gun.get('single')
+
+    const results: DecryptedData = {}
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData)
+        const decryptedData = decryptData(res.encryptedData) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
-        // if the signiture is valid it means the data has not been tampered with outside of the api
-        if (isValid) {
-          // generate an data integrity signiture / encrypt data
-          const signiture = generateSigniture(value)
-          const encryptedData = encryptData(value)
+        // if the current entry is valid and the id matches the row id param
+        // create a new body and add it as a property to results
+        if (isValid && decryptedData.id === singleId) {
 
-          const newData = {
-            [getGunEntryId(res)]: {
-              encryptedData,
-              signiture
-            }
+          const newBody = { value: value, id: singleId }
+
+          const newBodyEncrypted = {
+            encryptedData: encryptData(newBody),
+            signiture: generateSigniture(newBody),
           }
 
-          ref.put(newData, (ack: Acknowledgment) => {
-            if (ack.err) {
-              console.error(ack.err)
-              saveResponseStatus(currentUrl, 500)
-              return NextResponse.json({ message: 'Failed to save data', ok: false }, { status: 500 })
-            }
-          })
+          results[getGunEntryId(res)] = newBodyEncrypted
         }
+
+        // if the entry is valid but does not match 
+        // dont edit it and add it to results
+        else if (isValid) {
+          results[getGunEntryId(res)] = res
+        }
+
         else {
           // alert the user to the fact that unauth data has been altered / add in roll back feature
           console.error('unauth user altered data start rollback')
         }
+      }
+    })
+
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    ref.put(results, (ack: Acknowledgment) => {
+      if (ack.err) {
+        console.error(ack.err)
+        saveResponseStatus(currentUrl, 500)
+        return NextResponse.json({ message: 'Failed to update data', ok: false }, { status: 500 })
       }
     })
 

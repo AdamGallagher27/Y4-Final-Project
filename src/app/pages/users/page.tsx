@@ -32,10 +32,9 @@ export default function Status() {
 	return (
 		<div className='flex'>
 			<Sidebar />
-			<div className='p-4 ml-20'>
+			<div className='p-4 ml-20 w-96'>
 				<Title firstPartOfTitle='Collections' secondPartOfTitle='Users' />
 				{users && <UserResponseTable users={users}  />}
-				{singles && singles.length > 0 && JSON.stringify(singles)}
 			</div>
 		</div>
 	)

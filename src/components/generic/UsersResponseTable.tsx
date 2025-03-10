@@ -30,6 +30,13 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <div>{row.getValue('email')}</div>
     ),
+  },
+  {
+    accessorKey: 'password',
+    header: 'PASSWORD',
+    cell: ({ row }) => (
+      <div>{row.getValue('password')}</div>
+    ),
   }
 ]
 
@@ -52,7 +59,7 @@ const UserResponseTable = ({ users }: Props) => {
   })
 
   return (
-    <div className='w-full'>
+    <div>
       <div className='mb-4'>
         <Input
           placeholder='Filter'

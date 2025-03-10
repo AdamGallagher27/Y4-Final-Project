@@ -1,6 +1,6 @@
 'use client'
 
-import { User, Database, Code2, Activity, UserCog } from 'lucide-react'
+import { User, Database, Code2, Activity, UserCog, AlignVerticalDistributeCenter } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 
 const Sidebar = () => {
@@ -12,6 +12,10 @@ const Sidebar = () => {
 		<div className='h-screen fixed left-0 top-0 bottom-0  w-20 flex flex-col items-center bg-[#F8FAFC] border-r border-[#E2E8F0] text-white py-4 space-y-5'>
 			<button onClick={() => router.push('/pages/database')} className='p-2 rounded-lg'>
 				<Database className={`w-6 h-6 ${pathName === '/pages/database' ? 'text-black' : 'text-[#94A3B8]'}`} />
+			</button>
+
+			<button onClick={() => router.push('/pages/singles')} className='p-2 rounded-lg'>
+				<AlignVerticalDistributeCenter className={`w-6 h-6 ${pathName === '/pages/singles' ? 'text-black' : 'text-[#94A3B8]'}`} />
 			</button>
 
 			<button onClick={() => router.push('/pages/users')} className='p-2 rounded-lg'>

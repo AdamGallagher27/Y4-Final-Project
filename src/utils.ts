@@ -312,6 +312,56 @@ export const deleteRow = async (modelId: string, rowId: string) => {
   return
 }
 
+export const addNewSingle = async (single: Item): Promise<Item[] | undefined> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/single/${single.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({value: single.value})
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.singles
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
+}
+
+export const updateSingle = async (single: Item): Promise<Item[] | undefined> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/single/${single.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({value: single.value})
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.singles
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
+}
+
 export const getAllSingles = async (): Promise<Item[] | undefined> => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN
@@ -446,7 +496,7 @@ export const getPillColour = (method: string) => {
     methodColour = 'bg-green-500'
   }
   else if(method === 'POST') {
-    methodColour = 'bg-yellow-500'
+    methodColour = 'bg-blue-500'
   }
   else if(method === 'PUT') {
     methodColour = 'bg-blue-500'
@@ -456,4 +506,14 @@ export const getPillColour = (method: string) => {
   }
 
   return methodColour
+}
+
+export const generatePropetiesArray = (selectedType: string) => {
+  return [{
+    'name': 'id',
+    'type': 'string'
+  }, {
+    'name': 'value',
+    'type': selectedType
+  }]
 }
