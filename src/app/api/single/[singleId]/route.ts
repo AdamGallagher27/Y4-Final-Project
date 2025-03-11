@@ -208,39 +208,30 @@ export const DELETE = async (req: Request, { params }: { params: { singleId: str
 
     const { singleId } = await params
 
-    const { value } = await req.json()
+    const ref = gun.get('single')
 
-    if (value === undefined || value === null || !singleId) {
-      saveResponseStatus(currentUrl, 400)
-      return NextResponse.json({ message: 'invalid params', ok: false }, { status: 400 })
-    }
-
-    const ref = gun.get(singleId)
-
-    let gunEntryId: string | undefined
-
+    let singleToDeleteId: string | undefined
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData)
+        const decryptedData = decryptData(res.encryptedData) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
-        // store the gun js id then delete it later
-        if (isValid) {
-          gunEntryId = getGunEntryId(res)
+        if (isValid && decryptedData.id === singleId) {
+          singleToDeleteId = getGunEntryId(res)
         }
+
         else if (!isValid) {
-          // alert the user to the fact that unauth data has been altered / add in roll back featurje
+          // alert the user to the fact that unauth data has been altered / add in roll back feature
           console.error('unauth user altered data start rollback')
         }
       }
     })
 
-    // gun needs to assign gunEntryId and this allows it 
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    if (gunEntryId) {
-      ref.get(gunEntryId).put(null, (ack: Acknowledgment) => {
+    if (singleToDeleteId) {
+      ref.get(singleToDeleteId).put(null, (ack: Acknowledgment) => {
         if (ack.err) {
           console.error(ack.err)
           saveResponseStatus(currentUrl, 500)
@@ -250,11 +241,11 @@ export const DELETE = async (req: Request, { params }: { params: { singleId: str
     }
     else {
       saveResponseStatus(currentUrl, 500)
-      return NextResponse.json({ message: 'Data not found', ok: false }, { status: 500 })
+      return NextResponse.json({ message: 'Single not found', ok: false }, { status: 500 })
     }
 
-    saveResponseStatus(currentUrl, 200)
-    return NextResponse.json({ message: 'Data deleted', ok: true }, { status: 200 })
+    saveResponseStatus(currentUrl, 201)
+    return NextResponse.json({ message: 'Data Deleted', ok: true }, { status: 201 })
   }
 
   catch (error) {
@@ -263,4 +254,3 @@ export const DELETE = async (req: Request, { params }: { params: { singleId: str
     return NextResponse.json({ message: 'An error occoured', ok: false, error }, { status: 500 })
   }
 }
-
