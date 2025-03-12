@@ -307,7 +307,32 @@ export const deleteRow = async (modelId: string, rowId: string) => {
     const responseData = await response.json()
     return responseData
   } catch (error) {
-    console.error('Error saving API response status:', error)
+    console.error('Error deleting data:', error)
+  }
+  return
+}
+
+export const deleteSingle = async (singleId: string) => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN  
+
+  try {
+    const response = await fetch(`${apiUrl}api/single/${singleId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error deleting data:', error)
   }
   return
 }

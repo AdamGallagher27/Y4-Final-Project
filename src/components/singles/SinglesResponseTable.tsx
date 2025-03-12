@@ -42,10 +42,10 @@ const columns: ColumnDef<Item>[] = [
 
 interface Props {
   singles: Item[]
-  setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
+  setSelectedSingle: Dispatch<SetStateAction<Item | undefined>>
 }
 
-const SinglesResponseTable = ({ singles, setSelectedRow }: Props) => {
+const SinglesResponseTable = ({ singles, setSelectedSingle }: Props) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const table = useReactTable({
     data: singles,
@@ -100,7 +100,7 @@ const SinglesResponseTable = ({ singles, setSelectedRow }: Props) => {
                             id={`radio-${row.id}`}
                             name='row-select'
                             onChange={() => {
-                              setSelectedRow(row.original)
+                              setSelectedSingle(row.original)
                               row.toggleSelected(true)
                             }}
                           />

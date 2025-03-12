@@ -1,1 +1,97 @@
-[{"modelId":"test-952182","name":"test","properties":[{"name":"id","type":"string"},{"name":"string","type":"string"},{"name":"number","type":"number"},{"name":"boolean","type":"boolean"}],"items":[]},{"modelId":"empty_collection-884414","name":"empty_collection","properties":[{"name":"id","type":"string"},{"name":"doesnt matter","type":"string"}],"items":[]},{"modelId":"work-684418","name":"work","properties":[{"name":"id","type":"string"},{"name":"work","type":"string"}],"items":[]}]
+[
+  {
+    "modelId": "test-952182",
+    "name": "test",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "string",
+        "type": "string"
+      },
+      {
+        "name": "number",
+        "type": "number"
+      },
+      {
+        "name": "boolean",
+        "type": "boolean"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "empty_collection-884414",
+    "name": "empty_collection",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "doesnt matter",
+        "type": "string"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "work-684418",
+    "name": "work",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "work",
+        "type": "string"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "Notes-347647",
+    "name": "Notes",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "isDone",
+        "type": "boolean"
+      },
+      {
+        "name": "body",
+        "type": "string"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "Todos-349528",
+    "name": "Todos",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "type": "string"
+      },
+      {
+        "name": "isDone",
+        "type": "boolean"
+      }
+    ],
+    "items": []
+  }
+]

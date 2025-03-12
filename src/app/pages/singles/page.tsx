@@ -9,12 +9,13 @@ import { Item } from '@/types'
 import { getAllSingles } from '@/utils'
 import { useEffect, useState } from 'react'
 import UpdateSingle from '@/components/singles/UpdateSingle'
+import DeleteSingle from '@/components/singles/DeleteSingle'
 
 export default function Status() {
 	useAuthentication()
 	const [singles, setSingles] = useState<Item[] | undefined>([])
 	const [refresh, setRefresh] = useState<boolean>(false)
-	const [selectedRow, setSelectedRow] = useState<Item | undefined>()
+	const [selectedSingle, setSelectedSingle] = useState<Item | undefined>()
 
 
 	useEffect(() => {
@@ -35,10 +36,11 @@ export default function Status() {
 					<Title firstPartOfTitle='Collections' secondPartOfTitle='Singles' />
 					<div className='flex items-center gap-2'>
 						<AddSingle setRefresh={setRefresh} />
-						{selectedRow && <UpdateSingle selectedRow={selectedRow} setRefresh={setRefresh} />}
+						{selectedSingle && <UpdateSingle selectedSingle={selectedSingle} setRefresh={setRefresh} />}
+						{selectedSingle?.id && <DeleteSingle singleId={selectedSingle.id} setRefresh={setRefresh} /> }
 					</div>
 				</div>
-				{singles && <SinglesResponseTable singles={singles} setSelectedRow={setSelectedRow}  />}
+				{singles && <SinglesResponseTable singles={singles} setSelectedSingle={setSelectedSingle}  />}
 			</div>
 		</div>
 	)

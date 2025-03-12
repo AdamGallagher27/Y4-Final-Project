@@ -9,24 +9,24 @@ import { Input } from '../ui/input'
 import { addNewSingle, generatePropetiesArray, updateSingle, validateForm } from '@/utils'
 
 interface Props {
-  selectedRow: Item
+  selectedSingle: Item
   setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
-const UpdateSingle = ({ selectedRow, setRefresh }: Props) => {
+const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
 
   const startingType = (() => {
-    if (typeof selectedRow.value === 'boolean') return 'boolean';
-    if (typeof selectedRow.value === 'number') return 'number';
+    if (typeof selectedSingle.value === 'boolean') return 'boolean';
+    if (typeof selectedSingle.value === 'number') return 'number';
     return 'string';
   })()
 
-  const [form, setForm] = useState<{ [key: string]: string }>(selectedRow)
+  const [form, setForm] = useState<{ [key: string]: string }>(selectedSingle)
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    setForm(selectedRow)
+    setForm(selectedSingle)
 
     if (!open) {
       setErrors({})
@@ -60,7 +60,7 @@ const UpdateSingle = ({ selectedRow, setRefresh }: Props) => {
           <DialogTitle>Update Single</DialogTitle>
         </DialogHeader>
         <div>
-          {Object.entries(selectedRow).map(([name, value], index) => {
+          {Object.entries(selectedSingle).map(([name, value], index) => {
             if (name === 'id') return null
 
             if (value === 'true' || value === 'false') {
