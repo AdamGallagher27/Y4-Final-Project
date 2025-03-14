@@ -5,7 +5,7 @@ import ApiResponseTable from '@/components/generic/ApiResponseTable'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import { StatusFromAPI } from '@/types'
-import { getResponseStatus } from '@/utils'
+import { getResponseStatus } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Status() {

@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken')
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { startSession } from '@/utils'
 import { RSAKeyPair } from '@/types'
+import { startSession } from '@/utils/security'
 const { generateKeyPair } = require('crypto')
 
 

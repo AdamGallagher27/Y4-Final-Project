@@ -3,10 +3,11 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Item, Model, Property } from '@/types'
+import { Item, Model } from '@/types'
 import FormError from '../generic/FormError'
-import { updateCollectionRow, validateForm } from '@/utils'
+import { validateForm } from '@/utils'
 import { Input } from '../ui/input'
+import { updateCollectionRow } from '@/utils/api'
 
 interface Props {
   selectedRow: Item

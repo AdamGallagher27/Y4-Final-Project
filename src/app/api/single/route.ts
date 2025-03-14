@@ -1,5 +1,6 @@
 import { EncryptedItem, Item } from '@/types'
-import { authorisationMiddleWare, decryptData, saveResponseStatus, verifySigniture } from '@/utils'
+import { saveResponseStatus } from '@/utils/api'
+import { authorisationMiddleWare, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
@@ -10,8 +11,11 @@ export const GET = async (req: Request) => {
 
   const currentUrl = req.url
 
+  // this optional header is used to ignore saving the api response
+	const ignoreHeader = req.headers.get('Ignore')
+  const authHeader = req.headers.get('Authorization')
+
   try {
-    const authHeader = await req.headers.get('Authorization')
 
     // verify token
     const checkToken = authorisationMiddleWare(authHeader)
@@ -47,16 +51,16 @@ export const GET = async (req: Request) => {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     if (await result === null || await result === undefined) {
-      saveResponseStatus(currentUrl, 404)
+      !ignoreHeader && saveResponseStatus(currentUrl, 404)
       return NextResponse.json({ ok: false, message: 'Not found' }, { status: 404 })
     }
 
-    saveResponseStatus(currentUrl, 200)
+    !ignoreHeader && saveResponseStatus(currentUrl, 200)
     return NextResponse.json({ singles: result, ok: true, message: 'Retrieved singles successfully' }, { status: 200 })
   }
   catch (error) {
     console.error(error)
-    saveResponseStatus(currentUrl, 500)
+    !ignoreHeader && saveResponseStatus(currentUrl, 500)
     return NextResponse.json({ message: 'An error occoured', ok: false, error: error }, { status: 500 })
   }
 }

@@ -6,7 +6,7 @@ import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import { Button } from '@/components/ui/button'
 import { Model } from '@/types'
-import { getAllModels } from '@/utils'
+import { getAllModels } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Documentation() {

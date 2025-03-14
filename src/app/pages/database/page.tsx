@@ -9,7 +9,7 @@ import InnerSideBar from '@/components/generic/InnerSideBar'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import { Item, Model } from '@/types'
-import { getAllModels } from '@/utils'
+import { getAllModels } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Database() {

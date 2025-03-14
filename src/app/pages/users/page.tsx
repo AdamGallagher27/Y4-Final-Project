@@ -1,32 +1,24 @@
 'use client'
 
 import useAuthentication from '@/app/hooks/useAuthentication'
-import CollectionTable from '@/components/collections/CollectionTable'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import UserResponseTable from '@/components/generic/UsersResponseTable'
-import { Item, User } from '@/types'
-import { getAllSingles, getAllUsers } from '@/utils'
+import { User } from '@/types'
+import { getAllUsers } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Status() {
 	useAuthentication()
 
 	const [users, setUsers] = useState<User[] | undefined>([])
-	// fix use of items type
-	const [singles, setSingles] = useState<Item[] | undefined>([])
 
 	useEffect(() => {
 		const handleFetchUsers = async () =>{
 			setUsers(await getAllUsers())
 		}
 
-		const handleGetSingles = async () => {
-			setSingles(await getAllSingles())
-		}
-
 		handleFetchUsers()
-		handleGetSingles()
 	}, [])
 
 	return (

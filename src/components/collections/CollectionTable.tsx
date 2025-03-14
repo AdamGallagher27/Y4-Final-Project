@@ -20,8 +20,8 @@ import {
 import { Input } from '../ui/input'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Collection, Item, Model, Property } from '@/types'
-import { getAllCollectionRows } from '@/utils'
 import Loading from '../generic/Loading'
+import { getAllCollectionRows } from '@/utils/api'
 
 const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 	return properties.map((property) => {

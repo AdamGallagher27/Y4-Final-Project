@@ -6,7 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Item } from '@/types'
 import FormError from '../generic/FormError'
 import { Input } from '../ui/input'
-import { addNewSingle, generatePropetiesArray, updateSingle, validateForm } from '@/utils'
+import { generatePropetiesArray, validateForm } from '@/utils'
+import { updateSingle } from '@/utils/api'
 
 interface Props {
   selectedSingle: Item

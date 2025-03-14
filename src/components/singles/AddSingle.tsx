@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import FormError from '../generic/FormError'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { addNewSingle, generatePropetiesArray, validateForm } from '@/utils'
+import { generatePropetiesArray, validateForm } from '@/utils'
+import { addNewSingle } from '@/utils/api'
 
 interface Props {
   setRefresh: Dispatch<SetStateAction<boolean>>

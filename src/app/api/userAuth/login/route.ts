@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Gun from 'gun'
-import { decryptData, saveResponseStatus, validateEmail, validatePassword, verifySigniture } from '@/utils'
 import { EncryptedItem, User } from '@/types'
+import { validateEmail, validatePassword } from '@/utils'
+import { saveResponseStatus } from '@/utils/api'
+import { decryptData, verifySigniture } from '@/utils/security'
 const jwt = require('jsonwebtoken')
 
 const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])

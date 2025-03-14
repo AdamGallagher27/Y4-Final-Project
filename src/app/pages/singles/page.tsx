@@ -6,10 +6,10 @@ import Sidebar from '@/components/generic/Sidebar'
 import SinglesResponseTable from '@/components/singles/SinglesResponseTable'
 import Title from '@/components/generic/Title'
 import { Item } from '@/types'
-import { getAllSingles } from '@/utils'
 import { useEffect, useState } from 'react'
 import UpdateSingle from '@/components/singles/UpdateSingle'
 import DeleteSingle from '@/components/singles/DeleteSingle'
+import { getAllSingles } from '@/utils/api'
 
 export default function Status() {
 	useAuthentication()

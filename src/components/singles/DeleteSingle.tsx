@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { deleteSingle } from '@/utils'
+import { deleteSingle } from '@/utils/api'
 
 interface Props {
   singleId: string 

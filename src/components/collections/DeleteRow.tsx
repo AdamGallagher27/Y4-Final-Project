@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { deleteRow } from '@/utils'
+import { deleteRow } from '@/utils/api'
 
 interface Props {
   selectedRowId: string 

@@ -1,5 +1,7 @@
 import { Acknowledgment, DecryptedData, EncryptedItem, Item } from '@/types'
-import { authorisationMiddleWare, cleanResponse, decryptData, encryptData, generateSigniture, getGunEntryId, saveResponseStatus, verifySigniture } from '@/utils'
+import { cleanResponse, getGunEntryId } from '@/utils'
+import { saveResponseStatus } from '@/utils/api'
+import { authorisationMiddleWare, decryptData, verifySigniture, encryptData, generateSigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
@@ -10,14 +12,16 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 
 	const currentUrl = req.url
 
-	try {
-		const authHeader = await req.headers.get('Authorization')
+	// this optional header is used to ignore saving the api response
+	const ignoreHeader = req.headers.get('Ignore')
+	const authHeader = req.headers.get('Authorization')
 
+	try {
 		// verify token
-		const checkToken = await authorisationMiddleWare(authHeader)
+		const checkToken = authorisationMiddleWare(authHeader)
 		if (checkToken) return checkToken
 
-		const { modelId, rowId } = await params
+		const { modelId, rowId } = params
 
 		const ref = gun.get(modelId)
 		const results: Item[] = []
@@ -47,12 +51,12 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 		// this is my temp solution to this issue
 		await new Promise(resolve => setTimeout(resolve, 1000))
 
-		saveResponseStatus(currentUrl, 200)
+		!ignoreHeader && saveResponseStatus(currentUrl, 200)
 		return NextResponse.json({ body: cleanResponse(results), ok: true, message: 'Retrieved single row successfully' }, { status: 200 })
 	}
 	catch (error) {
 		console.error(error)
-		saveResponseStatus(currentUrl, 500)
+		!ignoreHeader && saveResponseStatus(currentUrl, 500)
 		return NextResponse.json({ message: 'An error occoured', ok: false, error: error }, { status: 500 })
 	}
 }
@@ -61,12 +65,14 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 export const PUT = async (req: Request, { params }: { params: { modelId: string, rowId: string } }) => {
 
 	const currentUrl = req.url
+	// this optional header is used to ignore saving the api response
+	const ignoreHeader = req.headers.get('Ignore')
+	const authHeader = req.headers.get('Authorization')
 
 	try {
-		const authHeader = await req.headers.get('Authorization')
 
 		// verify token
-		const checkToken = await authorisationMiddleWare(authHeader)
+		const checkToken = authorisationMiddleWare(authHeader)
 		if (checkToken) return checkToken
 
 		const body = await req.json()
@@ -76,7 +82,7 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 		const ref = gun.get(modelId)
 
 		if (!body || !modelId) {
-			saveResponseStatus(currentUrl, 400)
+			!ignoreHeader && saveResponseStatus(currentUrl, 400)
 			return NextResponse.json({ message: 'invalid params', ok: false }, { status: 400 })
 		}
 
@@ -132,17 +138,17 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 		ref.put(results, (ack: Acknowledgment) => {
 			if (ack.err) {
 				console.error(ack.err)
-				saveResponseStatus(currentUrl, 500)
+				!ignoreHeader && saveResponseStatus(currentUrl, 500)
 				return NextResponse.json({ message: 'Failed to update data', ok: false }, { status: 500 })
 			}
 		})
 
-		saveResponseStatus(currentUrl, 200)
+		!ignoreHeader && saveResponseStatus(currentUrl, 200)
 		return NextResponse.json({ message: 'Successfully updated row', ok: true }, { status: 200 })
 	}
 	catch (error) {
 		console.error(error)
-		saveResponseStatus(currentUrl, 500)
+		!ignoreHeader && saveResponseStatus(currentUrl, 500)
 		return NextResponse.json({ message: 'An error occoured', ok: false, error: error }, { status: 500 })
 	}
 }
@@ -152,21 +158,23 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 export const DELETE = async (req: Request, { params }: { params: { modelId: string, rowId: string } }) => {
 
 	const currentUrl = req.url
+	// this optional header is used to ignore saving the api response
+	const ignoreHeader = req.headers.get('Ignore')
+	const authHeader = req.headers.get('Authorization')
 
 	try {
-		const authHeader = await req.headers.get('Authorization')
 
 		// verify token
-		const checkToken = await authorisationMiddleWare(authHeader)
+		const checkToken = authorisationMiddleWare(authHeader)
 		if (checkToken) return checkToken
 
 		// Extract modelId and rowId from the params
-		const { modelId, rowId } = await params
+		const { modelId, rowId } = params
 		const ref = gun.get(modelId)
 
 		let rowToDeleteId: string | undefined
 
-		await ref.map().once((res: EncryptedItem) => {
+		ref.map().once((res: EncryptedItem) => {
 			if (res) {
 				const decryptedData = decryptData(res.encryptedData)
 				const isValid = verifySigniture(decryptedData, res.signiture)
@@ -196,21 +204,21 @@ export const DELETE = async (req: Request, { params }: { params: { modelId: stri
 			ref.get(rowToDeleteId).put(null, (ack: Acknowledgment) => {
 				if (ack.err) {
 					console.error(ack.err)
-					saveResponseStatus(currentUrl, 500)
+					!ignoreHeader && saveResponseStatus(currentUrl, 500)
 					return NextResponse.json({ message: 'Failed to delete data', ok: false }, { status: 500 })
 				}
 			})
 		}
 		else {
-			saveResponseStatus(currentUrl, 500)
+			!ignoreHeader && saveResponseStatus(currentUrl, 500)
 			return NextResponse.json({ message: 'Row not found', ok: false }, { status: 500 })
 		}
 
-		saveResponseStatus(currentUrl, 200)
+		!ignoreHeader && saveResponseStatus(currentUrl, 200)
 		return NextResponse.json({ message: 'Successfully deleted row', ok: true }, { status: 200 })
 	}
 	catch (error) {
-		saveResponseStatus(currentUrl, 500)
+		!ignoreHeader && saveResponseStatus(currentUrl, 500)
 		return NextResponse.json({ message: 'An error occoured', ok: false, error: error }, { status: 500 })
 	}
 

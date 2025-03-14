@@ -1,13 +1,13 @@
 'use client'
 
 //  https://metamask.io/news/developers/how-to-implement-metamask-sdk-with-nextjs/
-import { updateAuthJSON } from '@/utils'
 import { useSDK } from '@metamask/sdk-react'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Mail } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useAuth } from '@/context/AuthContext'
+import { updateAuthJSON } from '@/utils/api'
 
 interface Props {
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>

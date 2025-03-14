@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Model } from '@/types'
 import FormError from '../generic/FormError'
-import { addRowToCollection, validateForm } from '@/utils'
+import { validateForm } from '@/utils'
+import { addRowToCollection } from '@/utils/api'
 
 interface Props {
   selectedModel: Model

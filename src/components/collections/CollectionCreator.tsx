@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import { Model, Property } from '@/types'
-import { generateModelId, refreshPage } from '@/utils'
+import { refreshPage } from '@/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { generateModelId } from '@/utils/security'
 
 const addNewModelToModels = async (model: Model) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
