@@ -6,7 +6,8 @@
     "dev": "next dev && lint",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "npx jest"
   },
   "dependencies": {
     "@metamask/sdk-react": "^0.32.0",

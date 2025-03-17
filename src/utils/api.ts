@@ -42,6 +42,32 @@ export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> 
   }
 }
 
+export const getAllCollectionRows = async (modelId: string): Promise<Collection[] | undefined> => {
+
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/collections/${modelId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+        'Ignore': 'ignore'
+      },
+    })
+
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData.body
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return
+}
+
 export const addRowToCollection = async (modelId: string, body: Item) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN
@@ -219,32 +245,6 @@ export const getAllSingles = async (): Promise<Item[] | undefined> => {
 
     const responseData = await response.json()
     return responseData.singles
-  } catch (error) {
-    console.error('Error saving API response status:', error)
-  }
-  return
-}
-
-export const getAllCollectionRows = async (modelId: string): Promise<Collection[] | undefined> => {
-
-  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
-  try {
-    const response = await fetch(`${apiUrl}api/collections/${modelId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-        'Ignore': 'ignore'
-      },
-    })
-
-    if (!response.ok) {
-      console.error('Network response was not ok')
-    }
-
-    const responseData = await response.json()
-    return responseData.body
   } catch (error) {
     console.error('Error saving API response status:', error)
   }
