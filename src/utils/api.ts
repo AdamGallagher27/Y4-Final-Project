@@ -34,7 +34,7 @@ export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> 
 
       const responses = await response.json()
 
-      return responses as StatusFromAPI[]
+      return responses.reverse() as StatusFromAPI[]
     }
   }
   catch (error) {

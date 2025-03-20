@@ -22,7 +22,7 @@ export const GET = async (req: Request, { params }: { params: { singleId: string
     const checkToken = authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
 
-    const { singleId } = params
+    const { singleId } = await params
 
     const ref = gun.get('single')
     let result: Item[] = []

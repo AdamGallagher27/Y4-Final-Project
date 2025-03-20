@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { generateModelId } from '@/utils/security'
+import FormError from '../generic/FormError'
 
 const addNewModelToModels = async (model: Model) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
@@ -38,6 +39,7 @@ const CollectionCreator = () => {
   const [newCollectionName, setNewCollectionName] = useState('')
   const [properties, setProperties] = useState<Property[]>([{ name: '', type: 'string' }])
   const [open, setOpen] = useState(false)
+  const [error, setError] = useState<string | undefined>()
 
   const handlePropertyChange = (index: number, key: keyof Property, value: string) => {
     const updatedProperties = [...properties]
@@ -49,20 +51,33 @@ const CollectionCreator = () => {
     setProperties([...properties, { name: '', type: 'string' }])
   }
 
+  const validateNewCollection = (newCollection: Model) => {
+    const { properties, name } = newCollection
+
+    // if the properties length is one it means there is only the id and the collection is invalid
+    if (properties.length === 1 || !name) {
+      setError('Collection name and Properties are required')
+      return false
+    }
+  
+    setError(undefined)
+    return true
+  }
+
   const removePropertyField = (index: number) => {
     const updatedProperties = properties.filter((_, i) => i !== index)
     setProperties(updatedProperties)
   }
 
   const handleCreateCollection = () => {
-    if (newCollectionName) {
-      const newCollection = {
-        modelId: `${newCollectionName}-${generateModelId()}`,
-        name: newCollectionName,
-        properties: [idTemplate, ...properties.filter((p) => p.name)],
-        items: [],
-      }
+    const newCollection = {
+      modelId: `${newCollectionName}-${generateModelId()}`,
+      name: newCollectionName,
+      properties: [idTemplate, ...properties.filter((p) => p.name)],
+      items: [],
+    }
 
+    if (validateNewCollection(newCollection)) {
       addNewModelToModels(newCollection)
       setNewCollectionName('')
       setProperties([{ name: '', type: 'string' }])
@@ -81,6 +96,7 @@ const CollectionCreator = () => {
         <DialogHeader>
           <DialogTitle>Create a New Collection</DialogTitle>
         </DialogHeader>
+        {error && <FormError message={error} />}
         <div className='space-y-4'>
           <Input
             type='text'

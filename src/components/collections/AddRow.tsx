@@ -53,7 +53,7 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
   }
 
   const handleAddRow = async () => {
-    if (validateForm(form, properties, setErrors)) {
+    if (validateForm(form, properties, setErrors)) {      
       const response = await addRowToCollection(selectedModel.modelId, form)
       response && resetPopUp()
     }

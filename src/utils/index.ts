@@ -42,7 +42,7 @@ export const validatePassword = (password: string) => {
 
 
 
-const validateField = (name: string, value: string, properties: Property[]) => {
+const validateFormField = (name: string, value: string, properties: Property[]) => {
   const property = properties.find((prop) => prop.name === name)
 
   if (!property) return
@@ -83,7 +83,7 @@ export const validateForm = (
 
   properties.forEach((property) => {
     const value = form[property.name] || ''
-    const error = validateField(property.name, value, properties)
+    const error = validateFormField(property.name, value, properties)
 
     if (error) {
       formErrors[property.name] = error

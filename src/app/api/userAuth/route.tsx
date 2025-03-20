@@ -1,12 +1,14 @@
-import { Acknowledgment, EncryptedItem, Item, User } from '@/types'
-import { cleanResponse, generateRowId, authorisationMiddleWare, generateSigniture, encryptData, decryptData, verifySigniture, saveResponseStatus } from '@/utils'
+import { EncryptedItem, Item } from '@/types'
+import { cleanResponse } from '@/utils'
+import { saveResponseStatus } from '@/utils/api'
+import { authorisationMiddleWare, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
 
 const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
 
 // get all rows route
-export const GET = async (req: Request, { params }: { params: { modelId: string } }) => {
+export const GET = async (req: Request) => {
 
   const currentUrl = req.url
   

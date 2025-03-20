@@ -21,7 +21,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
     const checkToken = authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
 
-    const { modelId } = params
+    const { modelId } = await params
     const body = await req.json() as Item
     const ref = gun.get(modelId)
 
@@ -74,7 +74,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
     const checkToken = authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
 
-    const { modelId } = params
+    const { modelId } = await params
 
     const ref = gun.get(modelId)
     const results: Item[] = []

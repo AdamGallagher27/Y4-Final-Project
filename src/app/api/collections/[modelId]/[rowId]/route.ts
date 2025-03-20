@@ -21,7 +21,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string,
 		const checkToken = authorisationMiddleWare(authHeader)
 		if (checkToken) return checkToken
 
-		const { modelId, rowId } = params
+		const { modelId, rowId } = await params
 
 		const ref = gun.get(modelId)
 		const results: Item[] = []
@@ -169,7 +169,7 @@ export const DELETE = async (req: Request, { params }: { params: { modelId: stri
 		if (checkToken) return checkToken
 
 		// Extract modelId and rowId from the params
-		const { modelId, rowId } = params
+		const { modelId, rowId } = await params
 		const ref = gun.get(modelId)
 
 		let rowToDeleteId: string | undefined
