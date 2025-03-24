@@ -14,6 +14,4 @@ test hosted versions
 2 small project to show dashboard works
 tidy/refactor
 
-when boolean is added from the dashboard it is added as a string because it is stringified to show up in the UI
-need to be able to read real boolean from db and then change it to a string for the UI
 

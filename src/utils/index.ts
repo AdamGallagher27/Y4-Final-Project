@@ -1,5 +1,5 @@
 
-import { EncryptedItem, Item, Property } from '../types'
+import { Collection, EncryptedItem, Item, Property } from '../types'
 import { Dispatch, SetStateAction } from 'react'
 
 export const isOnClient = () => {
@@ -124,4 +124,31 @@ export const generatePropetiesArray = (selectedType: string) => {
     'name': 'value',
     'type': selectedType
   }]
+}
+
+// the form saves boolean values as a string
+// this is my temp solution for preventing them being saved as a stringified bool
+export const transformBoolStringsInForm = (form:{ [key: string]: string}) => {
+  return Object.fromEntries(
+    Object.entries(form).map(([key, value]) => {
+      if (value === 'true') return [key, true]
+      if (value === 'false') return [key, false]
+      return [key, value]
+    })
+  )
+}
+
+// this does the opposite of the above funtion it takes an array of data and makes booleans
+// a usuable string for the ui
+// chatgpt
+export const transformBoolToStringValue = (data: Collection[]): Collection[] => {
+  return data.map(item => {
+    const transformedValues = Object.fromEntries(
+      Object.entries(item).map(([key, value]) => 
+        typeof value === "boolean" ? [key, value.toString()] : [key, value]
+      )
+    )
+
+    return { ...item, ...transformedValues }
+  })
 }

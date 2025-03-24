@@ -22,21 +22,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Collection, Item, Model, Property } from '@/types'
 import Loading from '../generic/Loading'
 import { getAllCollectionRows } from '@/utils/api'
+import { transformBoolToStringValue } from '@/utils'
 
 const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 	return properties.map((property) => {
 		return {
 			accessorKey: property.name,
 			header: property.name,
-			cell: ({ row }) => {
-				const value: string | number | boolean = row.getValue(property.name)
-
-				if (property.type === 'boolean') {
-					return <div>{value ? 'true' : 'false'}</div>
-				}
-
-				return <div>{value}</div>
-			},
 		}
 	})
 }
@@ -54,14 +46,16 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 		// reset the selected row to prevent updating row in differente table
 		setSelectedRow(undefined)
 		setData(undefined)
-
 	}
 
 	useEffect(() => {
 		reset()
 
 		const handleGetAllRows = async () => {
-			const allData = await getAllCollectionRows(selectedModel.modelId)
+			const response =  await getAllCollectionRows(selectedModel.modelId)
+
+			// boolean values need to be converted to strings for the ui to render there values
+			const allData = response && transformBoolToStringValue(response)
 
 			if (allData) {
 				setData(allData)

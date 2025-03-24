@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Item, Model } from '@/types'
 import FormError from '../generic/FormError'
-import { validateForm } from '@/utils'
+import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { Input } from '../ui/input'
 import { updateCollectionRow } from '@/utils/api'
 
@@ -42,7 +42,8 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
 
   const handleUpdateRow = async () => {
     if (validateForm(form, properties, setErrors)) {
-      const response = await updateCollectionRow(model.modelId, form)
+      const body = transformBoolStringsInForm(form)
+      const response = await updateCollectionRow(model.modelId, body)
       response && resetPopUp()
     }
   }
@@ -67,13 +68,13 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
                     <div className='text-[#71717A]'>Enter {name}</div>
                     <input
                       type='checkbox'
-                      // checked={value === 'true'}
+                      checked={form[name] === 'true'}
                       onChange={(e) => handleChange(name, e.target.checked ? 'true' : 'false')}
                     />
                   </div>
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             } else if (typeof value === 'number') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
@@ -85,7 +86,7 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
                   />
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             } else if (typeof value === 'string') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
@@ -97,7 +98,7 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
                   />
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             }
           })}
           <div className='flex gap-3'>

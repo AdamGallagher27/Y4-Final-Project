@@ -56,7 +56,7 @@ export default function Documentation() {
 				</p>
 
 				{models && models.map(((model) => {
-					return <ModelDocumentation model={model} />
+					return <ModelDocumentation key={model.name} model={model} />
 				}))}
 			</div>
 		</div >

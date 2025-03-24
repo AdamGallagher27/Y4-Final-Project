@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Model } from '@/types'
 import FormError from '../generic/FormError'
-import { validateForm } from '@/utils'
+import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { addRowToCollection } from '@/utils/api'
 
 interface Props {
@@ -54,7 +54,8 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
 
   const handleAddRow = async () => {
     if (validateForm(form, properties, setErrors)) {      
-      const response = await addRowToCollection(selectedModel.modelId, form)
+      const body = transformBoolStringsInForm(form)
+      const response = await addRowToCollection(selectedModel.modelId, body)
       response && resetPopUp()
     }
   }
