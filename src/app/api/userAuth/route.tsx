@@ -4,17 +4,19 @@ import { saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
+import peers from '../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 
 // get all rows route
 export const GET = async (req: Request) => {
 
   const currentUrl = req.url
-  
-  try {
-    const authHeader = await req.headers.get('Authorization')
+  // this optional header is used to ignore saving the api response
+	const ignoreHeader = req.headers.get('Ignore')
+  const authHeader = req.headers.get('Authorization')
 
+  try {
     // verify token
     const checkToken = await authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
@@ -42,18 +44,16 @@ export const GET = async (req: Request) => {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     if (results.length === 0) {
-      saveResponseStatus(currentUrl, 404)
+      !ignoreHeader && saveResponseStatus(currentUrl, 404)
       return NextResponse.json({ message: 'No users found', ok: true, }, { status: 404 })
     }
 
-    saveResponseStatus(currentUrl, 200)
+    !ignoreHeader && saveResponseStatus(currentUrl, 200)
     return NextResponse.json({ message: 'Got all users successfully', ok: true, body: cleanResponse(results) }, { status: 200 })
   }
   catch (error) {
     console.error(error)
-    saveResponseStatus(currentUrl, 500)
+    !ignoreHeader && saveResponseStatus(currentUrl, 500)
     return NextResponse.json({ message: 'An error occoured', ok: false, error: error }, { status: 500 })
   }
-
-
 }

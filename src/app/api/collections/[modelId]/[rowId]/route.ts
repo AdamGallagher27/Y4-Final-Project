@@ -4,9 +4,9 @@ import { saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, decryptData, verifySigniture, encryptData, generateSigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
+import peers from '../../../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
-
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 // get single row from collection
 export const GET = async (req: Request, { params }: { params: { modelId: string, rowId: string } }) => {
 

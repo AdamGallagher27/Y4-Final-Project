@@ -88,9 +88,9 @@ export const addRowToCollection = async (modelId: string, body: Item) => {
     }
 
     const responseData = await response.json()
-    return responseData.body as EncryptedItem 
+    return responseData.body as EncryptedItem
   }
-  catch(error) {
+  catch (error) {
     console.error('Error saving API response status:', error)
   }
 }
@@ -117,14 +117,14 @@ export const updateCollectionRow = async (modelId: string, body: Item) => {
     const responseData = await response.json()
     return responseData
   }
-  catch(error) {
+  catch (error) {
     console.error('Error saving API response status:', error)
   }
 }
 
 export const deleteRow = async (modelId: string, rowId: string) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-  const authToken = process.env.NEXT_PUBLIC_API_TOKEN  
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
 
   try {
     const response = await fetch(`${apiUrl}api/collections/${modelId}/${rowId}`, {
@@ -150,7 +150,7 @@ export const deleteRow = async (modelId: string, rowId: string) => {
 
 export const deleteSingle = async (singleId: string) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-  const authToken = process.env.NEXT_PUBLIC_API_TOKEN  
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
 
   try {
     const response = await fetch(`${apiUrl}api/single/${singleId}`, {
@@ -185,7 +185,7 @@ export const addNewSingle = async (single: Item): Promise<Item[] | undefined> =>
         'Authorization': `Bearer ${authToken}`,
         'Ignore': 'ignore'
       },
-      body: JSON.stringify({value: single.value})
+      body: JSON.stringify({ value: single.value })
     })
 
     if (!response.ok) {
@@ -211,7 +211,7 @@ export const updateSingle = async (single: Item): Promise<Item[] | undefined> =>
         'Authorization': `Bearer ${authToken}`,
         'Ignore': 'ignore'
       },
-      body: JSON.stringify({value: single.value})
+      body: JSON.stringify({ value: single.value })
     })
 
     if (!response.ok) {
@@ -302,7 +302,29 @@ export const updateAuthJSON = async (walletId: string) => {
   }
 }
 
+export const addNewPeer = async (peerUrl: string) => {
 
+  const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+
+  try {
+    const response = await fetch(`${url}api/peers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: JSON.stringify({ peer: peerUrl })
+    })
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error during fetch:', error)
+  }
+}
 
 export const getAllModels = async (): Promise<Model[] | undefined> => {
 
@@ -321,6 +343,26 @@ export const getAllModels = async (): Promise<Model[] | undefined> => {
     console.error(error)
   }
   return
+}
+
+export const getAllPeers = async (): Promise<string[]> => {
+
+  try {
+
+    if (isOnClient()) {
+      const response = await fetch('/peers.json')
+      const peers = await response.json()
+
+      const defaultPeer = process.env.NEXT_PUBLIC_GUN_URL
+
+      return defaultPeer ? [defaultPeer, ...peers] : peers
+    }
+
+  }
+  catch (error) {
+    console.error(error)
+  }
+  return []
 }
 
 export const getAllModelNames = (models: Model[] | undefined) => {

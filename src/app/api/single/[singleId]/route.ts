@@ -4,8 +4,9 @@ import { saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, decryptData, verifySigniture, generateSigniture, encryptData } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
+import peers from '../../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 
 // get selected single from db
 export const GET = async (req: Request, { params }: { params: { singleId: string } }) => {

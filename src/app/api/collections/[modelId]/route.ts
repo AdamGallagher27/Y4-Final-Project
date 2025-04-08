@@ -4,8 +4,9 @@ import { saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, generateSigniture, encryptData, generateRowId, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
+import peers from '../../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 
 // create row route
 export const POST = async (req: Request, { params }: { params: { modelId: string } }) => {

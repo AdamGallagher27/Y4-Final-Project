@@ -5,8 +5,9 @@ import { validateEmail, validatePassword } from '@/utils'
 import { saveResponseStatus } from '@/utils/api'
 import { decryptData, verifySigniture } from '@/utils/security'
 const jwt = require('jsonwebtoken')
+import peers from '../../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 
 // login 
 export const POST = async (req: NextRequest) => {

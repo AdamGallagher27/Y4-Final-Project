@@ -3,8 +3,9 @@ import { saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
+import peers from '../../../../public/peers.json'
 
-const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL])
+const gun = Gun([process.env.NEXT_PUBLIC_GUN_URL, ...peers])
 
 // get all singles from db
 export const GET = async (req: Request) => {
