@@ -57,6 +57,10 @@ const validateFormField = (name: string, value: string, properties: Property[]) 
     return `${property.name} must be a valid number.`
   }
 
+  if(property.type === 'richtext' && value.length > 400) {
+    return `${property.name} is too long to be added to the database`
+  } 
+
   if (property.type === 'string') {
 
     if (value.length < 3) {
