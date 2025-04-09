@@ -8,6 +8,7 @@ import { Model } from '@/types'
 import FormError from '../generic/FormError'
 import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { addRowToCollection } from '@/utils/api'
+import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
   selectedModel: Model
@@ -70,6 +71,19 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
           <DialogTitle>Add a New Row</DialogTitle>
         </DialogHeader>
         <div>
+          
+        <div className='mb-3'>
+                  <div className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
+                    <div className='text-[#71717A]'>Enter name</div>
+                    <input
+                      type='checkbox'
+                      // checked={form[property.name] === 'true'}
+                      // onChange={(e) => handleChange(property.name, e.target.checked ? 'true' : 'false')}
+                    />
+                  </div>
+                  {/* <FormError message={errors[property.name]} /> */}
+                </div>
+          <RichTextInput />
           {properties.map((property, index) => {
             if (property.name === 'id') return
 

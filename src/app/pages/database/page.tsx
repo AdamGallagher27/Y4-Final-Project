@@ -37,7 +37,7 @@ export default function Database() {
 			<Sidebar />
 			{allModels && <InnerSideBar allModels={allModels} selectedModel={selectedModel || allModels[0]} setSelectedModel={setSelectedModel} />}
 			<div className='p-4 w-full'>
-				{/* {(selectedModel && selectedModel.name) &&
+				{(selectedModel && selectedModel.name) &&
 					<div className='flex items-center justify-between'>
 						<Title firstPartOfTitle='Collections' secondPartOfTitle={selectedModel.name} />
 						<div className='flex items-center gap-2'>
@@ -50,8 +50,8 @@ export default function Database() {
 						</div>
 					</div>
 				}
-				{(selectedModel && refresh) && <CollectionTable selectedModel={selectedModel} setSelectedRow={setSelectedRow} />} */}
-				<RichTextInput />
+				{(selectedModel && refresh) && <CollectionTable selectedModel={selectedModel} setSelectedRow={setSelectedRow} />}
+				{/* <RichTextInput /> */}
 			</div>
 		</div>
 	)

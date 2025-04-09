@@ -5,7 +5,7 @@ import ListItem from '@tiptap/extension-list-item'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 
-const Tiptap = () => {
+const RichTextInput = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -40,7 +40,7 @@ const Tiptap = () => {
     return null;
   }
 return (
-    <div className='flex flex-col justify-stretch min-h-[200px] border rounded border-b-0'>
+    <div className='flex flex-col justify-stretch min-h-[200px] border rounded border-b-0 mb-3'>
       <div className='flex items-center gap-2 mb-2'>
         <button
           type='button'
@@ -99,4 +99,4 @@ return (
   )
 }
 
-export default Tiptap
+export default RichTextInput

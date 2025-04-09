@@ -52,7 +52,7 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 		reset()
 
 		const handleGetAllRows = async () => {
-			const response =  await getAllCollectionRows(selectedModel.modelId)
+			const response = await getAllCollectionRows(selectedModel.modelId)
 
 			// boolean values need to be converted to strings for the ui to render there values
 			const allData = response && transformBoolToStringValue(response)
