@@ -1,6 +1,7 @@
 
 import { Collection, EncryptedItem, Item, Property } from '../types'
 import { Dispatch, SetStateAction } from 'react'
+import sanitizeHtml from 'sanitize-html'
 
 export const isOnClient = () => {
   if (typeof window !== undefined) {
@@ -154,5 +155,12 @@ export const transformBoolToStringValue = (data: Collection[]): Collection[] => 
     )
 
     return { ...item, ...transformedValues }
+  })
+}
+
+// ensures no one is adding malicious script tags into the db
+export const parseRichText = (html: string) => {
+  return sanitizeHtml(html, {
+    allowedTags: ['p', 'ol', 'ul', 'li', 'h2', 'strong', 'em']
   })
 }
