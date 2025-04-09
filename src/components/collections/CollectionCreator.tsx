@@ -124,6 +124,7 @@ const CollectionCreator = () => {
                     <SelectItem value='string'>String</SelectItem>
                     <SelectItem value='number'>Number</SelectItem>
                     <SelectItem value='boolean'>Boolean</SelectItem>
+                    <SelectItem value='richtext'>RichText</SelectItem>
                   </SelectContent>
                 </Select>
                 {properties.length > 1 && (

@@ -16,3 +16,5 @@ tidy/refactor
 rich text box in model create
 two different cms for both project in different browsers
 disccuss translation
+handle large text body
+purify html before adding to db 

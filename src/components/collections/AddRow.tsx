@@ -34,11 +34,11 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    if(!open) {
+    if (!open) {
       setForm(preProcessSelectedModel(selectedModel))
       setErrors({})
     }
-    
+
   }, [open])
 
   const { properties } = selectedModel
@@ -54,7 +54,7 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
   }
 
   const handleAddRow = async () => {
-    if (validateForm(form, properties, setErrors)) {      
+    if (validateForm(form, properties, setErrors)) {
       const body = transformBoolStringsInForm(form)
       const response = await addRowToCollection(selectedModel.modelId, body)
       response && resetPopUp()
@@ -71,19 +71,6 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
           <DialogTitle>Add a New Row</DialogTitle>
         </DialogHeader>
         <div>
-          
-        <div className='mb-3'>
-                  <div className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
-                    <div className='text-[#71717A]'>Enter name</div>
-                    <input
-                      type='checkbox'
-                      // checked={form[property.name] === 'true'}
-                      // onChange={(e) => handleChange(property.name, e.target.checked ? 'true' : 'false')}
-                    />
-                  </div>
-                  {/* <FormError message={errors[property.name]} /> */}
-                </div>
-          <RichTextInput />
           {properties.map((property, index) => {
             if (property.name === 'id') return
 
@@ -121,6 +108,12 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
                   onChange={(e) => handleChange(property.name, e.target.value)}
                   placeholder={`Enter ${property.name}`}
                 />
+                <FormError message={errors[property.name]} />
+              </div>)
+            }
+            else if (property.type === 'richtext') {
+              return (<div key={`${property}-${index}`} className='mb-3'>
+                <RichTextInput name={property.name} handleChange={handleChange} />
                 <FormError message={errors[property.name]} />
               </div>)
             }

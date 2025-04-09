@@ -4,11 +4,29 @@ import Heading from '@tiptap/extension-heading'
 import ListItem from '@tiptap/extension-list-item'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
+import Placeholder from '@tiptap/extension-placeholder'
 
-const RichTextInput = () => {
+
+interface Props {
+  name: string
+  handleChange: (name: string, value: string) => void
+}
+
+const RichTextInput = ({ name, handleChange }: Props) => {
   const editor = useEditor({
+    onUpdate: ({ editor }) => {
+      const content = editor.getHTML()
+      handleChange(name, content)
+    },
     extensions: [
       StarterKit,
+      Placeholder.configure({
+        placeholder: `Enter ${name}`,
+        // place holder does not show without these psuedo classes
+        // https://github.com/ueberdosis/tiptap/issues/2659
+        emptyNodeClass:
+          'first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
+      }),
       Heading.configure({
         HTMLAttributes: {
           class: 'text-xl font-bold capitalize',
@@ -35,19 +53,18 @@ const RichTextInput = () => {
       },
     },
 
-  });
+  })
   if (!editor) {
     return null;
   }
-return (
-    <div className='flex flex-col justify-stretch min-h-[200px] border rounded border-b-0 mb-3'>
+  return (
+    <div className='flex flex-col justify-stretch min-h-[200px] border rounded border-b-0'>
       <div className='flex items-center gap-2 mb-2'>
         <button
           type='button'
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded ${
-            editor.isActive('bold') ? 'bg-gray-200' : ''
-          }`}
+          className={`p-2 rounded ${editor.isActive('bold') ? 'bg-gray-200' : ''
+            }`}
           title='Bold (Ctrl+B)'
         >
           <b>B</b>
@@ -55,9 +72,8 @@ return (
         <button
           type='button'
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded ${
-            editor.isActive('italic') ? 'bg-gray-200' : ''
-          }`}
+          className={`p-2 rounded ${editor.isActive('italic') ? 'bg-gray-200' : ''
+            }`}
           title='Italic (Ctrl+I)'
         >
           <i>I</i>
@@ -76,9 +92,8 @@ return (
         <button
           type='button'
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded ${
-            editor.isActive('bulletList') ? 'bg-gray-200' : ''
-          }`}
+          className={`p-2 rounded ${editor.isActive('bulletList') ? 'bg-gray-200' : ''
+            }`}
           title='Bullet List'
         >
           BulletList
@@ -86,9 +101,8 @@ return (
         <button
           type='button'
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded ${
-            editor.isActive('orderedList') ? 'bg-gray-200' : ''
-          }`}
+          className={`p-2 rounded ${editor.isActive('orderedList') ? 'bg-gray-200' : ''
+            }`}
           title='Ordered List'
         >
           orderd list
