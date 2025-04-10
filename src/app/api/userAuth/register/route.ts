@@ -42,7 +42,7 @@ export const POST = async (req: NextRequest) => {
 		const encryptedData = encryptData(body)
 
 		const newData = {
-			encryptedData,
+			...encryptedData,
 			signiture,
 		}
 
@@ -53,7 +53,7 @@ export const POST = async (req: NextRequest) => {
 		// check that the email is unqique
 		ref.map().once((res: EncryptedItem) => {
 			if (res) {
-				const decryptedData = decryptData(res.encryptedData) as User
+				const decryptedData = decryptData(res)
 				const isValid = verifySigniture(decryptedData, res.signiture)
 
 				if (isValid && decryptedData.email === email) {

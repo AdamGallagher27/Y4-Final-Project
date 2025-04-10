@@ -36,7 +36,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
     const encryptedData = encryptData(body)
 
     const newData = {
-      encryptedData,
+      ...encryptedData,
       signiture,
       id: generateRowId()
     }
@@ -82,7 +82,7 @@ export const GET = async (req: Request, { params }: { params: { modelId: string 
 
     ref.map().once((res: EncryptedItem) => {
       if (res && res.encryptedData && res.signiture && res.id) {
-        const decryptedData = decryptData(res.encryptedData)
+        const decryptedData = decryptData(res)
         const isValid = verifySigniture(decryptedData, res.signiture)
 
         // if the signiture is valid it means the data has not been tampered with outside of the api

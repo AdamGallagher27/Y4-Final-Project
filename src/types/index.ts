@@ -30,6 +30,8 @@ export interface Item {
 export interface EncryptedItem {
   id?: string
   encryptedData: string
+  encryptedKey: string
+  iv: string
   signiture: string
   // eslint-disable-next-line
   _: any

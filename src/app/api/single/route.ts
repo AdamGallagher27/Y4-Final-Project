@@ -28,7 +28,7 @@ export const GET = async (req: Request) => {
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData) as Item
+        const decryptedData = decryptData(res) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
         // if the signiture is valid it means the data has not been tampered with outside of the api

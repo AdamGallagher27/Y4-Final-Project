@@ -31,7 +31,7 @@ export const GET = async (req: Request, { params }: { params: { singleId: string
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData) as Item
+        const decryptedData = decryptData(res) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
         // if the signiture is valid it means the data has not been tampered with outside of the api
@@ -99,7 +99,7 @@ export const POST = async (req: Request, { params }: { params: { singleId: strin
     const encryptedData = encryptData(body)
 
     const newData = {
-      encryptedData,
+      ...encryptedData,
       signiture,
     }
 
@@ -149,7 +149,7 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData) as Item
+        const decryptedData = decryptData(res) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
         // if the current entry is valid and the id matches the row id param
@@ -159,7 +159,7 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
           const newBody = { value: value, id: singleId }
 
           const newBodyEncrypted = {
-            encryptedData: encryptData(newBody),
+            ...encryptData(newBody),
             signiture: generateSigniture(newBody),
           }
 
@@ -220,7 +220,7 @@ export const DELETE = async (req: Request, { params }: { params: { singleId: str
 
     ref.map().once((res: EncryptedItem) => {
       if (res) {
-        const decryptedData = decryptData(res.encryptedData) as Item
+        const decryptedData = decryptData(res) as Item
         const isValid = verifySigniture(decryptedData, res.signiture)
 
         if (isValid && decryptedData.id === singleId) {

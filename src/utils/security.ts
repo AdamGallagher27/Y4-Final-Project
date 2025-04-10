@@ -74,31 +74,73 @@ export const authorisationMiddleWare = (authHeader: string | null) => {
 
 }
 
+// updated encryptdata / decryptdata / signiture chatgpt
 
 export const encryptData = (data: Item | User) => {
-  const buffer = Buffer.from(JSON.stringify(data))
-  const encrypted = crypto.publicEncrypt(process.env.PUBLIC_RSA_KEY as string, buffer)
+  const json = JSON.stringify(data)
 
-  return encrypted.toString('base64')
+  // Generate AES key + IV
+  const aesKey = crypto.randomBytes(32) // AES-256
+  const iv = crypto.randomBytes(16)     // AES IV
+
+  // Encrypt data using AES-256-CBC
+  const cipher = crypto.createCipheriv('aes-256-cbc', aesKey, iv)
+  let encryptedData = cipher.update(json, 'utf8', 'base64')
+  encryptedData += cipher.final('base64')
+
+  // Encrypt AES key using RSA
+  const encryptedKey = crypto.publicEncrypt(
+    {
+      key: process.env.PUBLIC_RSA_KEY as string,
+      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
+    },
+    aesKey
+  ).toString('base64')
+
+  return {
+    encryptedData,
+    encryptedKey,
+    iv: iv.toString('base64')
+  }
 }
 
 export const generateSigniture = (data: Item | User) => {
   const sign = crypto.createSign('SHA256')
   sign.update(JSON.stringify(data))
-
+  sign.end()
   const signBuffer = sign.sign(process.env.PRIVATE_RSA_KEY as string)
-
   return signBuffer.toString('base64')
 }
 
-export const decryptData = (encryptedData: string): Item | User | Single => {
-  const buffer = Buffer.from(encryptedData, 'base64')
-  const decrypted = crypto.privateDecrypt(process.env.PRIVATE_RSA_KEY as string, buffer)
-  return JSON.parse(decrypted.toString('utf-8'))
+export const decryptData = ({
+  encryptedData,
+  encryptedKey,
+  iv
+}: {
+  encryptedData: string
+  encryptedKey: string
+  iv: string
+}): Item | User => {
+  // Decrypt AES key using RSA
+  const aesKey = crypto.privateDecrypt(
+    {
+      key: process.env.PRIVATE_RSA_KEY as string,
+      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
+    },
+    Buffer.from(encryptedKey, 'base64')
+  )
+
+  // Decrypt data using AES
+  const decipher = crypto.createDecipheriv('aes-256-cbc', aesKey, Buffer.from(iv, 'base64'))
+  let decrypted = decipher.update(encryptedData, 'base64', 'utf8')
+  decrypted += decipher.final('utf8')
+
+  return JSON.parse(decrypted)
 }
 
-export const verifySigniture = (data: DecryptedData, signiture: string): boolean => {
+export const verifySigniture = (data: DecryptedData, signature: string): boolean => {
   const verify = crypto.createVerify('SHA256')
   verify.update(JSON.stringify(data))
-  return verify.verify(process.env.PUBLIC_RSA_KEY as string, signiture, 'base64')
+  verify.end()
+  return verify.verify(process.env.PUBLIC_RSA_KEY as string, signature, 'base64')
 }

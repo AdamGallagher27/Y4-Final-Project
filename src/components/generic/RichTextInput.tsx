@@ -5,7 +5,7 @@ import ListItem from '@tiptap/extension-list-item'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import Placeholder from '@tiptap/extension-placeholder'
-
+import { parseRichText } from '@/utils'
 
 interface Props {
   name: string
@@ -16,7 +16,7 @@ const RichTextInput = ({ name, handleChange }: Props) => {
   const editor = useEditor({
     onUpdate: ({ editor }) => {
       const content = editor.getHTML()
-      handleChange(name, content)
+      handleChange(name, parseRichText(content))
     },
     extensions: [
       StarterKit,

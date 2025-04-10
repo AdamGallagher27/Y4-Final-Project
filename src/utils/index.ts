@@ -41,8 +41,6 @@ export const validatePassword = (password: string) => {
   return regex.test(password)
 }
 
-
-
 const validateFormField = (name: string, value: string, properties: Property[]) => {
   const property = properties.find((prop) => prop.name === name)
 
@@ -58,7 +56,7 @@ const validateFormField = (name: string, value: string, properties: Property[]) 
     return `${property.name} must be a valid number.`
   }
 
-  if(property.type === 'richtext' && value.length > 400) {
+  if(property.type === 'richtext' && value.length > 900) {
     return `${property.name} is too long to be added to the database`
   } 
 
