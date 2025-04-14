@@ -8,6 +8,7 @@ import { Model } from '@/types'
 import FormError from '../generic/FormError'
 import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { addRowToCollection } from '@/utils/api'
+import { ScrollArea } from '../ui/scroll-area'
 import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
@@ -70,7 +71,7 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
         <DialogHeader>
           <DialogTitle>Add a New Row</DialogTitle>
         </DialogHeader>
-        <div>
+        <ScrollArea className='max-h-[600px]'>
           {properties.map((property, index) => {
             if (property.name === 'id') return
 
@@ -121,7 +122,7 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
           <div className='flex gap-3'>
             <Button onClick={handleAddRow}>Save Row</Button>
           </div>
-        </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )

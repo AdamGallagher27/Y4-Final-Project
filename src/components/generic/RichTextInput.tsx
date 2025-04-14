@@ -10,10 +10,12 @@ import { parseRichText } from '@/utils'
 interface Props {
   name: string
   handleChange: (name: string, value: string) => void
+  content?: string 
 }
 
-const RichTextInput = ({ name, handleChange }: Props) => {
+const RichTextInput = ({ name, handleChange, content }: Props) => {
   const editor = useEditor({
+    content,
     onUpdate: ({ editor }) => {
       const content = editor.getHTML()
       handleChange(name, parseRichText(content))
@@ -55,7 +57,7 @@ const RichTextInput = ({ name, handleChange }: Props) => {
 
   })
   if (!editor) {
-    return null;
+    return null
   }
   return (
     <div className='flex flex-col justify-stretch min-h-[200px] border rounded border-b-0'>
@@ -67,7 +69,7 @@ const RichTextInput = ({ name, handleChange }: Props) => {
             }`}
           title='Bold (Ctrl+B)'
         >
-          <b>B</b>
+          Bold
         </button>
         <button
           type='button'
@@ -76,7 +78,7 @@ const RichTextInput = ({ name, handleChange }: Props) => {
             }`}
           title='Italic (Ctrl+I)'
         >
-          <i>I</i>
+          Italic
         </button>
         <button
           type='button'
@@ -96,7 +98,7 @@ const RichTextInput = ({ name, handleChange }: Props) => {
             }`}
           title='Bullet List'
         >
-          BulletList
+          Bullet List
         </button>
         <button
           type='button'

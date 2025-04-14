@@ -12,10 +12,8 @@ UI work
 style
 test hosted versions
 2 small project to show dashboard works
-tidy/refactor
-rich text box in model create
 two different cms for both project in different browsers
 disccuss translation
-handle large text body
-purify html before adding to db 
-redo encryption with aes 
+tidy/refactor
+redo auth 
+improve performance

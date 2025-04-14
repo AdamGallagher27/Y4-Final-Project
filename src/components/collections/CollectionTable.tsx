@@ -96,7 +96,7 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 	}
 
 	return (
-		<div className='w-full'>
+		<div className='w-fit'>
 			<div className='mb-4'>
 				{(data && data?.length > 0) && <Input
 					placeholder='Filter by id'
@@ -139,12 +139,14 @@ const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps
 															row.toggleSelected(true)
 														}}
 													/>
-													<label htmlFor={`radio-${row.id}`} className='ml-2'>
+													<label htmlFor={`radio-${row.id}`} className='ml-2 '>
 														{cell.renderValue() as string}
 													</label>
 												</div>
 											) : (
-												cell.renderValue() as string
+												<div className='max-w-48 truncate'>
+													{cell.renderValue() as string}
+												</div>
 											)}
 										</TableCell>
 									)

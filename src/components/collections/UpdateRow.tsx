@@ -8,6 +8,8 @@ import FormError from '../generic/FormError'
 import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { Input } from '../ui/input'
 import { updateCollectionRow } from '@/utils/api'
+import { ScrollArea } from '../ui/scroll-area'
+import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
   selectedRow: Item
@@ -48,6 +50,10 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
     }
   }
 
+  const isPropertyRichText = (name: string) => {
+    return model.properties.some(property => property.name === name && property.type === 'richtext')
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -57,11 +63,17 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
         <DialogHeader>
           <DialogTitle>Update Row</DialogTitle>
         </DialogHeader>
-        <div>
+        <ScrollArea className='max-h-[600px]'>
           {Object.entries(selectedRow).map(([name, value], index) => {
             if (name === 'id') return null
-
-            if (value === 'true' || value === 'false') {
+            
+            if (isPropertyRichText(name)) {
+              return (<div key={`${name}-${index}`} className='mb-3'>
+                <RichTextInput name={name} handleChange={handleChange} content={value} />
+                <FormError message={errors[name]} />
+              </div>)
+            }
+            else if (value === 'true' || value === 'false') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
                   <div className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
@@ -87,7 +99,8 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
                   <FormError message={errors[name]} />
                 </div>
               )
-            } else if (typeof value === 'string') {
+            }
+            else if (typeof value === 'string') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
                   <Input
@@ -104,7 +117,7 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
           <div className='flex gap-3'>
             <Button onClick={handleUpdateRow}>Update Row</Button>
           </div>
-        </div>
+        </ScrollArea >
       </DialogContent>
     </Dialog>
   )
