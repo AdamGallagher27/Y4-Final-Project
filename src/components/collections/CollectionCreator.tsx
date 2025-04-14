@@ -2,13 +2,16 @@
 
 import { useState } from 'react'
 import { Model, Property } from '@/types'
-import { refreshPage } from '@/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { generateModelId } from '@/utils/security'
 import FormError from '../generic/FormError'
+
+interface Props {
+  setAllModels: React.Dispatch<React.SetStateAction<Model[]>>
+}
 
 const addNewModelToModels = async (model: Model) => {
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
@@ -22,7 +25,6 @@ const addNewModelToModels = async (model: Model) => {
     if (!response.ok) {
       console.error(response.status)
     }
-    console.log(await response.json())
   } catch (error) {
     console.error(error)
   }
@@ -33,9 +35,8 @@ const idTemplate = {
   'type': 'string'
 }
 
-// push to the all modesl array to cause refresh
 
-const CollectionCreator = () => {
+const CollectionCreator = ({ setAllModels }: Props) => {
   const [newCollectionName, setNewCollectionName] = useState('')
   const [properties, setProperties] = useState<Property[]>([{ name: '', type: 'string' }])
   const [open, setOpen] = useState(false)
@@ -59,7 +60,7 @@ const CollectionCreator = () => {
       setError('Collection name and Properties are required')
       return false
     }
-  
+
     setError(undefined)
     return true
   }
@@ -82,7 +83,7 @@ const CollectionCreator = () => {
       setNewCollectionName('')
       setProperties([{ name: '', type: 'string' }])
       setOpen(false)
-      refreshPage()
+      setAllModels(allModels => [...allModels, newCollection])
     }
   }
 

@@ -1,30 +1,14 @@
-'use client'
-
 import Sidebar from '@/components/generic/Sidebar'
-import Title from '@/components/generic/Title'
-import UserResponseTable from '@/components/generic/UsersResponseTable'
-import { User } from '@/types'
+import UsersWrapper from '@/components/serverPageWrappers/UsersWrapper'
 import { getAllUsers } from '@/utils/api'
-import { useEffect, useState } from 'react'
 
-export default function Status() {
-	const [users, setUsers] = useState<User[] | undefined>([])
-
-	useEffect(() => {
-		const handleFetchUsers = async () =>{
-			setUsers(await getAllUsers())
-		}
-
-		handleFetchUsers()
-	}, [])
+export default async function Status() {
+	const apiUsers = await getAllUsers()
 
 	return (
 		<div className='flex'>
 			<Sidebar />
-			<div className='p-4 ml-20 w-96'>
-				<Title firstPartOfTitle='Collections' secondPartOfTitle='Users' />
-				{users && <UserResponseTable users={users}  />}
-			</div>
+			<UsersWrapper apiUsers={apiUsers} />
 		</div>
 	)
 }

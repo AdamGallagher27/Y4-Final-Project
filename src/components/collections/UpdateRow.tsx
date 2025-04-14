@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Item, Model } from '@/types'
@@ -13,11 +13,10 @@ import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
   selectedRow: Item
-  setRefresh: Dispatch<SetStateAction<boolean>>
   model: Model
 }
 
-const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
+const UpdateRow = ({ selectedRow, model }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(selectedRow)
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -38,7 +37,6 @@ const UpdateRow = ({ selectedRow, setRefresh, model }: Props) => {
   }
 
   const resetPopUp = () => {
-    setRefresh(false)
     setOpen(false)
   }
 

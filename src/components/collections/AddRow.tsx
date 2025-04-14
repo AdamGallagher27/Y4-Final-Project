@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -13,7 +13,6 @@ import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
   selectedModel: Model
-  setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
 // pre save form with properties that are boolean
@@ -29,7 +28,7 @@ const preProcessSelectedModel = (model: Model) => {
   return result
 }
 
-const AddRow = ({ selectedModel, setRefresh }: Props) => {
+const AddRow = ({ selectedModel }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(preProcessSelectedModel(selectedModel))
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -49,7 +48,6 @@ const AddRow = ({ selectedModel, setRefresh }: Props) => {
   }
 
   const resetPopUp = () => {
-    setRefresh(false)
     setOpen(false)
     setForm(preProcessSelectedModel(selectedModel))
   }

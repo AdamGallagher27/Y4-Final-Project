@@ -1,21 +1,19 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { deleteSingle } from '@/utils/api'
 
 interface Props {
   singleId: string 
-  setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
-const DeleteRow = ({ singleId, setRefresh }: Props) => {
+const DeleteRow = ({ singleId }: Props) => {
   
   const [open, setOpen] = useState(false)
 
   const resetPopUp = () => {
-    setRefresh(false)
     setOpen(false)
   }
 

@@ -6,6 +6,9 @@ type Props = {
 }
 
 const PeersTable = ({ peers }: Props) => {
+
+  const peersWithDefaultPeer = [process.env.NEXT_PUBLIC_GUN_URL,...peers]
+
   return (
     <div className='overflow-x-auto mt-5 ml-3'>
       <Table>
@@ -16,7 +19,7 @@ const PeersTable = ({ peers }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {peers.map((peer, index) => (
+          {peersWithDefaultPeer.map((peer, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell> 
               <TableCell>{peer}</TableCell>

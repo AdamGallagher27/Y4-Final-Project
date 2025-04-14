@@ -14,23 +14,22 @@ interface Props {
 
 export const CollectionPageWrapper = ({ model }: Props) => {
 	const [selectedRow, setSelectedRow] = useState<Item | undefined>()
-	const [refresh, setRefresh] = useState(false)
 
 	return (
 		<div className='w-full'>
 			<div className='flex items-center justify-between'>
 				<Title firstPartOfTitle='Collections' secondPartOfTitle={model.name} />
 				<div className='flex items-center gap-2'>
-					<AddRow selectedModel={model} setRefresh={setRefresh} />
+					<AddRow selectedModel={model} />
 					{selectedRow && (
 						<>
-							<UpdateRow selectedRow={selectedRow} setRefresh={setRefresh} model={model} />
-							<DeleteRow selectedRowId={selectedRow.id} modelId={model.modelId} setRefresh={setRefresh} />
+							<UpdateRow selectedRow={selectedRow} model={model} />
+							<DeleteRow selectedRowId={selectedRow.id} modelId={model.modelId} />
 						</>
 					)}
 				</div>
 			</div>
-			<CollectionTable key={refresh.toString()} selectedModel={model} setSelectedRow={setSelectedRow} />
+			<CollectionTable selectedModel={model} setSelectedRow={setSelectedRow} />
 		</div>
 	)
 }

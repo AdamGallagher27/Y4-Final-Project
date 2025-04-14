@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -9,13 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { generatePropetiesArray, validateForm } from '@/utils'
 import { addNewSingle } from '@/utils/api'
 
-interface Props {
-  setRefresh: Dispatch<SetStateAction<boolean>>
-}
 
 
-
-const AddRow = ({ setRefresh }: Props) => {
+const AddRow = () => {
   const [form, setForm] = useState<{ [key: string]: string }>({ id: '', value: '' })
   const [selectedType, setSelectedType] = useState<'string' | 'number' | 'boolean'>('string')
   const [open, setOpen] = useState(false)
@@ -37,7 +33,6 @@ const AddRow = ({ setRefresh }: Props) => {
   }
 
   const resetPopUp = () => {
-    setRefresh(false)
     setOpen(false)
   }
 
@@ -74,7 +69,7 @@ const AddRow = ({ setRefresh }: Props) => {
                 placeholder='Single Value'
               />
 
-              <Select onValueChange={(value) => handleTypeChange(value as 'string' | 'number' | 'boolean')}>
+              <Select defaultValue='string' onValueChange={(value) => handleTypeChange(value as 'string' | 'number' | 'boolean')}>
                 <SelectTrigger className='w-[120px]'>
                   <SelectValue placeholder='Type' />
                 </SelectTrigger>

@@ -74,9 +74,10 @@ export const GET = async (req: Request, { params }: { params: { singleId: string
 export const POST = async (req: Request, { params }: { params: { singleId: string } }) => {
 
   const currentUrl = req.url
+  const ignoreHeader = req.headers.get('Ignore')
+  const authHeader = req.headers.get('Authorization')
 
   try {
-    const authHeader = await req.headers.get('Authorization')
 
     // verify token
     const checkToken = await authorisationMiddleWare(authHeader)
@@ -106,12 +107,12 @@ export const POST = async (req: Request, { params }: { params: { singleId: strin
     ref.set(newData, (ack: Acknowledgment) => {
       if (ack.err) {
         console.error(ack.err)
-        saveResponseStatus(currentUrl, 500)
+        !ignoreHeader && saveResponseStatus(currentUrl, 500)
         return NextResponse.json({ message: 'Failed to save data', ok: false }, { status: 500 })
       }
     })
 
-    saveResponseStatus(currentUrl, 201)
+    !ignoreHeader && saveResponseStatus(currentUrl, 201)
     return NextResponse.json({ message: 'Data created', body: newData, ok: true }, { status: 201 })
   }
 
@@ -126,9 +127,10 @@ export const POST = async (req: Request, { params }: { params: { singleId: strin
 export const PUT = async (req: Request, { params }: { params: { singleId: string } }) => {
 
   const currentUrl = req.url
+  const ignoreHeader = req.headers.get('Ignore')
+  const authHeader = req.headers.get('Authorization')
 
   try {
-    const authHeader = await req.headers.get('Authorization')
 
     // verify token
     const checkToken = await authorisationMiddleWare(authHeader)
@@ -184,18 +186,18 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
     ref.put(results, (ack: Acknowledgment) => {
       if (ack.err) {
         console.error(ack.err)
-        saveResponseStatus(currentUrl, 500)
+        !ignoreHeader && saveResponseStatus(currentUrl, 500)
         return NextResponse.json({ message: 'Failed to update data', ok: false }, { status: 500 })
       }
     })
 
-    saveResponseStatus(currentUrl, 201)
+    !ignoreHeader && saveResponseStatus(currentUrl, 201)
     return NextResponse.json({ message: 'Data updated', ok: true }, { status: 201 })
   }
 
   catch (error) {
     console.error(error)
-    saveResponseStatus(currentUrl, 500)
+    !ignoreHeader && saveResponseStatus(currentUrl, 500)
     return NextResponse.json({ message: 'An error occoured', ok: false, error }, { status: 500 })
   }
 }
@@ -204,10 +206,10 @@ export const PUT = async (req: Request, { params }: { params: { singleId: string
 export const DELETE = async (req: Request, { params }: { params: { singleId: string } }) => {
 
   const currentUrl = req.url
+  const ignoreHeader = req.headers.get('Ignore')
+  const authHeader = req.headers.get('Authorization')
 
   try {
-    const authHeader = await req.headers.get('Authorization')
-
     // verify token
     const checkToken = await authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
@@ -240,23 +242,23 @@ export const DELETE = async (req: Request, { params }: { params: { singleId: str
       ref.get(singleToDeleteId).put(null, (ack: Acknowledgment) => {
         if (ack.err) {
           console.error(ack.err)
-          saveResponseStatus(currentUrl, 500)
+          !ignoreHeader && saveResponseStatus(currentUrl, 500)
           return NextResponse.json({ message: 'Failed to delete data', ok: false }, { status: 500 })
         }
       })
     }
     else {
-      saveResponseStatus(currentUrl, 500)
+      !ignoreHeader && saveResponseStatus(currentUrl, 500)
       return NextResponse.json({ message: 'Single not found', ok: false }, { status: 500 })
     }
 
-    saveResponseStatus(currentUrl, 201)
+    !ignoreHeader && saveResponseStatus(currentUrl, 201)
     return NextResponse.json({ message: 'Data Deleted', ok: true }, { status: 201 })
   }
 
   catch (error) {
     console.error(error)
-    saveResponseStatus(currentUrl, 500)
+    !ignoreHeader && saveResponseStatus(currentUrl, 500)
     return NextResponse.json({ message: 'An error occoured', ok: false, error }, { status: 500 })
   }
 }

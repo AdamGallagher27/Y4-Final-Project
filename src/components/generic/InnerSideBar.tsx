@@ -4,17 +4,18 @@ import CollectionCreator from '../collections/CollectionCreator'
 
 interface Props {
 	allModels?: Model[]
+	setAllModels: React.Dispatch<React.SetStateAction<Model[]>>
 	selectedModel?: Model
-	setSelectedModel: Dispatch<SetStateAction<Model | undefined>>
+	setSelectedModel: Dispatch<SetStateAction<Model>>
 }
 
 // pass in all modesl
 
-const InnerSideBar = ({ allModels, selectedModel, setSelectedModel }: Props) => {
+const InnerSideBar = ({ allModels, setAllModels, selectedModel, setSelectedModel }: Props) => {
 
 	return (
 		<div className='h-screen w-56 flex flex-col items-center border-r border-[#E2E8F0] px-3 py-5 space-y-5 ml-20'>
-			<CollectionCreator />
+			<CollectionCreator setAllModels={setAllModels} />
 			<ul>
 				{allModels && allModels.map(model => {
 					if (selectedModel && allModels) {

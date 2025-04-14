@@ -1,30 +1,24 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { deleteRow } from '@/utils/api'
 
 interface Props {
   selectedRowId: string 
-  setRefresh: Dispatch<SetStateAction<boolean>>
   modelId: string
 }
 
-const DeleteRow = ({ modelId, selectedRowId, setRefresh }: Props) => {
+const DeleteRow = ({ modelId, selectedRowId }: Props) => {
   
   const [open, setOpen] = useState(false)
-
-  const resetPopUp = () => {
-    setRefresh(false)
-    setOpen(false)
-  }
 
   const handleDeleteRow = async () => {
     const response = await deleteRow(modelId, selectedRowId)
 
     if(response) {
-      resetPopUp()
+      setOpen(false)
     }
   }
 

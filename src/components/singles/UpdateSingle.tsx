@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Item } from '@/types'
@@ -11,15 +11,14 @@ import { updateSingle } from '@/utils/api'
 
 interface Props {
   selectedSingle: Item
-  setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
-const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
+const UpdateSingle = ({ selectedSingle }: Props) => {
 
   const startingType = (() => {
-    if (typeof selectedSingle.value === 'boolean') return 'boolean';
-    if (typeof selectedSingle.value === 'number') return 'number';
-    return 'string';
+    if (typeof selectedSingle.value === 'boolean') return 'boolean'
+    if (typeof selectedSingle.value === 'number') return 'number'
+    return 'string'
   })()
 
   const [form, setForm] = useState<{ [key: string]: string }>(selectedSingle)
@@ -40,7 +39,6 @@ const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
   }
 
   const resetPopUp = () => {
-    setRefresh(false)
     setOpen(false)
   }
 
@@ -76,7 +74,7 @@ const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
                   </div>
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             } else if (typeof value === 'number') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
@@ -88,7 +86,7 @@ const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
                   />
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             } else if (typeof value === 'string') {
               return (
                 <div key={`${name}-${index}`} className='mb-3'>
@@ -100,7 +98,7 @@ const UpdateSingle = ({ selectedSingle, setRefresh }: Props) => {
                   />
                   <FormError message={errors[name]} />
                 </div>
-              );
+              )
             }
           })}
           <div className='flex gap-3'>
