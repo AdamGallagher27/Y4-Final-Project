@@ -15,5 +15,4 @@ test hosted versions
 two different cms for both project in different browsers
 disccuss translation
 tidy/refactor
-redo auth 
-improve performance
+change Item type to row

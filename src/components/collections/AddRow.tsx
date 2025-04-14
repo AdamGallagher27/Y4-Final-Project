@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Model } from '@/types'
+import { Item, Model } from '@/types'
 import FormError from '../generic/FormError'
 import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { addRowToCollection } from '@/utils/api'
@@ -12,6 +12,7 @@ import { ScrollArea } from '../ui/scroll-area'
 import RichTextInput from '../generic/RichTextInput'
 
 interface Props {
+  setData: Dispatch<SetStateAction<Item[]>>
   selectedModel: Model
 }
 
@@ -28,7 +29,7 @@ const preProcessSelectedModel = (model: Model) => {
   return result
 }
 
-const AddRow = ({ selectedModel }: Props) => {
+const AddRow = ({ setData, selectedModel }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(preProcessSelectedModel(selectedModel))
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -56,7 +57,17 @@ const AddRow = ({ selectedModel }: Props) => {
     if (validateForm(form, properties, setErrors)) {
       const body = transformBoolStringsInForm(form)
       const response = await addRowToCollection(selectedModel.modelId, body)
-      response && resetPopUp()
+
+      if(response && response.id) {
+
+        const newRow = {
+          ...form,
+          id: response.id
+        } as Item
+
+        setData((prevData) => [...prevData, newRow])
+        resetPopUp()
+      }
     }
   }
 

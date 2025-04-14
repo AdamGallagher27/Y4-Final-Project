@@ -42,7 +42,7 @@ export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> 
   }
 }
 
-export const getAllCollectionRows = async (modelId: string): Promise<Collection[] | undefined> => {
+export const getAllCollectionRows = async (modelId: string): Promise<Item[] | undefined> => {
 
   const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN

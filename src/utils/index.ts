@@ -144,7 +144,7 @@ export const transformBoolStringsInForm = (form:{ [key: string]: string}) => {
 // this does the opposite of the above funtion it takes an array of data and makes booleans
 // a usuable string for the ui
 // chatgpt
-export const transformBoolToStringValue = (data: Collection[]): Collection[] => {
+export const transformBoolToStringValue = (data: Item[]): Item[] => {
   return data.map(item => {
     const transformedValues = Object.fromEntries(
       Object.entries(item).map(([key, value]) => 

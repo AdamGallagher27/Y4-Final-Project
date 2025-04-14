@@ -1,22 +1,23 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Item, Model } from '@/types'
-import FormError from '../generic/FormError'
 import { transformBoolStringsInForm, validateForm } from '@/utils'
 import { Input } from '../ui/input'
 import { updateCollectionRow } from '@/utils/api'
 import { ScrollArea } from '../ui/scroll-area'
 import RichTextInput from '../generic/RichTextInput'
+import FormError from '../generic/FormError'
 
 interface Props {
+  setData: Dispatch<SetStateAction<Item[]>>
   selectedRow: Item
   model: Model
 }
 
-const UpdateRow = ({ selectedRow, model }: Props) => {
+const UpdateRow = ({ setData, selectedRow, model }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(selectedRow)
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -44,7 +45,13 @@ const UpdateRow = ({ selectedRow, model }: Props) => {
     if (validateForm(form, properties, setErrors)) {
       const body = transformBoolStringsInForm(form)
       const response = await updateCollectionRow(model.modelId, body)
-      response && resetPopUp()
+
+      // after validation and updating db
+      // update the rows array i.e (data) with valid form variable
+      if (response) {
+        setData(prevData => prevData.map((row: Item) => row.id === form.id ? form : row))
+        resetPopUp()
+      }
     }
   }
 
@@ -64,7 +71,7 @@ const UpdateRow = ({ selectedRow, model }: Props) => {
         <ScrollArea className='max-h-[600px]'>
           {Object.entries(selectedRow).map(([name, value], index) => {
             if (name === 'id') return null
-            
+
             if (isPropertyRichText(name)) {
               return (<div key={`${name}-${index}`} className='mb-3'>
                 <RichTextInput name={name} handleChange={handleChange} content={value} />

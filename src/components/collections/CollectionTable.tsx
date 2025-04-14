@@ -18,11 +18,9 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Input } from '../ui/input'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Collection, Item, Model, Property } from '@/types'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { Item, Model, Property } from '@/types'
 import Loading from '../generic/Loading'
-import { getAllCollectionRows } from '@/utils/api'
-import { transformBoolToStringValue } from '@/utils'
 
 const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 	return properties.map((property) => {
@@ -34,44 +32,12 @@ const generateColumns = (properties: Property[]): ColumnDef<any>[] => {
 }
 
 interface CollectionTableProps {
+	data: Item[] | undefined
 	selectedModel: Model
 	setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
 }
 
-const CollectionTable = ({ selectedModel, setSelectedRow }: CollectionTableProps) => {
-
-	const [data, setData] = useState<Collection[] | undefined>(undefined)
-
-	const reset = () => {
-		// reset the selected row to prevent updating row in differente table
-		setSelectedRow(undefined)
-		setData(undefined)
-	}
-
-	useEffect(() => {
-		reset()
-
-		const handleGetAllRows = async () => {
-			const response = await getAllCollectionRows(selectedModel.modelId)
-
-			// boolean values need to be converted to strings for the ui to render there values
-			const allData = response && transformBoolToStringValue(response)
-
-			if (allData) {
-				setData(allData)
-			}
-			else {
-				setData([])
-			}
-		}
-
-		handleGetAllRows()
-
-		return () => {
-			reset()
-		}
-	}, [selectedModel])
-
+const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTableProps) => {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
 	const columns = generateColumns(selectedModel.properties)
