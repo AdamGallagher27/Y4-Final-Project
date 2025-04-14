@@ -1,6 +1,5 @@
 'use client'
 
-import useAuthentication from '@/app/hooks/useAuthentication'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import UserResponseTable from '@/components/generic/UsersResponseTable'
@@ -9,8 +8,6 @@ import { getAllUsers } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Status() {
-	useAuthentication()
-
 	const [users, setUsers] = useState<User[] | undefined>([])
 
 	useEffect(() => {

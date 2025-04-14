@@ -1,6 +1,5 @@
 'use client'
 
-import useAuthentication from '@/app/hooks/useAuthentication'
 import ModelDocumentation from '@/components/generic/ModelDocumentation'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
@@ -10,8 +9,6 @@ import { getAllModels } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Documentation() {
-	useAuthentication()
-
 	const [models, setModels] = useState<Model[] | undefined>([])
 	const [copied, setCopied] = useState(false)
 

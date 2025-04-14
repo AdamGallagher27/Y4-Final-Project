@@ -1,6 +1,5 @@
 'use client'
 
-import { AuthProvider } from '@/context/AuthContext'
 import '../styles/globals.css'
 import { MetaMaskProvider } from '@metamask/sdk-react'
 
@@ -23,13 +22,11 @@ export default function RootLayout({
 
   return (
     <html lang='en'>
-      <AuthProvider>
-        <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
-          <body className='p-0 m-0'>
-            {children}
-          </body>
-        </MetaMaskProvider>
-      </AuthProvider>
+      <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
+        <body className='p-0 m-0'>
+          {children}
+        </body>
+      </MetaMaskProvider>
     </html>
   )
 }

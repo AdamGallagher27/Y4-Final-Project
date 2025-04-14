@@ -162,3 +162,12 @@ export const parseRichText = (html: string) => {
     allowedTags: ['p', 'ol', 'ul', 'li', 'h2', 'strong', 'em']
   })
 }
+
+export const setCookie = (name: string, value: string) => {
+	const maxAge = 60 * 60 * 24 
+	document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; secure; SameSite=Strict`
+}
+
+export const unsetCookie = () => {
+  document.cookie = 'authenticated=;'
+}

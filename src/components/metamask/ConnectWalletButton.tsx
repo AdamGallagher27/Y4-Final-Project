@@ -6,8 +6,8 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Mail } from 'lucide-react'
 import { Button } from '../ui/button'
-import { useAuth } from '@/context/AuthContext'
 import { updateAuthJSON } from '@/utils/api'
+import { setCookie, unsetCookie } from '@/utils'
 
 interface Props {
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>
@@ -15,22 +15,21 @@ interface Props {
 
 export const ConnectWalletButton = ({ setIsAuthenticated }: Props) => {
   
-  const {  setIsLoggedIn, setWalletAddress } = useAuth()
   const { sdk, connected, account } = useSDK()
 
   // if the account variable gets assigned wallet address
   // hit the user auth end point
   // this checks if its the first time the user has logged in before
+  // when the user authenticates create a cookie for auth using there wallet address
+  // unset the cookie if not auth
   useEffect(() => {
     if (account) {
+      setCookie('authenticated', 'true')
       updateAuthJSON(account)
-      setIsLoggedIn(true)
-      setWalletAddress(account) 
       setIsAuthenticated(true)
     }
     else{
-      setIsLoggedIn(false)
-      setWalletAddress('') 
+      unsetCookie()
       setIsAuthenticated(false)
     }
   }, [account])
@@ -44,7 +43,7 @@ export const ConnectWalletButton = ({ setIsAuthenticated }: Props) => {
     }
   }
 
-  if(connected) return
+  if(connected) return null
 
   return (
     <div className='relative'>

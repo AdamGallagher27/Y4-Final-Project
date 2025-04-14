@@ -1,27 +1,24 @@
 'use client'
 
-import useAuthentication from '@/app/hooks/useAuthentication'
 import ConfigurePeer from '@/components/generic/ConfigurePeer'
 import PeersTable from '@/components/generic/PeersTable'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/context/AuthContext'
+import { unsetCookie } from '@/utils'
 import { getAllPeers } from '@/utils/api'
 import { useSDK } from '@metamask/sdk-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Profile() {
-	const { setIsLoggedIn, setWalletAddress } = useAuth()
 	const { sdk } = useSDK()
 	const router = useRouter()
 
 	const disconnect = () => {
 		if (sdk) {
 			sdk.terminate()
-			setIsLoggedIn(false)
-			setWalletAddress('')
+			unsetCookie()
 		}
 	}
 
@@ -29,8 +26,6 @@ export default function Profile() {
 		disconnect()
 		router.push('/')
 	}
-
-	useAuthentication()
 
 	const [peers, setPeers] = useState<string[]>([])
 

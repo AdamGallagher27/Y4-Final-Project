@@ -1,6 +1,5 @@
 'use client'
 
-import useAuthentication from '@/app/hooks/useAuthentication'
 import AddSingle from '@/components/singles/AddSingle'
 import Sidebar from '@/components/generic/Sidebar'
 import SinglesResponseTable from '@/components/singles/SinglesResponseTable'
@@ -12,7 +11,6 @@ import DeleteSingle from '@/components/singles/DeleteSingle'
 import { getAllSingles } from '@/utils/api'
 
 export default function Status() {
-	useAuthentication()
 	const [singles, setSingles] = useState<Item[] | undefined>([])
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const [selectedSingle, setSelectedSingle] = useState<Item | undefined>()

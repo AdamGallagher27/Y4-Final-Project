@@ -1,6 +1,5 @@
 'use client'
 
-import useAuthentication from '@/app/hooks/useAuthentication'
 import ApiResponseTable from '@/components/generic/ApiResponseTable'
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
@@ -10,7 +9,6 @@ import { getResponseStatus } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 export default function Status() {
-	useAuthentication()
 
 	const [responses, setResponses] = useState<StatusFromAPI[] | undefined>([])
 
