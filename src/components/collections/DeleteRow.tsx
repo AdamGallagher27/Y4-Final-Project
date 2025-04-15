@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { deleteRow } from '@/utils/api'
+import { Item } from '@/types'
 
 interface Props {
   selectedRowId: string 
   modelId: string
+  setData: Dispatch<SetStateAction<Item[]>>
 }
 
-const DeleteRow = ({ modelId, selectedRowId }: Props) => {
+const DeleteRow = ({ setData, modelId, selectedRowId }: Props) => {
   
   const [open, setOpen] = useState(false)
 
@@ -18,6 +20,9 @@ const DeleteRow = ({ modelId, selectedRowId }: Props) => {
     const response = await deleteRow(modelId, selectedRowId)
 
     if(response) {
+      // update parent state variable without the deleted row
+      // prevents rerender / api call
+      setData(prevData => prevData.filter(row => row.id !== selectedRowId))
       setOpen(false)
     }
   }

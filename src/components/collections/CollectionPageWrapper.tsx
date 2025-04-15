@@ -57,7 +57,7 @@ export const CollectionPageWrapper = ({ model }: Props) => {
 					{selectedRow && (
 						<>
 							<UpdateRow setData={setData} selectedRow={selectedRow} model={model} />
-							<DeleteRow selectedRowId={selectedRow.id} modelId={modelId} />
+							<DeleteRow setData={setData} selectedRowId={selectedRow.id} modelId={modelId} />
 						</>
 					)}
 				</div>
