@@ -5,6 +5,8 @@ better loading in general but specifically on singls / users page
 add sort by date to api logs
 flesh out documentation 
 fix over use of Item type
+fix wrong model being loaded (prev state so propigate on next render not curret)
+I THINK THIS IS CAUSING THE BUG ^^^^^^^^^
 
 in progress
 ----------------------

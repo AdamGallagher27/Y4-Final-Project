@@ -38,12 +38,13 @@ export const POST = async (req: NextRequest) => {
 
 		let correctPasword: undefined | boolean
 
-		gun.get(email).map().once((res: EncryptedItem) => {
+
+		gun.get('users').map().once((res: EncryptedItem) => {
 			if (res) {
 				const decryptedUser = decryptData(res)
 				const isValid = verifySigniture(decryptedUser, res.signiture)
 
-				if (isValid && decryptedUser.password === password) {
+				if (isValid && decryptedUser.password === password && decryptedUser.email === email) {
 					correctPasword = true
 				}
 			}
