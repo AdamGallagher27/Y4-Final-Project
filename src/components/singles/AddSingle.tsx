@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import FormError from '../generic/FormError'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { generatePropetiesArray, validateForm } from '@/utils'
+import { generatePropetiesArray, transformBoolStringsInForm, validateForm } from '@/utils'
 import { addNewSingle } from '@/utils/api'
 
 
@@ -38,7 +38,8 @@ const AddRow = () => {
 
   const handleAddRow = async () => {
     if (validateForm(form, generatePropetiesArray(selectedType), setErrors)) {
-      addNewSingle(form)
+      const body = transformBoolStringsInForm(form)
+      addNewSingle(body)
       resetPopUp()
     }
   }

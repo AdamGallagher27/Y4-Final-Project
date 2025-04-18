@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Item } from '@/types'
 import FormError from '../generic/FormError'
 import { Input } from '../ui/input'
-import { generatePropetiesArray, validateForm } from '@/utils'
+import { generatePropetiesArray, transformBoolStringsInForm, validateForm } from '@/utils'
 import { updateSingle } from '@/utils/api'
 
 interface Props {
@@ -44,7 +44,8 @@ const UpdateSingle = ({ selectedSingle }: Props) => {
 
   const handleUpdateRow = async () => {
     if (validateForm(form, generatePropetiesArray(startingType), setErrors)) {
-      updateSingle(form)
+      const body = transformBoolStringsInForm(form)
+      updateSingle(body)
       resetPopUp()
     }
   }

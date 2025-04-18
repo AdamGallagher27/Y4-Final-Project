@@ -1,12 +1,8 @@
 backlog
 -----------------------
-inner side bar min width
-better loading in general but specifically on singls / users page
 add sort by date to api logs
-flesh out documentation 
 fix over use of Item type
-fix wrong model being loaded (prev state so propigate on next render not curret)
-I THINK THIS IS CAUSING THE BUG ^^^^^^^^^
+numbers being stringified
 
 in progress
 ----------------------
@@ -18,3 +14,5 @@ two different cms for both project in different browsers
 disccuss translation
 tidy/refactor
 change Item type to row
+better loading in general but specifically on singls / users page
+flesh out documentation 

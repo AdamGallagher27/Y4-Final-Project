@@ -32,12 +32,89 @@
         "type": "string"
       },
       {
-        "name": "quantityInStock,",
+        "name": "quantityInStock",
         "type": "number"
       },
       {
         "name": "storageInstructions",
         "type": "string"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "staff-681215",
+    "name": "staff",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "job",
+        "type": "string"
+      },
+      {
+        "name": "pay",
+        "type": "number"
+      },
+      {
+        "name": "age",
+        "type": "number"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "homepage-569000",
+    "name": "homepage",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "prescriptionParagraph",
+        "type": "richtext"
+      },
+      {
+        "name": "staffParagraph",
+        "type": "richtext"
+      },
+      {
+        "name": "introductionParagraph",
+        "type": "richtext"
+      }
+    ],
+    "items": []
+  },
+  {
+    "modelId": "about-007124",
+    "name": "about",
+    "properties": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "firstParagraph",
+        "type": "richtext"
+      },
+      {
+        "name": "secondParagraph",
+        "type": "richtext"
+      },
+      {
+        "name": "thirdParagraph",
+        "type": "richtext"
+      },
+      {
+        "name": "fourthParagraph",
+        "type": "richtext"
       }
     ],
     "items": []

@@ -35,7 +35,7 @@ const AddRow = ({ setData, selectedModel }: Props) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
       setForm(preProcessSelectedModel(selectedModel))
       setErrors({})
     }

@@ -34,7 +34,6 @@ export const CollectionPageWrapper = ({ model }: Props) => {
 			const allData = response && transformBoolToStringValue(response) || []
 
 			if (allData) {
-				console.log(allData)
 				setData(allData)
 			}
 			else {
