@@ -4,12 +4,15 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { deleteSingle } from '@/utils/api'
+import { Item } from '@/types'
 
 interface Props {
   singleId: string 
+  setSingles: React.Dispatch<React.SetStateAction<Item[]>>
+  setSelectedSingle: React.Dispatch<React.SetStateAction<Item | undefined>>
 }
 
-const DeleteRow = ({ singleId }: Props) => {
+const DeleteRow = ({ singleId, setSingles, setSelectedSingle }: Props) => {
   
   const [open, setOpen] = useState(false)
 
@@ -20,9 +23,9 @@ const DeleteRow = ({ singleId }: Props) => {
   const handleDeleteSingle = async () => {
     const response = await deleteSingle(singleId)
 
-    console.log(response)
-
     if(response) {
+      setSingles(prevData => prevData.filter(single => single.id !== singleId))
+      setSelectedSingle(undefined)
       resetPopUp()
     }
   }

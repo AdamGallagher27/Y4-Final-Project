@@ -8,10 +8,14 @@ import FormError from '../generic/FormError'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { generatePropetiesArray, transformBoolStringsInForm, validateForm } from '@/utils'
 import { addNewSingle } from '@/utils/api'
+import { Item } from '@/types'
+
+interface Props {
+  setSingles: React.Dispatch<React.SetStateAction<Item[]>>
+}
 
 
-
-const AddRow = () => {
+const AddRow = ({setSingles}: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>({ id: '', value: '' })
   const [selectedType, setSelectedType] = useState<'string' | 'number' | 'boolean'>('string')
   const [open, setOpen] = useState(false)
@@ -40,6 +44,7 @@ const AddRow = () => {
     if (validateForm(form, generatePropetiesArray(selectedType), setErrors)) {
       const body = transformBoolStringsInForm(form)
       addNewSingle(body)
+      setSingles(prevSingles => [...prevSingles, form])
       resetPopUp()
     }
   }

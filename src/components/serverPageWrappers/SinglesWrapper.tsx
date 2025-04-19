@@ -13,7 +13,7 @@ interface Props{
 
 const SinglesWrapper = ({apiSingles}: Props) => {
 
-  const [singles] = useState<Item[] | undefined>(apiSingles)
+  const [singles, setSingles] = useState<Item[]>(apiSingles || [])
 	const [selectedSingle, setSelectedSingle] = useState<Item | undefined>()
 
   return (
@@ -21,9 +21,9 @@ const SinglesWrapper = ({apiSingles}: Props) => {
       <div className='flex items-center justify-between'>
         <Title firstPartOfTitle='Collections' secondPartOfTitle='Singles' />
         <div className='flex items-center gap-2'>
-          <AddSingle />
+          <AddSingle setSingles={setSingles} />
           {selectedSingle && <UpdateSingle selectedSingle={selectedSingle} />}
-          {selectedSingle?.id && <DeleteSingle singleId={selectedSingle.id} /> }
+          {selectedSingle?.id && <DeleteSingle setSelectedSingle={setSelectedSingle} setSingles={setSingles} singleId={selectedSingle.id} /> }
         </div>
       </div>
       {singles && <SinglesResponseTable singles={singles} setSelectedSingle={setSelectedSingle}  />}

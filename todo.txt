@@ -12,11 +12,8 @@ test hosted versions
 disccuss translation
 tidy/refactor
 change Item type to row
-better loading in general but specifically on singls / users page
+better loading in general but specifically on singls 
 flesh out documentation 
-folders are loaded at build time not refreshed
-users propigate really slowly
-
 fix saved responses
 review all of singles page work
 api validation (compare body to model ensure they match)

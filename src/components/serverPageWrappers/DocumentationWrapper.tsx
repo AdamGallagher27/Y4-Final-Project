@@ -1,15 +1,13 @@
 'use client'
 import { Model } from '@/types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../generic/Title'
 import { Button } from '../ui/button'
 import ModelDocumentation from '../generic/ModelDocumentation'
+import { getAllModelsFromIndexedDB } from '@/utils/indexDB'
 
-interface Props {
-  models: Model[]
-}
 
-const DocumentationWrapper = ({ models }: Props) => {
+const DocumentationWrapper = () => {
 
   const [copied, setCopied] = useState(false)
 
@@ -22,6 +20,17 @@ const DocumentationWrapper = ({ models }: Props) => {
       setTimeout(() => setCopied(false), 2000)
     }
   }
+
+  const [models, setModels] = useState<Model[]>([])
+  
+    useEffect(() => {
+      const handleLoadModels = async () => {
+        const models = await getAllModelsFromIndexedDB()
+        setModels(models)
+      }
+  
+      handleLoadModels()
+    }, [])
 
   return (
     <div className='p-4 w-full ml-20'>
