@@ -46,7 +46,7 @@ export const POST = async (req: NextRequest) => {
 			signiture,
 		}
 
-		const ref = gun.get('users')
+		const ref = gun.get('usersDB')
 
 		let isEmailUnique: boolean = true
 

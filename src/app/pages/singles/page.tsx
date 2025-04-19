@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Sidebar from '@/components/generic/Sidebar'
 import { getAllSingles } from '@/utils/api'
 import SinglesWrapper from '@/components/serverPageWrappers/SinglesWrapper'

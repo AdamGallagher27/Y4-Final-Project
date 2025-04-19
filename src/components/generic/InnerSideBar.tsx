@@ -6,7 +6,7 @@ interface Props {
 	allModels?: Model[]
 	setAllModels: React.Dispatch<React.SetStateAction<Model[]>>
 	selectedModel?: Model
-	setSelectedModel: Dispatch<SetStateAction<Model>>
+	setSelectedModel: Dispatch<SetStateAction<Model | undefined>>
 }
 
 // pass in all modesl

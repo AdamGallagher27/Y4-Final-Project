@@ -39,7 +39,7 @@ export const POST = async (req: NextRequest) => {
 		let correctPasword: undefined | boolean
 
 
-		gun.get('users').map().once((res: EncryptedItem) => {
+		gun.get('usersDB').map().once((res: EncryptedItem) => {
 			if (res) {
 				const decryptedUser = decryptData(res)
 				const isValid = verifySigniture(decryptedUser, res.signiture)

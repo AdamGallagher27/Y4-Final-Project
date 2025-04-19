@@ -326,21 +326,52 @@ export const addNewPeer = async (peerUrl: string) => {
   }
 }
 
-export const getAllModels = async (): Promise<Model[] | undefined> => {
+
+export const addModel = async (model: Model) => {
+
+  const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
 
   try {
+    const response = await fetch(`${url}api/models`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({ newModel: model })
+    })
 
-    if (isOnClient()) {
-      const response = await fetch('/models.json')
-
-      const models = await response.json()
-
-      return models
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
     }
 
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error during fetch:', error)
   }
-  catch (error) {
-    console.error(error)
+}
+
+export const getAllModels = async (): Promise<Model[] | undefined> => {
+
+  const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+
+  try {
+    const response = await fetch(`${url}api/models`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+        'Ignore': 'ignore'
+      },
+    })
+
+    const responseData = await response.json()
+    return responseData
+  } catch (error) {
+    console.error('Error during fetch:', error)
   }
   return
 }

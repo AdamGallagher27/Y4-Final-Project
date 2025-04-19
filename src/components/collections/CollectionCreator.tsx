@@ -8,25 +8,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { generateModelId } from '@/utils/security'
 import FormError from '../generic/FormError'
+import { saveModelToIndexedDB } from '@/utils/indexDB'
 
 interface Props {
   setAllModels: React.Dispatch<React.SetStateAction<Model[]>>
 }
 
 const addNewModelToModels = async (model: Model) => {
-  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
-
   try {
-    const response = await fetch(`${apiUrl}api/models`, {
-      method: 'POST',
-      body: JSON.stringify(model)
-    })
-
-    if (!response.ok) {
-      console.error(response.status)
-    }
+    await saveModelToIndexedDB(model)
   } catch (error) {
-    console.error(error)
+    console.error('Failed to save model:', error)
   }
 }
 
@@ -75,7 +67,6 @@ const CollectionCreator = ({ setAllModels }: Props) => {
       modelId: `${newCollectionName}-${generateModelId()}`,
       name: newCollectionName,
       properties: [idTemplate, ...properties.filter((p) => p.name)],
-      items: [],
     }
 
     if (validateNewCollection(newCollection)) {

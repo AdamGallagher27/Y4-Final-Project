@@ -1,16 +1,26 @@
 'use client'
 import { Model } from '@/types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InnerSideBar from '../generic/InnerSideBar'
 import { CollectionPageWrapper } from '../collections/CollectionPageWrapper'
+import { getAllModelsFromIndexedDB } from '@/utils/indexDB'
 
-interface Props {
-  models: Model[]
-}
+const DatabaseWrapper = () => {
+  const [allModels, setAllModels] = useState<Model[]>([])
+  const [selectedModel, setSelectedModel] = useState<Model | undefined>()
 
-const DatabaseWrapper = ({models}: Props) => {
-  const [allModels, setAllModels] = useState<Model[]>(models)
-  const [selectedModel, setSelectedModel] = useState<Model>(models[0])
+  useEffect(() => {
+    const handleLoadModels = async () => {
+      const models = await getAllModelsFromIndexedDB()
+      setAllModels(models)
+
+      if (models.length > 0 && !selectedModel) {
+        setSelectedModel(models[0])
+      }
+    }
+
+    handleLoadModels()
+  }, [])
 
   return (
     <>

@@ -8,7 +8,6 @@ export interface Property {
 export interface Collection {
   name: string
   properties: Property[]
-  items?: Item[]
 }
 
 export interface Model {

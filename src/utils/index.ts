@@ -148,7 +148,7 @@ export const transformBoolToStringValue = (data: Item[]): Item[] => {
   return data.map(item => {
     const transformedValues = Object.fromEntries(
       Object.entries(item).map(([key, value]) => 
-        typeof value === "boolean" ? [key, value.toString()] : [key, value]
+        typeof value === 'boolean' ? [key, value.toString()] : [key, value]
       )
     )
 

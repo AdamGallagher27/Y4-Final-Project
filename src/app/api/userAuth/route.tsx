@@ -21,7 +21,7 @@ export const GET = async (req: Request) => {
     const checkToken = await authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
 
-    const ref = gun.get('users')
+    const ref = gun.get('usersDB')
     const results: Item[] = []
 
     ref.map().once((res: EncryptedItem) => {

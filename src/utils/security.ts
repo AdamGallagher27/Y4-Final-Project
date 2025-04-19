@@ -75,7 +75,6 @@ export const authorisationMiddleWare = (authHeader: string | null) => {
 }
 
 // updated encryptdata / decryptdata / signiture chatgpt
-
 export const encryptData = (data: Item | User) => {
   const json = JSON.stringify(data)
 

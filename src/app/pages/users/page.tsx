@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Sidebar from '@/components/generic/Sidebar'
 import UsersWrapper from '@/components/serverPageWrappers/UsersWrapper'
 import { getAllUsers } from '@/utils/api'
