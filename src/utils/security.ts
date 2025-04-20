@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken')
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { DecryptedData, Item, Single, User } from '../types'
+import { DecryptedData, Item, User } from '../types'
 
-// these three functions are the same but have different names 
+// these four functions are the same but have different names 
 // this is just for cleaner ui code
 export const generateRowId = () => {
   return uuidv4()
@@ -15,6 +15,13 @@ export const generateModelId = () => {
 }
 
 const generateSessionId = () => {
+  return uuidv4()
+}
+
+// this is used to generate a unique store name for IDB
+// this means the user can have multiple projects cloned on the same client
+// without sharing models accross them
+export const generateStoreIDB = () => {
   return uuidv4()
 }
 

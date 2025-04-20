@@ -2,8 +2,10 @@
 import { openDB } from 'idb'
 import { Model } from '@/types'
 
-const DB_NAME = 'indexDB'
-const STORE_NAME = 'models'
+// this makes sure each instance of the cms is unique and doesnt share models
+// on the same client
+const DB_NAME = 'indexDB-${process.env.NEXT_PUBLIC_IDB_STORE}'
+const STORE_NAME = `models-${process.env.NEXT_PUBLIC_IDB_STORE}`
 
 export const getDb = async () => {
   return await openDB(DB_NAME, 1, {

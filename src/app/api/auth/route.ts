@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { RSAKeyPair } from '@/types'
-import { startSession } from '@/utils/security'
+import { generateStoreIDB, startSession } from '@/utils/security'
 const { generateKeyPair } = require('crypto')
 
 
@@ -47,8 +47,10 @@ const createEnvFile = (rsaKeyPair: RSAKeyPair, walletId: string) => {
   const initialSession = startSession(walletId)
   const apiToken = createToken(initialSession, rsaKeyPair.privateKey)
 
+  const idbStore = generateStoreIDB()
+
   if (!fs.existsSync(filePath)) {
-    const defaultContent = `PUBLIC_RSA_KEY="${rsaKeyPair.publicKey}"\nPRIVATE_RSA_KEY="${rsaKeyPair.privateKey}"\nNEXT_PUBLIC_HOSTING_URL="http://localhost:3000/"\nNEXT_PUBLIC_GUN_URL="https://gun-manhattan.herokuapp.com/gun"\nNEXT_PUBLIC_API_TOKEN="${apiToken}"`
+    const defaultContent = `PUBLIC_RSA_KEY="${rsaKeyPair.publicKey}"\nPRIVATE_RSA_KEY="${rsaKeyPair.privateKey}"\nNEXT_PUBLIC_HOSTING_URL="http://localhost:3000/"\nNEXT_PUBLIC_GUN_URL="https://gun-manhattan.herokuapp.com/gun"\nNEXT_PUBLIC_API_TOKEN="${apiToken}"\nNEXT_PUBLIC_IDB_STORE="${idbStore}"`
 
     fs.writeFileSync(filePath, defaultContent)
     console.log(`${fileName} created successfully.`)

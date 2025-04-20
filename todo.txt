@@ -17,3 +17,4 @@ flesh out documentation
 fix saved responses
 review all of singles page work
 api validation (compare body to model ensure they match)
+create model not being pushed 
