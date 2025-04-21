@@ -17,6 +17,7 @@ const DatabaseWrapper = () => {
     const handleLoadModels = async () => {
       const modelsFromIndexDB = await getAllModelsFromIndexedDB()
   
+
       if (modelsFromIndexDB.length === 0) {
         const modelsFromGun = await getAllModelsFromGun()
         if (modelsFromGun) {
@@ -35,7 +36,7 @@ const DatabaseWrapper = () => {
   }, [])
 
   useEffect(() => {
-    if(!selectedModel && allModels.length > 1) {
+    if(!selectedModel && allModels.length !== 0) {
       setSelectedModel(allModels[0])
     }
 

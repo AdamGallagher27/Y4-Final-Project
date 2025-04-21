@@ -57,7 +57,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
     })
 
     !ignoreHeader && saveResponseStatus(currentUrl, 201)
-    return NextResponse.json({ message: 'Data created', body: 'newData', ok: true }, { status: 201 })
+    return NextResponse.json({ message: 'Data created', body: newData, ok: true }, { status: 201 })
   }
 
   catch (error) {

@@ -8,9 +8,8 @@ final test of singles work
 finish thesis
 better loading in general but specifically on singls 
 flesh out documentation 
-fix saved responses
+
 disccuss translation
-fix end point (use name for route and model id for gun)
 
 for presentation desiscison
 ---------------------------------

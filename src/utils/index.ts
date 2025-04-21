@@ -99,9 +99,14 @@ export const validateForm = (
 }
 
 const bodyPropertiesMatch = (body: Item, properties: Property[]) => {
-  return Object.keys(body).every(key =>
-    properties.some(prop => prop.name === key)
-  )
+  const keys = Object.keys(body)
+
+  for (const key of keys) {
+    const hasMatch = properties.some(prop => prop.name === key)
+    if (!hasMatch) return false
+  }
+
+  return true
 }
 
 

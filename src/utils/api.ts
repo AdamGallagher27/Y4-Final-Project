@@ -26,20 +26,28 @@ export const saveResponseStatus = async (url: string, status: number) => {
   }
 }
 
-export const getResponseStatus = async (): Promise<StatusFromAPI[] | undefined> => {
+export const getResponseStatus = async (): Promise<StatusFromAPI[]> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
 
   try {
-    if (isOnClient()) {
-      const response = await fetch('/response.json')
+    const response = await fetch(`${apiUrl}api/saveResponse`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-      const responses = await response.json()
-
-      return responses.reverse() as StatusFromAPI[]
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
     }
+
+    const responseData = await response.json()
+
+    return responseData.body
+  } catch (error) {
+    console.error('Error saving API response status:', error)
   }
-  catch (error) {
-    console.error(error)
-  }
+  return []
 }
 
 export const getAllCollectionRows = async (modelId: string): Promise<Item[] | undefined> => {
@@ -87,6 +95,7 @@ export const addRowToCollection = async (modelId: string, body: Item) => {
       console.error('Network response was not ok')
     }
 
+    
     const responseData = await response.json()
     return responseData.body as EncryptedItem
   }

@@ -1,11 +1,11 @@
-'use client'
-
 import Sidebar from '@/components/generic/Sidebar'
 import Title from '@/components/generic/Title'
-import statusArray from '../../../../public/response.json'
 import StatusWrapper from '@/components/serverPageWrappers/StatusWrapper'
+import { getResponseStatus } from '@/utils/api'
 
-export default function Status() {
+export default async  function Status() {
+
+	const statusArray = await getResponseStatus()
 
 	return (
 		<div className='flex'>
