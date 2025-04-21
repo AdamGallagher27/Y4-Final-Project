@@ -9,17 +9,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { generateModelId } from '@/utils/security'
 import FormError from '../generic/FormError'
 import { saveModelToIndexedDB } from '@/utils/indexDB'
+import { saveModelToGun } from '@/utils/api'
 
 interface Props {
   setAllModels: React.Dispatch<React.SetStateAction<Model[]>>
 }
 
-const addNewModelToModels = async (model: Model) => {
+const addNewModelToIndexDB = async (model: Model) => {
   try {
     await saveModelToIndexedDB(model)
   } catch (error) {
     console.error('Failed to save model:', error)
   }
+}
+
+const handleSaveModel = (model: Model) => {
+  addNewModelToIndexDB(model)
+  saveModelToGun(model)
 }
 
 const idTemplate = {
@@ -70,7 +76,7 @@ const CollectionCreator = ({ setAllModels }: Props) => {
     }
 
     if (validateNewCollection(newCollection)) {
-      addNewModelToModels(newCollection)
+      handleSaveModel(newCollection)
       setNewCollectionName('')
       setProperties([{ name: '', type: 'string' }])
       setOpen(false)

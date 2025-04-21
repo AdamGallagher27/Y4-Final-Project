@@ -1,20 +1,20 @@
-backlog
------------------------
-add sort by date to api logs
-fix over use of Item type
-numbers being stringified
 
-in progress
-----------------------
-UI work
-style
-test hosted versions
-disccuss translation
-tidy/refactor
-change Item type to row
+have to do 
+-------------------
+
+
+
+final test of singles work
+finish thesis
 better loading in general but specifically on singls 
 flesh out documentation 
 fix saved responses
-review all of singles page work
-api validation (compare body to model ensure they match)
-create model not being pushed 
+disccuss translation
+fix end point (use name for route and model id for gun)
+
+for presentation desiscison
+---------------------------------
+host cms
+host two peers for network
+host two apps
+

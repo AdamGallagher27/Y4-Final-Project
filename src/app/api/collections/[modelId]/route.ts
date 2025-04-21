@@ -1,6 +1,6 @@
 import { Acknowledgment, EncryptedItem, Item } from '@/types'
-import { cleanResponse,  } from '@/utils'
-import { saveResponseStatus } from '@/utils/api'
+import { cleanResponse, validateOnServer,  } from '@/utils'
+import { getModelProperties, saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, generateSigniture, encryptData, generateRowId, decryptData, verifySigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
@@ -24,6 +24,13 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
 
     const { modelId } = await params
     const body = await req.json() as Item
+
+    const properties = await getModelProperties(modelId)
+
+    // validate body against its models properties
+    const notValid = validateOnServer(body, properties)
+    if(notValid) return notValid
+
     const ref = gun.get(modelId)
 
     if (!body || !modelId) {
@@ -50,7 +57,7 @@ export const POST = async (req: Request, { params }: { params: { modelId: string
     })
 
     !ignoreHeader && saveResponseStatus(currentUrl, 201)
-    return NextResponse.json({ message: 'Data created', body: newData, ok: true }, { status: 201 })
+    return NextResponse.json({ message: 'Data created', body: 'newData', ok: true }, { status: 201 })
   }
 
   catch (error) {

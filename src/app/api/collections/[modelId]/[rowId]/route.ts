@@ -1,6 +1,6 @@
 import { Acknowledgment, DecryptedData, EncryptedItem, Item } from '@/types'
-import { cleanResponse, getGunEntryId } from '@/utils'
-import { saveResponseStatus } from '@/utils/api'
+import { cleanResponse, getGunEntryId, validateOnServer } from '@/utils'
+import { getModelProperties, saveResponseStatus } from '@/utils/api'
 import { authorisationMiddleWare, decryptData, verifySigniture, encryptData, generateSigniture } from '@/utils/security'
 import Gun from 'gun'
 import { NextResponse } from 'next/server'
@@ -79,6 +79,13 @@ export const PUT = async (req: Request, { params }: { params: { modelId: string,
 
 		// Extract modelId and rowId from the params
 		const { modelId, rowId } = await params
+
+		const properties = await getModelProperties(modelId)
+		
+		// validate body against its models properties
+		const notValid = validateOnServer(body, properties)
+		if(notValid) return notValid
+
 		const ref = gun.get(modelId)
 
 		if (!body || !modelId) {

@@ -1,5 +1,6 @@
 
-import { Collection, EncryptedItem, Item, Property } from '../types'
+import { NextResponse } from 'next/server'
+import { EncryptedItem, Item, Property } from '../types'
 import { Dispatch, SetStateAction } from 'react'
 import sanitizeHtml from 'sanitize-html'
 
@@ -12,9 +13,8 @@ export const isOnClient = () => {
 }
 
 export const refreshPage = () => {
-  if(isOnClient()) window.location.reload()
+  if (isOnClient()) window.location.reload()
 }
-
 
 export const cleanResponse = (response: Item[]) => {
   return response.map(item => {
@@ -56,9 +56,9 @@ const validateFormField = (name: string, value: string, properties: Property[]) 
     return `${property.name} must be a valid number.`
   }
 
-  if(property.type === 'richtext' && value.length > 900) {
+  if (property.type === 'richtext' && value.length > 900) {
     return `${property.name} is too long to be added to the database`
-  } 
+  }
 
   if (property.type === 'string') {
 
@@ -75,8 +75,8 @@ const validateFormField = (name: string, value: string, properties: Property[]) 
 }
 
 export const validateForm = (
-  form: { [key: string]: string }, 
-  properties: Property[], 
+  form: { [key: string]: string },
+  properties: Property[],
   setErrors: Dispatch<SetStateAction<{ [key: string]: string }>>
 ) => {
   const formErrors: { [key: string]: string } = {}
@@ -98,18 +98,71 @@ export const validateForm = (
   return isValid
 }
 
+const bodyPropertiesMatch = (body: Item, properties: Property[]) => {
+  return Object.keys(body).every(key =>
+    properties.some(prop => prop.name === key)
+  )
+}
+
+
+export const validateOnServer = (body: Item, properties: Property[]) => {
+
+  const errors: { [key: string]: string } = {}
+
+  if(!bodyPropertiesMatch(body, properties)) {
+    errors['invalidBody'] = 'Body sent to API does not match model'
+  }
+  
+  for (const property of properties) {
+    const { name, type } = property
+    const value = body[name]
+
+    if (name === 'id') continue 
+
+    if(!value) continue 
+
+    // rich text needs special validation as it is stored as a string with special charachters
+    // not a specific richtext type
+    if (type === 'richtext' && value[0] !== '<') {
+      errors[name] = `Invalid ${name} type`
+    }
+
+    if(type !== 'richtext' && typeof value !== type) {
+      errors[name] = `Invalid ${name} type`
+    }
+
+
+    if(type === 'string') {
+      if (value.length < 3) {
+        errors[name] = `${name} must be at least 3 characters long.`
+      }
+  
+      const regex = /^[a-zA-Z0-9 ]+$/
+      if (!regex.test(value)) {
+        errors[name] = `${name} can only contain letters, numbers, and spaces.`
+      }
+    }
+  }
+
+  const notValid = Object.keys(errors).length !== 0
+
+  if (notValid) {
+    return NextResponse.json({ message: 'error fetching, invalid params', errors, ok: false }, { status: 400 })
+  }
+}
+
 
 export const getPillColour = (method: string) => {
 
   let methodColour
 
-  if(method === 'GET') {
+  if (method === 'GET') {
     methodColour = 'bg-green-500'
   }
-  else if(method === 'POST') {
+  else if (method === 'POST') {
     methodColour = 'bg-blue-500'
   }
-  else if(method === 'PUT') {
+  else if (method === 'PUT') {
     methodColour = 'bg-blue-500'
   }
   else {
@@ -131,7 +184,7 @@ export const generatePropetiesArray = (selectedType: string) => {
 
 // the form saves boolean values as a string
 // this is my temp solution for preventing them being saved as a stringified bool
-export const transformBoolStringsInForm = (form:{ [key: string]: string}) => {
+export const transformBoolStringsInForm = (form: { [key: string]: string }) => {
   return Object.fromEntries(
     Object.entries(form).map(([key, value]) => {
       if (value === 'true') return [key, true]
@@ -147,7 +200,7 @@ export const transformBoolStringsInForm = (form:{ [key: string]: string}) => {
 export const transformBoolToStringValue = (data: Item[]): Item[] => {
   return data.map(item => {
     const transformedValues = Object.fromEntries(
-      Object.entries(item).map(([key, value]) => 
+      Object.entries(item).map(([key, value]) =>
         typeof value === 'boolean' ? [key, value.toString()] : [key, value]
       )
     )
@@ -164,8 +217,8 @@ export const parseRichText = (html: string) => {
 }
 
 export const setCookie = (name: string, value: string) => {
-	const maxAge = 60 * 60 * 24 
-	document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; secure; SameSite=Strict`
+  const maxAge = 60 * 60 * 24
+  document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; secure; SameSite=Strict`
 }
 
 export const unsetCookie = () => {

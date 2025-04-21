@@ -1,6 +1,6 @@
 
-import { isOnClient } from '.'
-import { Collection, EncryptedItem, Item, Model, StatusFromAPI, User } from '../types'
+import { cleanResponse, isOnClient } from '.'
+import { EncryptedItem, Item, Model, Property, StatusFromAPI, User } from '../types'
 
 export const saveResponseStatus = async (url: string, status: number) => {
 
@@ -327,7 +327,7 @@ export const addNewPeer = async (peerUrl: string) => {
 }
 
 
-export const addModel = async (model: Model) => {
+export const saveModelToGun = async (model: Model) => {
 
   const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN
@@ -353,8 +353,37 @@ export const addModel = async (model: Model) => {
   }
 }
 
-export const getAllModels = async (): Promise<Model[] | undefined> => {
+export const getAllModelsFromGun = async (): Promise<Model[]> => {
+  const apiUrl = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
+  const authToken = process.env.NEXT_PUBLIC_API_TOKEN
+  try {
+    const response = await fetch(`${apiUrl}api/models`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+        'Ignore': 'ignore'
+      },
+    })
 
+    if (!response.ok) {
+      console.error('Network response was not ok')
+    }
+
+    const responseData: Item = await response.json()
+
+    // properties are stored as a string and need to be parsed
+    const parsedProperties: Model[] = responseData.body.map(((model: Item) => {
+      return {...model, properties: JSON.parse(model.properties)}
+    }))
+
+    return cleanResponse(parsedProperties) as unknown as Model[]
+  } catch (error) {
+    console.error('Error saving API response status:', error)
+  }
+  return []
+}
+export const getModelProperties = async (modelId: string): Promise<Property[]> => {
   const url = process.env.NEXT_PUBLIC_HOSTING_URL || 'http://localhost:3000/'
   const authToken = process.env.NEXT_PUBLIC_API_TOKEN
 
@@ -369,11 +398,18 @@ export const getAllModels = async (): Promise<Model[] | undefined> => {
     })
 
     const responseData = await response.json()
-    return responseData
+
+    const selectedModel = responseData.body.find((model: Item) => model.modelId === modelId)
+
+
+    if (selectedModel) {
+      return JSON.parse(selectedModel.properties)
+    }
+
   } catch (error) {
     console.error('Error during fetch:', error)
   }
-  return
+  return []
 }
 
 export const getAllPeers = async (): Promise<string[]> => {

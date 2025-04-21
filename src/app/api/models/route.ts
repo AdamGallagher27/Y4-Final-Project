@@ -10,14 +10,18 @@ export const POST = async (req: Request) => {
   const authHeader = req.headers.get('Authorization')
 
   try {
-    // verify token
     const checkToken = authorisationMiddleWare(authHeader)
     if (checkToken) return checkToken
 
-    const newModel: Model = await req.json()
+    const { newModel } = await req.json()
     const ref = gun.get('modelsDB')
 
-    ref.set(newModel, (ack: Acknowledgment) => {
+    const gunCompatibleModel = {
+      ...newModel,
+      properties: JSON.stringify(newModel.properties),
+    }
+
+    ref.set(gunCompatibleModel, (ack: Acknowledgment) => {
       if (ack.err) {
         console.error(ack.err)
         return NextResponse.json({ message: 'Failed to save data', ok: false }, { status: 500 })
@@ -25,11 +29,9 @@ export const POST = async (req: Request) => {
     })
 
     return NextResponse.json({ message: 'Added to models successfully', ok: true }, { status: 201 })
-  }
-  catch (error) {
+  } catch (error) {
     return NextResponse.json({ error: error, ok: false }, { status: 500 })
   }
-
 }
 
 export const GET = async (req: Request) => {
@@ -44,9 +46,6 @@ export const GET = async (req: Request) => {
     const results: Model[] = []
 
     ref.map().once((res: Model) => {
-
-      console.log(res)
-
       if (res) {
         results.push(res)
       }
