@@ -4,9 +4,9 @@ have to do
 
 
 
-final test of singles work
+
 finish thesis
-better loading in general but specifically on singls 
+
 flesh out documentation 
 
 disccuss translation

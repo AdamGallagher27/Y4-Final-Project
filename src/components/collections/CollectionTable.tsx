@@ -18,7 +18,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Input } from '../ui/input'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Item, Model, Property } from '@/types'
 import Loading from '../generic/Loading'
 
@@ -39,6 +39,7 @@ interface CollectionTableProps {
 
 const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTableProps) => {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [isLoading, setIsLoading] = useState(true)
 
 	const columns = generateColumns(selectedModel.properties)
 	const table = useReactTable({
@@ -53,12 +54,23 @@ const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTabl
 		},
 	})
 
-	if (!data) {
+
+	useEffect(() => {
+		setTimeout(() => {
+			setIsLoading(false)
+		}, 3000)
+
+		if(data && data.length !== 0) setIsLoading(false)
+
+		return () => setIsLoading(true)
+	}, [selectedModel])
+
+	if (isLoading) {
 		return <Loading />
 	}
 
 	if (data && data.length === 0) {
-		return <p>No entries yet</p>
+		return <p className='m-2'>No entries yet</p>
 	}
 
 	return (

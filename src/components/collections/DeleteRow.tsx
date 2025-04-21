@@ -8,11 +8,12 @@ import { Item } from '@/types'
 
 interface Props {
   selectedRowId: string 
+  setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
   modelId: string
   setData: Dispatch<SetStateAction<Item[]>>
 }
 
-const DeleteRow = ({ setData, modelId, selectedRowId }: Props) => {
+const DeleteRow = ({ setData, modelId, selectedRowId, setSelectedRow }: Props) => {
   
   const [open, setOpen] = useState(false)
 
@@ -23,6 +24,7 @@ const DeleteRow = ({ setData, modelId, selectedRowId }: Props) => {
       // update parent state variable without the deleted row
       // prevents rerender / api call
       setData(prevData => prevData.filter(row => row.id !== selectedRowId))
+      setSelectedRow(undefined)
       setOpen(false)
     }
   }

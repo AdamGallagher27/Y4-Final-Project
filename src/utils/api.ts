@@ -94,7 +94,6 @@ export const addRowToCollection = async (modelId: string, body: Item) => {
     if (!response.ok) {
       console.error('Network response was not ok')
     }
-
     
     const responseData = await response.json()
     return responseData.body as EncryptedItem

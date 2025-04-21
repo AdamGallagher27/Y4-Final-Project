@@ -11,9 +11,10 @@ import { updateSingle } from '@/utils/api'
 
 interface Props {
   selectedSingle: Item
+  setSingles: React.Dispatch<React.SetStateAction<Item[]>>
 }
 
-const UpdateSingle = ({ selectedSingle }: Props) => {
+const UpdateSingle = ({ selectedSingle, setSingles }: Props) => {
 
   const startingType = (() => {
     if (typeof selectedSingle.value === 'boolean') return 'boolean'
@@ -46,6 +47,7 @@ const UpdateSingle = ({ selectedSingle }: Props) => {
     if (validateForm(form, generatePropetiesArray(startingType), setErrors)) {
       const body = transformBoolStringsInForm(form)
       updateSingle(body)
+      setSingles(prev => prev.map((single) => single.id === selectedSingle.id ? form : single))
       resetPopUp()
     }
   }
