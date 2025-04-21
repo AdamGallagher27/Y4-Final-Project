@@ -7,13 +7,13 @@ have to do
 
 finish thesis
 
-flesh out documentation 
 
-disccuss translation
+
 
 for presentation desiscison
 ---------------------------------
 host cms
 host two peers for network
 host two apps
+disccuss translation
 

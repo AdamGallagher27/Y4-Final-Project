@@ -164,14 +164,11 @@ export const getPillColour = (method: string) => {
   if (method === 'GET') {
     methodColour = 'bg-green-500'
   }
-  else if (method === 'POST') {
-    methodColour = 'bg-blue-500'
-  }
-  else if (method === 'PUT') {
-    methodColour = 'bg-blue-500'
+  else if (method === 'DELETE') {
+    methodColour = 'bg-red-500'
   }
   else {
-    methodColour = 'bg-red-500'
+    methodColour = 'bg-blue-500'
   }
 
   return methodColour
