@@ -132,10 +132,18 @@ export const validateOnServer = (body: Item, properties: Property[]) => {
       errors[name] = `Invalid ${name} type`
     }
 
-    if(type !== 'richtext' && typeof value !== type) {
+    if (type === 'number') {
+      const num = Number(value)
+
+      if (isNaN(num)) {
+        errors[name] = `Invalid ${name} type`
+      }
+    }
+    
+
+    if(type !== 'richtext' && type !== 'number' && typeof value !== type ) {
       errors[name] = `Invalid ${name} type`
     }
-
 
     if(type === 'string') {
       if (value.length < 3) {
