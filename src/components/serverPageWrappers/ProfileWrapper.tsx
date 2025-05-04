@@ -19,12 +19,15 @@ const ProfileWrapper = ({ configuredPeers }: Props) => {
     if (sdk) {
       sdk.terminate()
       unsetCookie()
+      return true
     }
   }
 
-  const logoutAndRedirect = () => {
-    disconnect()
-    router.push('/')
+  const logoutAndRedirect = async () => {
+    const disconected = disconnect()
+    if(disconected) {
+      router.push('/')
+    }
   }
 
   const [peers, setPeers] = useState<string[]>(configuredPeers)

@@ -11,10 +11,11 @@ import { updateSingle } from '@/utils/api'
 
 interface Props {
   selectedSingle: Item
+  setSelectedSingle: React.Dispatch<React.SetStateAction<Item | undefined>>
   setSingles: React.Dispatch<React.SetStateAction<Item[]>>
 }
 
-const UpdateSingle = ({ selectedSingle, setSingles }: Props) => {
+const UpdateSingle = ({ selectedSingle, setSelectedSingle, setSingles }: Props) => {
 
   const startingType = (() => {
     if (typeof selectedSingle.value === 'boolean') return 'boolean'
@@ -41,6 +42,7 @@ const UpdateSingle = ({ selectedSingle, setSingles }: Props) => {
 
   const resetPopUp = () => {
     setOpen(false)
+    setSelectedSingle(undefined)
   }
 
   const handleUpdateRow = async () => {
@@ -71,6 +73,8 @@ const UpdateSingle = ({ selectedSingle, setSingles }: Props) => {
                   <div className='flex items-center justify-between h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm'>
                     <div className='text-[#71717A]'>Enter {name}</div>
                     <input
+                      // has to be form.value because form can be mutated but value const cannot be 
+                      checked={form.value === 'true'}
                       type='checkbox'
                       onChange={(e) => handleChange(name, e.target.checked ? 'true' : 'false')}
                     />

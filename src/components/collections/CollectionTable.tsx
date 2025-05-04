@@ -35,9 +35,10 @@ interface CollectionTableProps {
 	data: Item[] | undefined
 	selectedModel: Model
 	setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
+	selectedRow: Item | undefined
 }
 
-const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTableProps) => {
+const CollectionTable = ({ data, selectedModel, selectedRow, setSelectedRow }: CollectionTableProps) => {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [isLoading, setIsLoading] = useState(true)
 
@@ -56,13 +57,15 @@ const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTabl
 
 
 	useEffect(() => {
-		setTimeout(() => {
+		// WHen i use type timeout it throws ts error this is a quick fix that solves it
+		let timeoutId: ReturnType<typeof setTimeout>
+		
+		setIsLoading(true)
+		timeoutId = setTimeout(() => {
 			setIsLoading(false)
 		}, 3000)
 
-		if(data && data.length !== 0) setIsLoading(false)
-
-		return () => setIsLoading(true)
+		return () => clearTimeout(timeoutId);
 	}, [selectedModel])
 
 	if (isLoading) {
@@ -112,9 +115,15 @@ const CollectionTable = ({ data, selectedModel, setSelectedRow }: CollectionTabl
 														type='radio'
 														id={`radio-${row.id}`}
 														name='row-select'
+														checked={selectedRow?.id === row.original.id}
 														onChange={() => {
-															setSelectedRow(row.original)
-															row.toggleSelected(true)
+															if (!selectedRow || selectedRow.id !== row.original.id) {
+																setSelectedRow(row.original);
+																row.toggleSelected(true);
+															} else {
+																setSelectedRow(undefined);
+																row.toggleSelected(false);
+															}
 														}}
 													/>
 													<label htmlFor={`radio-${row.id}`} className='ml-2 '>

@@ -21,7 +21,7 @@ const SinglesWrapper = ({apiSingles}: Props) => {
         <Title firstPartOfTitle='Collections' secondPartOfTitle='Singles' />
         <div className='flex items-center gap-2'>
           <AddSingle setSingles={setSingles} />
-          {selectedSingle && <UpdateSingle selectedSingle={selectedSingle} setSingles={setSingles} />}
+          {selectedSingle && <UpdateSingle selectedSingle={selectedSingle} setSelectedSingle={setSelectedSingle} setSingles={setSingles} />}
           {selectedSingle?.id && <DeleteSingle setSelectedSingle={setSelectedSingle} setSingles={setSingles} singleId={selectedSingle.id} /> }
         </div>
       </div>

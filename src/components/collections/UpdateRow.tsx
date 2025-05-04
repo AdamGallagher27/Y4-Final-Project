@@ -14,10 +14,11 @@ import FormError from '../generic/FormError'
 interface Props {
   setData: Dispatch<SetStateAction<Item[]>>
   selectedRow: Item
+  setSelectedRow: Dispatch<SetStateAction<Item | undefined>>
   model: Model
 }
 
-const UpdateRow = ({ setData, selectedRow, model }: Props) => {
+const UpdateRow = ({ setData, selectedRow, setSelectedRow, model }: Props) => {
   const [form, setForm] = useState<{ [key: string]: string }>(selectedRow)
   const [open, setOpen] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -39,6 +40,7 @@ const UpdateRow = ({ setData, selectedRow, model }: Props) => {
 
   const resetPopUp = () => {
     setOpen(false)
+    setSelectedRow(undefined)
   }
 
   const handleUpdateRow = async () => {

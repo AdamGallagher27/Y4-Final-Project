@@ -55,13 +55,13 @@ export const CollectionPageWrapper = ({ model }: Props) => {
 					<AddRow setData={setData} selectedModel={model} />
 					{selectedRow && (
 						<>
-							<UpdateRow setData={setData} selectedRow={selectedRow} model={model} />
+							<UpdateRow setData={setData} selectedRow={selectedRow} setSelectedRow={setSelectedRow} model={model} />
 							<DeleteRow setData={setData} setSelectedRow={setSelectedRow} selectedRowId={selectedRow.id} modelId={modelId} />
 						</>
 					)}
 				</div>
 			</div>
-			<CollectionTable data={data} selectedModel={model} setSelectedRow={setSelectedRow} />
+			<CollectionTable data={data} selectedModel={model} setSelectedRow={setSelectedRow} selectedRow={selectedRow} />
 		</div>
 	)
 }
